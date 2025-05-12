@@ -1,8 +1,8 @@
 const HomeView = () => {
     return (
         <div>
-            <h1>Home View</h1>
-            <p>New text here</p>
+            <h1>Welcome to the Typing App</h1>
+            <p>Welcome to the Typing App</p>
         </div>
     )
 }
