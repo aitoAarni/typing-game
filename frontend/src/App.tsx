@@ -1,8 +1,12 @@
+import { Route, BrowserRouter, Routes } from "react-router-dom"
+import HomeView from "./components/HomeView"
 function App() {
     return (
-        <div>
-            <p> brooo whatahek</p>
-        </div>
+        <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<HomeView />} />
+            </Routes>
+        </BrowserRouter>
     )
 }
 
