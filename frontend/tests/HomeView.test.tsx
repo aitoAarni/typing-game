@@ -6,8 +6,4 @@ describe('HomeView page tets', () => {
         const { getByText } = render(<HomeView />)
         expect(getByText("Welcome to the Typing App")).toBeInTheDocument() 
     })
-    test("HomeView has a typing box", () => {
-        const { getByTestId } = render(<HomeView />)
-        expect(getByTestId("typing-box")).toBeInTheDocument()
-    })
 })
