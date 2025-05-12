@@ -23,5 +23,6 @@
         "noFallthroughCasesInSwitch": true,
         "noUncheckedSideEffectImports": true
     },
+    "esModuleInterop": true,
     "include": ["src", "tests"]
 }
