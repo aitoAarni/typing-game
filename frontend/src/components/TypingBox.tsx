@@ -16,7 +16,7 @@ const TypingBox = ({ text }: TypingBoxProps) => {
             setTypedCorrectly(new Array(text.length).fill(null))
         }
     }, [text])
-
+    console.log("typedCorrectly.length", typedCorrectly.length)
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
             currentCharRef.current = event.key
@@ -35,7 +35,7 @@ const TypingBox = ({ text }: TypingBoxProps) => {
         if (char.length === 1) {
             copy[currentIndex] = char === charList[currentIndex]
             setTypedCorrectly(copy)
-            setCurrentIndex(prev => prev + 1)
+            setCurrentIndex(prev => Math.min(charList.length, prev + 1))
         } else if (char === "Backspace") {
             copy[currentIndex - 1] = null
             setTypedCorrectly(copy)

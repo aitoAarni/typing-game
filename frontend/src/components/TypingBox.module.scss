@@ -5,14 +5,22 @@
     flex: 1;
 }
 
+%charBase {
+    font-family: sans-serif;
+    font-size: 2rem;
+}
+
 .charCorrect {
+    @extend %charBase;
     color: greenyellow;
 }
 
 .charIncorrect {
+    @extend %charBase;
     color: red;
 }
 
 .charUntyped {
+    @extend %charBase;
     color: gray;
 }
