@@ -1,0 +1,18 @@
+@use "../styles/variables" as *;
+
+.container {
+    display: flex;
+    flex: 1;
+}
+
+.charCorrect {
+    color: greenyellow;
+}
+
+.charIncorrect {
+    color: red;
+}
+
+.charUntyped {
+    color: gray;
+}
