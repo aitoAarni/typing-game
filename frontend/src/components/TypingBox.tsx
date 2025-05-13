@@ -6,17 +6,20 @@ interface TypingBoxProps {
 }
 
 const TypingBox = ({ text }: TypingBoxProps) => {
-    const [charList, setCharList] = useState<string[]>([])
-    const [currentIndex, setCurrentIndex] = useState(0)
-    const [typedCorrectly, setTypedCorrectly] = useState<(boolean | null)[]>([])
+    const [charList, setCharList] = useState<string[][]>([])
+    const [currentIndex, setCurrentIndex] = useState<number[]>([0, 0])
+    const [typedCorrectly, setTypedCorrectly] = useState<(boolean | null)[][]>([])
     const [keyPressInt, setKeyPressInt] = useState<number>(0)
     const currentCharRef = useRef<string>("")
     useEffect(() => {
         if (text?.length) {
-            setCharList(text?.split(""))
-            setTypedCorrectly(new Array(text.length).fill(null))
+            const [partitionedText, typedCorrectlyInitial] = partitionText(text)
+            setCharList(partitionedText)
+            setTypedCorrectly(typedCorrectlyInitial)
         }
+
     }, [text])
+
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
             currentCharRef.current = event.key
@@ -32,14 +35,27 @@ const TypingBox = ({ text }: TypingBoxProps) => {
         const char = currentCharRef.current
         const copy = [...typedCorrectly]
         if (char.length === 1) {
-            copy[currentIndex] = char === charList[currentIndex]
-            setTypedCorrectly(copy)
-            setCurrentIndex(prev => Math.min(charList.length, prev + 1))
+            copy[currentIndex[0]][currentIndex[1]] = char === charList[currentIndex[0]][currentIndex[1]]
+            setCurrentIndex(prev => {
+                if (prev[1] + 1 < charList[prev[0]].length - 1) {
+                    return [prev[0], prev[1] + 1]
+                } else if (prev[0] + 1 < charList.length) {
+                    return [prev[0] + 1, 0]
+                } else {
+                    return [prev[0], prev[1] + 1]
+                }
+            })
         } else if (char === "Backspace") {
-            copy[currentIndex - 1] = null
-            setTypedCorrectly(copy)
-            setCurrentIndex(prev => Math.max(0, prev - 1))
+            if (currentIndex[1] === 0 && currentIndex[0] > 0) {
+                currentIndex[0] = currentIndex[0] - 1
+                currentIndex[1] = charList[currentIndex[0]].length - 1
+            } else if (currentIndex[1] > 0) {
+                currentIndex[1] = currentIndex[1] - 1
+            }
+            copy[currentIndex[0]][currentIndex[1]] = null
+            setCurrentIndex(currentIndex)
         }
+        setTypedCorrectly(copy)
     }, [keyPressInt])
 
     return (
@@ -69,18 +85,22 @@ const TypingBox = ({ text }: TypingBoxProps) => {
     )
 }
 
-const partitionText = (text: string) => {
+const partitionText = (text: string): [string[][], (boolean | null)[][]] => {
     const words = text.split(" ")
     const partitionedText: string[][] = []
+    const typedCorrectly: (boolean | null)[][] = []
     words.forEach((word, index) => {
         const chars = word.trim().split("")
+        const nullInitializer = new Array(chars.length).fill(null)
         partitionedText.push(chars)
+        typedCorrectly.push(nullInitializer)
         if (index !== words.length - 1) {
             partitionedText.push([" "])
+            typedCorrectly.push([null])
         }
 
     })
-    return partitionedText
+    return [partitionedText, typedCorrectly]
 }
 
 export default TypingBox
