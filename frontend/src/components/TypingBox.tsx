@@ -53,7 +53,7 @@ const TypingBox = ({ text }: TypingBoxProps) => {
                 currentIndex[1] = currentIndex[1] - 1
             }
             copy[currentIndex[0]][currentIndex[1]] = null
-            setCurrentIndex(currentIndex)
+            setCurrentIndex([...currentIndex])
         }
         setTypedCorrectly(copy)
     }, [keyPressInt])
@@ -66,8 +66,7 @@ const TypingBox = ({ text }: TypingBoxProps) => {
                         
                 {word.map((char, index1) => {
                     
-                    const caretClass =
-                    currentIndex == [index0, index1] ? styles.caret : styles.noCaret
+                    const caretClass = currentIndex[0] === index0 && currentIndex[1] === index1 ? styles.caret : styles.noCaret
                     let charClass
                     if (typedCorrectly[index0][index1] == true) {
                         charClass = styles.charCorrect
@@ -84,15 +83,16 @@ const TypingBox = ({ text }: TypingBoxProps) => {
                             {char === " " ? "\u00A0" : char}
                         </span>
                     </span>
+                    )
                     })
             }
-                )
             </span>
+                )
             })}
         </div>
     )
 }
-}
+
 
 const partitionText = (text: string): [string[][], (boolean | null)[][]] => {
     const words = text.split(" ")
