@@ -4,6 +4,7 @@ import styles from "./TypingBox.module.scss"
 interface TypingBoxProps {
     text?: string
 }
+
 const TypingBox = ({ text }: TypingBoxProps) => {
     const [charList, setCharList] = useState<string[]>([])
     const [currentIndex, setCurrentIndex] = useState(0)
