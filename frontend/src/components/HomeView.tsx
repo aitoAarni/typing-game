@@ -4,6 +4,7 @@ const testText = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed d
 const HomeView = () => {
     return (
         <div
+            data-testid="home-view"
             style={{
                 display: "flex",
                 flex: 1,

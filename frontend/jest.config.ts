@@ -10,4 +10,8 @@ export default {
     ],
   },
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
+   moduleNameMapper: {
+    "\\.module\\.(css|sass|scss)$": "identity-obj-proxy",  // Mock CSS Modules
+    "\\.(css|sass|scss)$": "<rootDir>/__mocks__/styleMock.js",  // Mock plain styles
+  },
 };

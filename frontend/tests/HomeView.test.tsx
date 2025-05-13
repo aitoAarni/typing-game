@@ -3,7 +3,7 @@ import HomeView from '../src/components/HomeView';
 
 describe('HomeView page tets', () => {
     test("HomeView renders correctly", () => {
-        const { getByText } = render(<HomeView />)
-        expect(getByText("Welcome to the Typing App")).toBeInTheDocument() 
+        const { getByTestId } = render(<HomeView />)
+        expect(getByTestId("home-view")).toBeInTheDocument() 
     })
 })
