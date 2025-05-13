@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef} from "react"
+import { useEffect, useState, useRef } from "react"
 import styles from "./TypingBox.module.scss"
 
 interface TypingBoxProps {
@@ -7,7 +7,7 @@ interface TypingBoxProps {
 const TypingBox = ({ text }: TypingBoxProps) => {
     const [charList, setCharList] = useState<string[]>([])
     const [currentIndex, setCurrentIndex] = useState(0)
-    const [typedCorrectly, setTypedCorrectly] = useState<boolean[]>([])
+    const [typedCorrectly, setTypedCorrectly] = useState<(boolean | null)[]>([])
     const [keyPressInt, setKeyPressInt] = useState<number>(0)
     const currentCharRef = useRef<string>("")
     useEffect(() => {
@@ -20,7 +20,7 @@ const TypingBox = ({ text }: TypingBoxProps) => {
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
             currentCharRef.current = event.key
-            setKeyPressInt((prev) => prev + 1)
+            setKeyPressInt(prev => prev + 1)
         }
         window.addEventListener("keydown", handleKeyDown)
         return () => {
@@ -31,14 +31,17 @@ const TypingBox = ({ text }: TypingBoxProps) => {
     useEffect(() => {
         console.log(`currentCar: ${currentCharRef.current}`)
         const char = currentCharRef.current
+        const copy = [...typedCorrectly]
         if (char.length === 1) {
-            const copy = [...typedCorrectly]
             copy[currentIndex] = char === charList[currentIndex]
             setTypedCorrectly(copy)
-            setCurrentIndex((prev) => prev + 1)
+            setCurrentIndex(prev => prev + 1)
+        } else if (char === "Backspace") {
+            copy[currentIndex - 1] = null
+            setTypedCorrectly(copy)
+            setCurrentIndex(prev => Math.max(0, prev - 1))
         }
     }, [keyPressInt])
-
 
     return (
         <div>
