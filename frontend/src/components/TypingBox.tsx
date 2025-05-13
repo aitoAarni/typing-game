@@ -60,29 +60,38 @@ const TypingBox = ({ text }: TypingBoxProps) => {
 
     return (
         <div className={styles.container}>
-            {charList.map((char, index) => {
-                const caretClass =
-                    currentIndex == index ? styles.caret : styles.noCaret
-                let charClass
-                if (typedCorrectly[index] == true) {
-                    charClass = styles.charCorrect
-                } else if (typedCorrectly[index] == false) {
-                    charClass = styles.charIncorrect
-                } else {
-                    charClass = styles.charUntyped
-                }
-
+            {charList.map((word, index0) => {
                 return (
-                    <span key={index} className={styles.charContainer}>
+                    <span>
+                        
+                {word.map((char, index1) => {
+                    
+                    const caretClass =
+                    currentIndex == [index0, index1] ? styles.caret : styles.noCaret
+                    let charClass
+                    if (typedCorrectly[index0][index1] == true) {
+                        charClass = styles.charCorrect
+                    } else if (typedCorrectly[index0][index1] == false) {
+                        charClass = styles.charIncorrect
+                    } else {
+                        charClass = styles.charUntyped
+                    }
+                    
+                    return (
+                        <span key={index0 * 10000 + index1} className={styles.charContainer}>
                         <span className={caretClass}></span>
                         <span className={charClass}>
                             {char === " " ? "\u00A0" : char}
                         </span>
                     </span>
+                    })
+            }
                 )
+            </span>
             })}
         </div>
     )
+}
 }
 
 const partitionText = (text: string): [string[][], (boolean | null)[][]] => {
