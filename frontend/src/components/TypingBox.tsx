@@ -69,4 +69,18 @@ const TypingBox = ({ text }: TypingBoxProps) => {
     )
 }
 
+const partitionText = (text: string) => {
+    const words = text.split(" ")
+    const partitionedText: string[][] = []
+    words.forEach((word, index) => {
+        const chars = word.trim().split("")
+        partitionedText.push(chars)
+        if (index !== words.length - 1) {
+            partitionedText.push([" "])
+        }
+
+    })
+    return partitionedText
+}
+
 export default TypingBox
