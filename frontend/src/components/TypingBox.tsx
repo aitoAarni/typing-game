@@ -16,7 +16,6 @@ const TypingBox = ({ text }: TypingBoxProps) => {
             setTypedCorrectly(new Array(text.length).fill(null))
         }
     }, [text])
-    console.log("typedCorrectly.length", typedCorrectly.length)
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
             currentCharRef.current = event.key
@@ -29,7 +28,6 @@ const TypingBox = ({ text }: TypingBoxProps) => {
     }, [])
 
     useEffect(() => {
-        console.log(`currentCar: ${currentCharRef.current}`)
         const char = currentCharRef.current
         const copy = [...typedCorrectly]
         if (char.length === 1) {
@@ -44,11 +42,10 @@ const TypingBox = ({ text }: TypingBoxProps) => {
     }, [keyPressInt])
 
     return (
-        <div>
-            {text} <br />
+        <div className={styles.container}>
             {charList.map((char, index) => {
                 const caretClass =
-                    currentIndex == index ? styles.caretActive : styles.caret
+                    currentIndex == index ? styles.caret : styles.noCaret
                 let charClass
                 if (typedCorrectly[index] == true) {
                     charClass = styles.charCorrect
@@ -59,9 +56,11 @@ const TypingBox = ({ text }: TypingBoxProps) => {
                 }
 
                 return (
-                    <span key={index}>
+                    <span key={index} className={styles.charContainer}>
                         <span className={caretClass}></span>
-                        <span className={charClass}>{char}</span>
+                        <span className={charClass}>
+                            {char === " " ? "\u00A0" : char}
+                        </span>
                     </span>
                 )
             })}

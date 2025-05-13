@@ -3,11 +3,16 @@
 .container {
     display: flex;
     flex: 1;
+    flex-direction: row;
+}
+
+.charContainer {
+    display: inline; 
 }
 
 %charBase {
     font-family: sans-serif;
-    font-size: 2rem;
+    font-size: 2em;
 }
 
 .charCorrect {
@@ -23,4 +28,31 @@
 .charUntyped {
     @extend %charBase;
     color: gray;
+}
+
+%caretBase {
+    display: inline-block;
+    width: 2px;
+    height: 2em;
+    vertical-align: bottom;
+}
+
+.caret {
+    @extend %caretBase;
+    background-color: blue;
+    animation: blink 2s step-end infinite;
+}
+
+.noCaret {
+    @extend %caretBase;
+    background-color: transparent;
+}
+
+@keyframes blink {
+  from, to {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.2;
+  }
 }
