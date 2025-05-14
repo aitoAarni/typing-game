@@ -6,16 +6,27 @@
     flex: 1;
     flex-direction: row;
     justify-content: center;
+    height: 180px;
+    background-color: rgba(80, 80, 80, 0.363);
+    //overflow-y: hidden;
+    position: relative;;
+}
+
+.inner {
+    transition: transform 0.2s ease-out;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .wordContainer {
     display: flex;
     align-items: center;
-    margin: 10px 0;
+    padding: 10px 0;
 }
 .charContainer {
     display: flex;
     align-items: center;
+    height: 40px;
     font-size: 40px;
 
 }

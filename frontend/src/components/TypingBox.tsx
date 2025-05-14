@@ -6,21 +6,26 @@ interface TypingBoxProps {
 }
 
 const TypingBox = ({ text }: TypingBoxProps) => {
-    const [typedCorrectly, setTypedCorrectly] = useState<(boolean | null)[][]>([])
+    const [typedCorrectly, setTypedCorrectly] = useState<(boolean | null)[][]>(
+        []
+    )
     const [charList, setCharList] = useState<string[][]>([])
     const [currentIndex, setCurrentIndex] = useState<number[]>([0, 0])
     const [keyPressInt, setKeyPressInt] = useState<number>(0)
+    const [scrollOffset, setScrollOffset] = useState<number>(0)
     const currentCharRef = useRef<string>("")
 
     useEffect(() => {
         if (text?.length) {
             const [partitionedText, typedCorrectlyInitial] = partitionText(text)
-            if (partitionedText.length > 0 && typedCorrectlyInitial.length > 0) {
-            setTypedCorrectly(typedCorrectlyInitial)
-            setCharList(partitionedText)
+            if (
+                partitionedText.length > 0 &&
+                typedCorrectlyInitial.length > 0
+            ) {
+                setTypedCorrectly(typedCorrectlyInitial)
+                setCharList(partitionedText)
             }
         }
-
     }, [text])
 
     useEffect(() => {
@@ -39,7 +44,8 @@ const TypingBox = ({ text }: TypingBoxProps) => {
         const char = currentCharRef.current
         const copy = [...typedCorrectly]
         if (char.length === 1) {
-            copy[currentIndex[0]][currentIndex[1]] = char === charList[currentIndex[0]][currentIndex[1]]
+            copy[currentIndex[0]][currentIndex[1]] =
+                char === charList[currentIndex[0]][currentIndex[1]]
             setCurrentIndex(prev => {
                 if (prev[1] + 1 < charList[prev[0]].length) {
                     return [prev[0], prev[1] + 1]
@@ -62,44 +68,73 @@ const TypingBox = ({ text }: TypingBoxProps) => {
         setTypedCorrectly(copy)
     }, [keyPressInt])
 
+    const lineHeight = 40
+
+    useEffect(() => {
+        const container = document.querySelector(`.${styles.container}`)
+        if (!container) return
+
+        const caretElement = container.querySelector(`.${styles.caret}`)
+        if (!caretElement) return
+
+        const caretTop = caretElement.getBoundingClientRect().top
+        console.log(`caret: ${caretElement.getBoundingClientRect().y}`)
+        const containerTop = container.getBoundingClientRect().top
+        const relativeLine = Math.floor((caretTop - containerTop) / lineHeight)
+
+        if (relativeLine >= 3) {
+            setScrollOffset(prev => prev + lineHeight)
+        }
+    }, [currentIndex])
+
     if (charList.length === 0 || typedCorrectly.length === 0) {
         return <div className={styles.container}></div>
     }
     return (
         <div className={styles.container}>
-            {charList.map((word, index0) => {
-                return (
-                    <span key={index0} className={styles.wordContainer}>
-                        
-                {word.map((char, index1) => {
-                    
-                    const caretClass = currentIndex[0] === index0 && currentIndex[1] === index1 ? styles.caret : styles.noCaret
-                    let charClass
-                    if (typedCorrectly[index0][index1] == true) {
-                        charClass = styles.charCorrect
-                    } else if (typedCorrectly[index0][index1] == false) {
-                        charClass = styles.charIncorrect
-                    } else {
-                        charClass = styles.charUntyped
-                    }
-                    
+            <div
+                className={styles.inner}
+                style={{ transform: `translateY(-${scrollOffset}px)` }}
+            >
+                {charList.map((word, index0) => {
                     return (
-                        <span key={index1} className={styles.charContainer}>
-                        <span className={caretClass}></span>
-                        <span className={charClass}>
-                            {char === " " ? "\u00A0" : char}
+                        <span key={index0} className={styles.wordContainer}>
+                            {word.map((char, index1) => {
+                                const caretClass =
+                                    currentIndex[0] === index0 &&
+                                    currentIndex[1] === index1
+                                        ? styles.caret
+                                        : styles.noCaret
+                                let charClass
+                                if (typedCorrectly[index0][index1] == true) {
+                                    charClass = styles.charCorrect
+                                } else if (
+                                    typedCorrectly[index0][index1] == false
+                                ) {
+                                    charClass = styles.charIncorrect
+                                } else {
+                                    charClass = styles.charUntyped
+                                }
+
+                                return (
+                                    <span
+                                        key={index1}
+                                        className={styles.charContainer}
+                                    >
+                                        <span className={caretClass}></span>
+                                        <span className={charClass}>
+                                            {char === " " ? "\u00A0" : char}
+                                        </span>
+                                    </span>
+                                )
+                            })}
                         </span>
-                    </span>
                     )
-                    })
-            }
-            </span>
-                )
-            })}
+                })}
+            </div>
         </div>
     )
 }
-
 
 const partitionText = (text: string): [string[][], (boolean | null)[][]] => {
     const words = text.trim().split(/\s+/)
@@ -114,7 +149,6 @@ const partitionText = (text: string): [string[][], (boolean | null)[][]] => {
             partitionedText.push([" "])
             typedCorrectly.push([null])
         }
-
     })
     return [partitionedText, typedCorrectly]
 }
