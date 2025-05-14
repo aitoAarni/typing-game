@@ -8,6 +8,10 @@
     justify-content: center;
 }
 
+.wordContainer {
+    display: flex;
+    align-items: center;
+}
 .charContainer {
     white-space: pre;
     display: flex;

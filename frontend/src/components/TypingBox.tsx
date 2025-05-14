@@ -6,16 +6,23 @@ interface TypingBoxProps {
 }
 
 const TypingBox = ({ text }: TypingBoxProps) => {
+    const [typedCorrectly, setTypedCorrectly] = useState<(boolean | null)[][]>([])
     const [charList, setCharList] = useState<string[][]>([])
     const [currentIndex, setCurrentIndex] = useState<number[]>([0, 0])
-    const [typedCorrectly, setTypedCorrectly] = useState<(boolean | null)[][]>([])
     const [keyPressInt, setKeyPressInt] = useState<number>(0)
     const currentCharRef = useRef<string>("")
+
     useEffect(() => {
         if (text?.length) {
             const [partitionedText, typedCorrectlyInitial] = partitionText(text)
-            setCharList(partitionedText)
+            console.log("partitionedText.length", partitionedText.length)
+            console.log("typedCorrectlyInitial.length", typedCorrectlyInitial.length)
+            if (partitionedText.length > 0 && typedCorrectlyInitial.length > 0) {
             setTypedCorrectly(typedCorrectlyInitial)
+            setCharList(partitionedText)
+            console.log("charList.length1", charList.length)
+            console.log("typedCorrectly.length1", typedCorrectly.length)
+            }
         }
 
     }, [text])
@@ -32,12 +39,13 @@ const TypingBox = ({ text }: TypingBoxProps) => {
     }, [])
 
     useEffect(() => {
+        if (typedCorrectly.length === 0 || charList.length === 0) return
         const char = currentCharRef.current
         const copy = [...typedCorrectly]
         if (char.length === 1) {
             copy[currentIndex[0]][currentIndex[1]] = char === charList[currentIndex[0]][currentIndex[1]]
             setCurrentIndex(prev => {
-                if (prev[1] + 1 < charList[prev[0]].length - 1) {
+                if (prev[1] + 1 < charList[prev[0]].length) {
                     return [prev[0], prev[1] + 1]
                 } else if (prev[0] + 1 < charList.length) {
                     return [prev[0] + 1, 0]
@@ -58,11 +66,14 @@ const TypingBox = ({ text }: TypingBoxProps) => {
         setTypedCorrectly(copy)
     }, [keyPressInt])
 
+    if (charList.length === 0 || typedCorrectly.length === 0) {
+        return <div className={styles.container}></div>
+    }
     return (
         <div className={styles.container}>
             {charList.map((word, index0) => {
                 return (
-                    <span>
+                    <span key={index0} className={styles.wordContainer}>
                         
                 {word.map((char, index1) => {
                     
@@ -77,7 +88,7 @@ const TypingBox = ({ text }: TypingBoxProps) => {
                     }
                     
                     return (
-                        <span key={index0 * 10000 + index1} className={styles.charContainer}>
+                        <span key={index1} className={styles.charContainer}>
                         <span className={caretClass}></span>
                         <span className={charClass}>
                             {char === " " ? "\u00A0" : char}
@@ -95,7 +106,7 @@ const TypingBox = ({ text }: TypingBoxProps) => {
 
 
 const partitionText = (text: string): [string[][], (boolean | null)[][]] => {
-    const words = text.split(" ")
+    const words = text.trim().split(/\s+/)
     const partitionedText: string[][] = []
     const typedCorrectly: (boolean | null)[][] = []
     words.forEach((word, index) => {
