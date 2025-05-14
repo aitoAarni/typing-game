@@ -11,17 +11,18 @@
 .wordContainer {
     display: flex;
     align-items: center;
+    margin: 10px 0;
 }
 .charContainer {
-    white-space: pre;
     display: flex;
     align-items: center;
+    font-size: 40px;
 
 }
 
 %charBase {
     font-family: "Roboto", sans-serif;
-    font-size: 40px;
+    font-size: 1em;
 }
 
 .charCorrect {
@@ -42,14 +43,14 @@
 %caretBase {
     display: inline-block;
     width: 3px;
-    height: 80%;
-    border-radius: 20px;
+    height: 1em;
+    border-radius: 10px;
 }
 
 .caret {
     @extend %caretBase;
     background-color: blue;
-    animation: blink 2s step-end infinite;
+    animation: blink 1s step-end infinite;
 }
 
 .noCaret {
