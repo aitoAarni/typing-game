@@ -15,13 +15,9 @@ const TypingBox = ({ text }: TypingBoxProps) => {
     useEffect(() => {
         if (text?.length) {
             const [partitionedText, typedCorrectlyInitial] = partitionText(text)
-            console.log("partitionedText.length", partitionedText.length)
-            console.log("typedCorrectlyInitial.length", typedCorrectlyInitial.length)
             if (partitionedText.length > 0 && typedCorrectlyInitial.length > 0) {
             setTypedCorrectly(typedCorrectlyInitial)
             setCharList(partitionedText)
-            console.log("charList.length1", charList.length)
-            console.log("typedCorrectly.length1", typedCorrectly.length)
             }
         }
 
@@ -50,7 +46,7 @@ const TypingBox = ({ text }: TypingBoxProps) => {
                 } else if (prev[0] + 1 < charList.length) {
                     return [prev[0] + 1, 0]
                 } else {
-                    return [prev[0], prev[1] + 1]
+                    return [prev[0], charList[prev[0]].length]
                 }
             })
         } else if (char === "Backspace") {
