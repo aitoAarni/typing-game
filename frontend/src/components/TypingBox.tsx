@@ -88,10 +88,10 @@ const TypingBox = ({ text }: TypingBoxProps) => {
         }
     }, [currentIndex])
     if (charList.length === 0 || typedCorrectly.length === 0) {
-        return <div className={styles.container}></div>
+        return <div className={styles.container} data-testid="typing-container"></div>
     }
     return (
-        <div className={styles.container}>
+        <div className={styles.container} data-testid="typing-container">
             <div
                 onTransitionEnd={() => setIsAnimating(false)}
                 className={styles.inner}
@@ -113,13 +113,17 @@ const TypingBox = ({ text }: TypingBoxProps) => {
                                         ? styles.caret
                                         : styles.noCaret
                                 let charClass
+                                let testId
                                 if (typedCorrectly[index0][index1] == true) {
                                     charClass = styles.charCorrect
+                                    testId = "char-correct"
                                 } else if (
                                     typedCorrectly[index0][index1] == false
                                 ) {
+                                    testId = "char-incorrect"
                                     charClass = styles.charIncorrect
                                 } else {
+                                    testId = "char-untyped"
                                     charClass = styles.charUntyped
                                 }
 
@@ -129,7 +133,7 @@ const TypingBox = ({ text }: TypingBoxProps) => {
                                         className={styles.charContainer}
                                     >
                                         <span className={caretClass}></span>
-                                        <span className={charClass}>
+                                        <span className={charClass} data-testid={testId}>
                                             {char === " " ? "\u00A0" : char}
                                         </span>
                                     </span>
