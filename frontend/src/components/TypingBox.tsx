@@ -41,6 +41,7 @@ const TypingBox = ({ text }: TypingBoxProps) => {
     }, [])
 
     useEffect(() => {
+        console.log(window.query)
         if (typedCorrectly.length === 0 || charList.length === 0) return
         const char = currentCharRef.current
         const copy = [...typedCorrectly]
@@ -70,7 +71,7 @@ const TypingBox = ({ text }: TypingBoxProps) => {
     }, [keyPressInt])
 
     const lineHeight = 60
-
+    
     useEffect(() => {
         if (isAnimating) return
         const container = document.querySelector(`.${styles.container}`)
@@ -91,18 +92,6 @@ const TypingBox = ({ text }: TypingBoxProps) => {
         }
     }, [currentIndex])
 
-    useEffect(() => {
-        const wordContainer = document.querySelector(`.${styles.inner}`)
-        if (!wordContainer) return
-        const handleEndofAnimation = () => setIsAnimating(false)
-        wordContainer.addEventListener("transitionend", handleEndofAnimation)
-        return () => {
-            wordContainer.removeEventListener(
-                "transitionend",
-                handleEndofAnimation
-            )
-        }
-    }, [currentIndex])
     if (charList.length === 0 || typedCorrectly.length === 0) {
         return <div className={styles.container}></div>
     }
@@ -110,7 +99,7 @@ const TypingBox = ({ text }: TypingBoxProps) => {
         <div className={styles.container}>
             <div className={styles.line}></div>
 
-            <div
+            <div onTransitionEnd={() => setIsAnimating(false)}
                 className={styles.inner}
                 style={{ transform: `translateY(-${scrollOffset}px)` }}
             >
