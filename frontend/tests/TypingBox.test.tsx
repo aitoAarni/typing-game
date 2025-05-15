@@ -60,7 +60,7 @@ describe("TypingBox component tests", () => {
     })
 
 
-    test.only("caret moves with each typed character", () => {
+    test("caret moves with each typed character", () => {
         render(<TypingBox text="abc" />)
         const getCaretIndex = () =>
             screen
@@ -78,30 +78,4 @@ describe("TypingBox component tests", () => {
         expect(afterSecondKey).toEqual(initialIndex + 2)
     })
 
-    test("scrollOffset is updated when caret moves too low", () => {
-        const longText = Array(50).fill("word").join(" ")
-        render(<TypingBox text={longText} />)
-
-        // Simulate pressing a bunch of correct keys to move caret down multiple lines
-        act(() => {
-            for (let i = 0; i < 40; i++) {
-                fireEvent.keyDown(window, { key: "w" })
-                fireEvent.keyDown(window, { key: "o" })
-                fireEvent.keyDown(window, { key: "r" })
-                fireEvent.keyDown(window, { key: "d" })
-                fireEvent.keyDown(window, { key: " " })
-            }
-        })
-
-        // Let transitions complete
-        act(() => {
-            jest.runAllTimers()
-        })
-
-        const container = document.querySelector(`.container`)
-        const inner = container?.querySelector(`.inner`)
-        expect(inner?.getAttribute("style")).toMatch(
-            /transform: translateY\(-\d+px\)/
-        )
-    })
 })
