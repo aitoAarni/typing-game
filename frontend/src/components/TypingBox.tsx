@@ -3,9 +3,10 @@ import styles from "./TypingBox.module.scss"
 
 interface TypingBoxProps {
     text?: string
+    textTyped?: () => void
 }
 
-const TypingBox = ({ text }: TypingBoxProps) => {
+const TypingBox = ({ text, textTyped }: TypingBoxProps) => {
     const lineHeight = 60
     const [typedCorrectly, setTypedCorrectly] = useState<(boolean | null)[][]>(
         []
@@ -51,6 +52,8 @@ const TypingBox = ({ text }: TypingBoxProps) => {
                 } else if (prev[0] + 1 < charList.length) {
                     return [prev[0] + 1, 0]
                 } else {
+                    if (textTyped) textTyped()
+                    console.log("Finished typing")
                     return [prev[0], charList[prev[0]].length]
                 }
             })
@@ -78,7 +81,6 @@ const TypingBox = ({ text }: TypingBoxProps) => {
         const caretTop = caretElement.getBoundingClientRect().top
         const containerTop = container.getBoundingClientRect().top
         const relativeLine = Math.floor((caretTop - containerTop) / lineHeight)
-        console.log(`relativeLine: ${relativeLine}`)
         if (relativeLine >= 2) {
             setIsAnimating(true)
             setScrollOffset(prev => prev + lineHeight)
