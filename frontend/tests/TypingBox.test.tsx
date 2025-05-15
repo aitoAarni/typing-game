@@ -47,8 +47,7 @@ describe("TypingBox component tests", () => {
         act(() => {
             fireEvent.keyDown(window, { key: "b" })
         })
-        const incorrectChar = screen.getByText("a")
-        expect(incorrectChar.className).toContain("charIncorrect")
+        expect(screen.getByTestId("char-incorrect")).toBeInTheDocument()
     })
 
     test("backspace undoes last typed character", () => {
@@ -57,29 +56,26 @@ describe("TypingBox component tests", () => {
             fireEvent.keyDown(window, { key: "b" })
             fireEvent.keyDown(window, { key: "Backspace" })
         })
-        const char = screen.getByText("a")
-        expect(char.className).toContain("charUntyped")
+        expect(screen.getByTestId("char-untyped")).toBeInTheDocument()
     })
 
-    test("caret moves with each typed character", () => {
+
+    test.only("caret moves with each typed character", () => {
         render(<TypingBox text="abc" />)
         const getCaretIndex = () =>
             screen
-                .getAllByText(
-                    (_, el) => el?.className.includes("caret") ?? false
-                )
-                .findIndex(
-                    el => getComputedStyle(el).backgroundColor !== "transparent"
-                )
+                .getAllByTestId(/^(caret|no-caret)$/)
+                .findIndex(el => el.dataset.testid === "caret")
 
         const initialIndex = getCaretIndex()
+        expect(initialIndex).toEqual(0)
         act(() => fireEvent.keyDown(window, { key: "a" }))
         const afterFirstKey = getCaretIndex()
-        expect(afterFirstKey).not.toEqual(initialIndex)
-
+        expect(afterFirstKey).toEqual(initialIndex + 1)
+        
         act(() => fireEvent.keyDown(window, { key: "b" }))
         const afterSecondKey = getCaretIndex()
-        expect(afterSecondKey).not.toEqual(afterFirstKey)
+        expect(afterSecondKey).toEqual(initialIndex + 2)
     })
 
     test("scrollOffset is updated when caret moves too low", () => {

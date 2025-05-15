@@ -107,16 +107,18 @@ const TypingBox = ({ text }: TypingBoxProps) => {
                     return (
                         <span key={index0} className={styles.wordContainer}>
                             {word.map((char, index1) => {
-                                const caretClass =
-                                    currentIndex[0] === index0 &&
-                                    currentIndex[1] === index1
-                                        ? styles.caret
-                                        : styles.noCaret
+                                let caretClass = styles.noCaret
+                                let caretTestId = "no-caret"
+                                if (currentIndex[0] === index0 && currentIndex[1] === index1) {
+                                    caretClass = styles.caret
+                                    caretTestId = "caret"
+                                }
                                 let charClass
                                 let testId
                                 if (typedCorrectly[index0][index1] == true) {
                                     charClass = styles.charCorrect
                                     testId = "char-correct"
+
                                 } else if (
                                     typedCorrectly[index0][index1] == false
                                 ) {
@@ -132,7 +134,7 @@ const TypingBox = ({ text }: TypingBoxProps) => {
                                         key={index1}
                                         className={styles.charContainer}
                                     >
-                                        <span className={caretClass}></span>
+                                        <span className={caretClass} data-testid={caretTestId}></span>
                                         <span className={charClass} data-testid={testId}>
                                             {char === " " ? "\u00A0" : char}
                                         </span>
