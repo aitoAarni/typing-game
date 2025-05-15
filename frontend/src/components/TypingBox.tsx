@@ -38,7 +38,6 @@ const TypingBox = ({ text }: TypingBoxProps) => {
         }
     }, [text])
 
-
     useEffect(() => {
         if (typedCorrectly.length === 0 || charList.length === 0) return
         const char = currentCharRef.current
@@ -66,6 +65,9 @@ const TypingBox = ({ text }: TypingBoxProps) => {
             setCurrentIndex([...currentIndex])
         }
         setTypedCorrectly(copy)
+    }, [keyPressInt])
+    useEffect(() => {
+
         if (isAnimating) return
         const container = document.querySelector(`.${styles.container}`)
         if (!container) return
@@ -76,27 +78,31 @@ const TypingBox = ({ text }: TypingBoxProps) => {
         const caretTop = caretElement.getBoundingClientRect().top
         const containerTop = container.getBoundingClientRect().top
         const relativeLine = Math.floor((caretTop - containerTop) / lineHeight)
+        console.log(`relativeLine: ${relativeLine}`)
         if (relativeLine >= 2) {
             setIsAnimating(true)
             setScrollOffset(prev => prev + lineHeight)
-        } else if (relativeLine < 0) {
+        } else if (relativeLine <= 0) {
             setIsAnimating(true)
             setScrollOffset(prev => prev - lineHeight)
         }
-    }, [keyPressInt])
-
+    }, [currentIndex])
     if (charList.length === 0 || typedCorrectly.length === 0) {
         return <div className={styles.container}></div>
     }
     return (
         <div className={styles.container}>
-            <div className={styles.line}></div>
-
             <div
                 onTransitionEnd={() => setIsAnimating(false)}
                 className={styles.inner}
                 style={{ transform: `translateY(-${scrollOffset}px)` }}
             >
+                <div
+                    style={{
+                        height: lineHeight,
+                        width: "100%",
+                    }}
+                ></div>
                 {charList.map((word, index0) => {
                     return (
                         <span key={index0} className={styles.wordContainer}>
