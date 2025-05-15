@@ -3,7 +3,7 @@ import styles from "./TypingView.module.scss"
 import TypingBox from "./TypingBox"
 import TypingFinished from "./TypingFinished"
 
-const text = "hello world and other stuff to type and test the typing box"
+const text = "hello world"
 
 const TypingView = () => {
     const [isTyping, setIsTyping] = useState<boolean>(true)
