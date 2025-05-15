@@ -9,20 +9,10 @@
     flex-direction: row;
     justify-content: center;
     height: 180px;
-    background-color: rgba(80, 80, 80, 0.363);
     overflow-y: hidden;
     position: relative;
 }
 
-.line {
-  position: fixed;
-  top: 200px; // <-- Y position in pixels
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background-color: red;
-  z-index: 1000; // keep it visible above other elements
-}
 
 .inner {
     transition: transform 0.2s ease-out;
