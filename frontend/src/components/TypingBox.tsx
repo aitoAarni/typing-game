@@ -6,6 +6,7 @@ interface TypingBoxProps {
 }
 
 const TypingBox = ({ text }: TypingBoxProps) => {
+    const lineHeight = 60
     const [typedCorrectly, setTypedCorrectly] = useState<(boolean | null)[][]>(
         []
     )
@@ -27,9 +28,6 @@ const TypingBox = ({ text }: TypingBoxProps) => {
                 setCharList(partitionedText)
             }
         }
-    }, [text])
-
-    useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
             currentCharRef.current = event.key
             setKeyPressInt(prev => prev + 1)
@@ -38,7 +36,8 @@ const TypingBox = ({ text }: TypingBoxProps) => {
         return () => {
             window.removeEventListener("keydown", handleKeyDown)
         }
-    }, [])
+    }, [text])
+
 
     useEffect(() => {
         if (typedCorrectly.length === 0 || charList.length === 0) return
@@ -85,10 +84,6 @@ const TypingBox = ({ text }: TypingBoxProps) => {
             setScrollOffset(prev => prev - lineHeight)
         }
     }, [keyPressInt])
-
-    const lineHeight = 60
-
-    useEffect(() => {}, [currentIndex])
 
     if (charList.length === 0 || typedCorrectly.length === 0) {
         return <div className={styles.container}></div>
