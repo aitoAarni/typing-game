@@ -1,16 +1,10 @@
 import TypingView from "./TypingView"
+import styles from "./HomeView.module.scss"
 
 const HomeView = () => {
     return (
-        <div
-            data-testid="home-view"
-            style={{
-                display: "flex",
-                flex: 1,
-            
-            }}
-        >
-        <TypingView />
+        <div className={styles.container} data-testid="home-view">
+            <TypingView />
         </div>
     )
 }
