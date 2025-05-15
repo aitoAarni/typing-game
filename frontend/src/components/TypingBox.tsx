@@ -78,6 +78,7 @@ const TypingBox = ({ text }: TypingBoxProps) => {
         if (!caretElement) return
 
         const caretTop = caretElement.getBoundingClientRect().top
+        console.log(`caretTop: ${caretTop}`)
         console.log(`caret: ${caretElement.getBoundingClientRect().y}`)
         const containerTop = container.getBoundingClientRect().top
         const relativeLine = Math.floor((caretTop - containerTop) / lineHeight)
@@ -91,7 +92,10 @@ const TypingBox = ({ text }: TypingBoxProps) => {
         return <div className={styles.container}></div>
     }
     return (
+
         <div className={styles.container}>
+            <div className={styles.line}></div>
+
             <div
                 className={styles.inner}
                 style={{ transform: `translateY(-${scrollOffset}px)` }}
@@ -120,7 +124,7 @@ const TypingBox = ({ text }: TypingBoxProps) => {
                                     <span
                                         key={index1}
                                         className={styles.charContainer}
-                                    >
+                                        >
                                         <span className={caretClass}></span>
                                         <span className={charClass}>
                                             {char === " " ? "\u00A0" : char}
@@ -131,8 +135,8 @@ const TypingBox = ({ text }: TypingBoxProps) => {
                         </span>
                     )
                 })}
-            </div>
         </div>
+</div>
     )
 }
 
