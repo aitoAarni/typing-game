@@ -13,6 +13,7 @@ const TypingBox = ({ text }: TypingBoxProps) => {
     const [currentIndex, setCurrentIndex] = useState<number[]>([0, 0])
     const [keyPressInt, setKeyPressInt] = useState<number>(0)
     const [scrollOffset, setScrollOffset] = useState<number>(0)
+    const [isAnimating, setIsAnimating] = useState<boolean>(false)
     const currentCharRef = useRef<string>("")
 
     useEffect(() => {
@@ -71,6 +72,7 @@ const TypingBox = ({ text }: TypingBoxProps) => {
     const lineHeight = 60
 
     useEffect(() => {
+        if (isAnimating) return
         const container = document.querySelector(`.${styles.container}`)
         if (!container) return
 
@@ -78,21 +80,33 @@ const TypingBox = ({ text }: TypingBoxProps) => {
         if (!caretElement) return
 
         const caretTop = caretElement.getBoundingClientRect().top
-        console.log(`caretTop: ${caretTop}`)
-        console.log(`caret: ${caretElement.getBoundingClientRect().y}`)
         const containerTop = container.getBoundingClientRect().top
         const relativeLine = Math.floor((caretTop - containerTop) / lineHeight)
-
         if (relativeLine >= 2) {
+            setIsAnimating(true)
             setScrollOffset(prev => prev + lineHeight)
+        } else if (relativeLine < 0) {
+            setIsAnimating(true)
+            setScrollOffset(prev => prev - lineHeight)
         }
     }, [currentIndex])
 
+    useEffect(() => {
+        const wordContainer = document.querySelector(`.${styles.inner}`)
+        if (!wordContainer) return
+        const handleEndofAnimation = () => setIsAnimating(false)
+        wordContainer.addEventListener("transitionend", handleEndofAnimation)
+        return () => {
+            wordContainer.removeEventListener(
+                "transitionend",
+                handleEndofAnimation
+            )
+        }
+    }, [currentIndex])
     if (charList.length === 0 || typedCorrectly.length === 0) {
         return <div className={styles.container}></div>
     }
     return (
-
         <div className={styles.container}>
             <div className={styles.line}></div>
 
@@ -124,7 +138,7 @@ const TypingBox = ({ text }: TypingBoxProps) => {
                                     <span
                                         key={index1}
                                         className={styles.charContainer}
-                                        >
+                                    >
                                         <span className={caretClass}></span>
                                         <span className={charClass}>
                                             {char === " " ? "\u00A0" : char}
@@ -135,8 +149,8 @@ const TypingBox = ({ text }: TypingBoxProps) => {
                         </span>
                     )
                 })}
+            </div>
         </div>
-</div>
     )
 }
 
