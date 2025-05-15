@@ -68,7 +68,7 @@ const TypingBox = ({ text }: TypingBoxProps) => {
         setTypedCorrectly(copy)
     }, [keyPressInt])
 
-    const lineHeight = 40
+    const lineHeight = 60
 
     useEffect(() => {
         const container = document.querySelector(`.${styles.container}`)
@@ -83,7 +83,7 @@ const TypingBox = ({ text }: TypingBoxProps) => {
         const containerTop = container.getBoundingClientRect().top
         const relativeLine = Math.floor((caretTop - containerTop) / lineHeight)
 
-        if (relativeLine >= 3) {
+        if (relativeLine >= 2) {
             setScrollOffset(prev => prev + lineHeight)
         }
     }, [currentIndex])
