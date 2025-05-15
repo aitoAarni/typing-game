@@ -15,7 +15,7 @@ const TypingView = () => {
             )}
             {!isTyping && (
                 <TypingFinished
-                    statistics={{ accuracy: 100, wpm: 100, time: 10 }}
+                    statistics={{ accuracy: 100, wpm: 100, time: 10, wordCount: 2 }}
                     typeAgain={() => setIsTyping(true)}
                 />
             )}
