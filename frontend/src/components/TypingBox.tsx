@@ -52,8 +52,6 @@ const TypingBox = ({ text, textTyped }: TypingBoxProps) => {
                 } else if (prev[0] + 1 < charList.length) {
                     return [prev[0] + 1, 0]
                 } else {
-                    if (textTyped) textTyped()
-                    console.log("Finished typing")
                     return [prev[0], charList[prev[0]].length]
                 }
             })
@@ -68,6 +66,10 @@ const TypingBox = ({ text, textTyped }: TypingBoxProps) => {
             setCurrentIndex([...currentIndex])
         }
         setTypedCorrectly(copy)
+        if (textTyped && currentIndex[0] === charList.length - 1 && currentIndex[1] === charList[charList.length - 1].length) {
+            textTyped()
+        }
+            
     }, [keyPressInt])
     useEffect(() => {
 

@@ -3,7 +3,6 @@
 
 .container {
     display: flex;
-    margin: 200px;
     flex: 1;
     flex-direction: row;
     justify-content: center;
@@ -26,10 +25,8 @@
 }
 .charContainer {
     display: flex;
-    align-items: center;
     height: 40px;
-    font-size: 40px;
-
+    font-size: $text-size;
 }
 
 %charBase {
