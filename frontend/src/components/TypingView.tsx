@@ -19,7 +19,6 @@ const TypingView = ({ textService }: TypingViewProps) => {
         const setNewText = async () => {
             setTypingTextLoading(true)
             const newText = await textService.getNewText()
-            console.log("in typing view, text:", newText)
             setTypingText(newText)
             setTypingTextLoading(false)
         }
