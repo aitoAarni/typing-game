@@ -10,7 +10,7 @@ interface TypingViewProps {
     textService: WordDefinitionService
 }
 
-const TypingView = ({textService}: TypingViewProps) => {
+const TypingView = ({ textService }: TypingViewProps) => {
     const [isTyping, setIsTyping] = useState<boolean>(true)
     const [typingText, setTypingText] = useState<string>("")
     const [typingTextLoading, setTypingTextLoading] = useState<boolean>(true)
@@ -18,8 +18,15 @@ const TypingView = ({textService}: TypingViewProps) => {
     useEffect(() => {
         const setNewText = async () => {
             setTypingTextLoading(true)
-            const newText = await textService.getNewText()
-            setTypingText(newText)
+            const newText = textService.getNewText()
+            if (newText instanceof Promise) {
+                console.log("newText instanceof Promise")
+                const text = await newText
+                setTypingText(text)
+            } else {
+                console.log("newTExt is text")
+                setTypingText(newText)
+            }
             setTypingTextLoading(false)
         }
         if (isTyping) {
@@ -27,16 +34,22 @@ const TypingView = ({textService}: TypingViewProps) => {
         }
     }, [isTyping])
 
-    console.log("text: ", typingText)
-    console.log("typingTextLoaindg: ", typingTextLoading)
     return (
         <div className={styles.container}>
             {isTyping && !typingTextLoading && (
-                <TypingBox text={typingText} textTyped={() => setIsTyping(false)} />
+                <TypingBox
+                    text={typingText}
+                    textTyped={() => setIsTyping(false)}
+                />
             )}
             {!isTyping && (
                 <TypingFinished
-                    statistics={{ accuracy: 100, wpm: 100, time: 10, wordCount: 2 }}
+                    statistics={{
+                        accuracy: 100,
+                        wpm: 100,
+                        time: 10,
+                        wordCount: 2,
+                    }}
                     typeAgain={() => setIsTyping(true)}
                 />
             )}

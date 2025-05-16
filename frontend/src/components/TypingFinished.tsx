@@ -12,7 +12,6 @@ interface TypingFinishedProps {
 }
 
 const TypingFinished = ({statistics, typeAgain}: TypingFinishedProps) => {
-    console.log("In typing finished")
     return (
         <div className={styles.container}>
             <p className={styles.typingStat}>accuracy {statistics.accuracy}%</p>
