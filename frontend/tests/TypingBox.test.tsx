@@ -30,7 +30,6 @@ describe("TypingBox component tests", () => {
         render(<TypingBox text={sampleText} />)
         const grayChars = screen.getAllByTestId("char-untyped")
 
-        // Each char + 1 space between "hello" and "world"
         expect(grayChars.length).toBe(sampleText.length)
     })
 

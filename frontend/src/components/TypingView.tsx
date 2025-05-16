@@ -1,17 +1,38 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import styles from "./TypingView.module.scss"
 import TypingBox from "./TypingBox"
 import TypingFinished from "./TypingFinished"
+import WordDefinitionService from "../services/WordDefinitionService"
 
-const text = "hello world"
+//const text = "hello world"
 
-const TypingView = () => {
+interface TypingViewProps {
+    textService: WordDefinitionService
+}
+
+const TypingView = ({textService}: TypingViewProps) => {
     const [isTyping, setIsTyping] = useState<boolean>(true)
-    console.log("Is typing", isTyping)
+    const [typingText, setTypingText] = useState<string>("")
+    const [typingTextLoading, setTypingTextLoading] = useState<boolean>(true)
+
+    useEffect(() => {
+        const setNewText = async () => {
+            setTypingTextLoading(true)
+            const newText = await textService.getNewText()
+            setTypingText(newText)
+            setTypingTextLoading(false)
+        }
+        if (isTyping) {
+            setNewText()
+        }
+    }, [isTyping])
+
+    console.log("text: ", typingText)
+    console.log("typingTextLoaindg: ", typingTextLoading)
     return (
         <div className={styles.container}>
-            {isTyping && (
-                <TypingBox text={text} textTyped={() => setIsTyping(false)} />
+            {isTyping && !typingTextLoading && (
+                <TypingBox text={typingText} textTyped={() => setIsTyping(false)} />
             )}
             {!isTyping && (
                 <TypingFinished
