@@ -1,21 +1,20 @@
-const save = (key: string, value: string) => {
-    localStorage.setItem(key, value)
-}
+import { BrowserStorage, StorageAdapter } from "../storage/LocalStorage"
 
-const load = (key: string): string | null => {
-    return localStorage.getItem(key)
-}
-
-const setDefinitionId = (id: number) => {
-    save("definitionId", id.toString())
-}
-
-const getDefinitionId = (): number => {
-    const id = load("definitionId")
-    if (id) {
-        return parseInt(id, 10)
+// for testability
+export const injectionDefinitionService = (storage: StorageAdapter) => {
+    const setDefinitionId = (id: number) => {
+        storage.setItem("definitionId", id.toString())
     }
-    return 0
+
+    const getDefinitionId = (): number => {
+        const id = storage.getItem("definitionId")
+        if (id) {
+            return parseInt(id, 10)
+        }
+        return 0
+    }
+    return { setDefinitionId, getDefinitionId }
 }
 
-export { setDefinitionId, getDefinitionId }
+const DefinitionService = injectionDefinitionService(new BrowserStorage())
+export default DefinitionService
