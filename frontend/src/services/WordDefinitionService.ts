@@ -11,9 +11,10 @@ class WordDefinitionService {
         this.nextText = fetcText(id + 1)
         this.fetchText = fetcText
     }
-    getNewText() {
+    async getNewText() {
         this.id++
         this.currentText = this.nextText
+        console.log("Current text:", this.currentText)
         this.fetchNextText()
         return this.currentText
     }

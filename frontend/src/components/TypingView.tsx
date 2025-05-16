@@ -18,15 +18,9 @@ const TypingView = ({ textService }: TypingViewProps) => {
     useEffect(() => {
         const setNewText = async () => {
             setTypingTextLoading(true)
-            const newText = textService.getNewText()
-            if (newText instanceof Promise) {
-                console.log("newText instanceof Promise")
-                const text = await newText
-                setTypingText(text)
-            } else {
-                console.log("newTExt is text")
-                setTypingText(newText)
-            }
+            const newText = await textService.getNewText()
+            console.log("in typing view, text:", newText)
+            setTypingText(newText)
             setTypingTextLoading(false)
         }
         if (isTyping) {
