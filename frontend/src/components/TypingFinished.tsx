@@ -1,26 +1,29 @@
-import styles from './TypingFinished.module.scss'
+import styles from "./TypingFinished.module.scss"
+import { TypingStatistics } from "./TypingView"
 
 interface TypingFinishedProps {
-    statistics: {
-        accuracy: number
-        wpm: number
-        time: number
-        wordCount: number
-         
-    }
+    statistics: TypingStatistics | null
     typeAgain: () => void
 }
 
-const TypingFinished = ({statistics, typeAgain}: TypingFinishedProps) => {
+const TypingFinished = ({ statistics, typeAgain }: TypingFinishedProps) => {
     return (
         <div className={styles.container}>
-            <p className={styles.typingStat}>accuracy {statistics.accuracy}%</p>
-            <p className={styles.typingStat}>{statistics.wpm} wpm</p>
-            <p className={styles.typingStat}>{statistics.time} s</p>
-            <p className={styles.typingStat}>{statistics.wordCount} words</p>
+            {statistics && (
+                <div>
+                    <p className={styles.typingStat}>
+                        accuracy {statistics.accuracy}%
+                    </p>
+                    <p className={styles.typingStat}>{statistics.wpm} wpm</p>
+                    <p className={styles.typingStat}>{statistics.time} s</p>
+                    <p className={styles.typingStat}>
+                        {statistics.wordCount} words
+                    </p>
+                </div>
+            )}
             <button onClick={() => typeAgain()}>New Text</button>
         </div>
-    ) 
+    )
 }
 
 export default TypingFinished

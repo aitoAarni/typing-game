@@ -1,12 +1,19 @@
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useState, useRef, use } from "react"
 import styles from "./TypingBox.module.scss"
 
 interface TypingBoxProps {
     text?: string
-    textTyped?: () => void
+    textTyped: () => void
+    calculateStatistics: (totalChars: number, errors: number) => void
+    startTimer: () => void
 }
 
-const TypingBox = ({ text, textTyped }: TypingBoxProps) => {
+const TypingBox = ({
+    text,
+    textTyped,
+    calculateStatistics,
+    startTimer,
+}: TypingBoxProps) => {
     const lineHeight = 60
     const [typedCorrectly, setTypedCorrectly] = useState<(boolean | null)[][]>(
         []
@@ -16,7 +23,10 @@ const TypingBox = ({ text, textTyped }: TypingBoxProps) => {
     const [keyPressInt, setKeyPressInt] = useState<number>(0)
     const [scrollOffset, setScrollOffset] = useState<number>(0)
     const [isAnimating, setIsAnimating] = useState<boolean>(false)
+    
     const currentCharRef = useRef<string>("")
+    const startedTypingRef = useRef<boolean>(false)
+    
 
     useEffect(() => {
         if (text?.length) {
@@ -44,6 +54,10 @@ const TypingBox = ({ text, textTyped }: TypingBoxProps) => {
         const char = currentCharRef.current
         const copy = [...typedCorrectly]
         if (char.length === 1) {
+            if (!startedTypingRef.current) {
+                startTimer()
+                startedTypingRef.current = true
+            }
             copy[currentIndex[0]][currentIndex[1]] =
                 char === charList[currentIndex[0]][currentIndex[1]]
             setCurrentIndex(prev => {
@@ -66,13 +80,19 @@ const TypingBox = ({ text, textTyped }: TypingBoxProps) => {
             setCurrentIndex([...currentIndex])
         }
         setTypedCorrectly(copy)
-        if (textTyped && currentIndex[0] === charList.length - 1 && currentIndex[1] === charList[charList.length - 1].length) {
-            textTyped()
-        }
-            
     }, [keyPressInt])
-    useEffect(() => {
 
+    useEffect(() => {
+        if (
+            currentIndex[0] === charList.length - 1 &&
+            currentIndex[1] === charList[charList.length - 1].length
+        ) {
+            textTyped()
+            const { totalChars, errors } = calculateCharsAndErrors(
+                typedCorrectly
+            )
+            calculateStatistics(totalChars, errors)
+        }
         if (isAnimating) return
         const container = document.querySelector(`.${styles.container}`)
         if (!container) return
@@ -92,7 +112,12 @@ const TypingBox = ({ text, textTyped }: TypingBoxProps) => {
         }
     }, [currentIndex])
     if (charList.length === 0 || typedCorrectly.length === 0) {
-        return <div className={styles.container} data-testid="typing-container"></div>
+        return (
+            <div
+                className={styles.container}
+                data-testid="typing-container"
+            ></div>
+        )
     }
     return (
         <div className={styles.container} data-testid="typing-container">
@@ -113,7 +138,10 @@ const TypingBox = ({ text, textTyped }: TypingBoxProps) => {
                             {word.map((char, index1) => {
                                 let caretClass = styles.noCaret
                                 let caretTestId = "no-caret"
-                                if (currentIndex[0] === index0 && currentIndex[1] === index1) {
+                                if (
+                                    currentIndex[0] === index0 &&
+                                    currentIndex[1] === index1
+                                ) {
                                     caretClass = styles.caret
                                     caretTestId = "caret"
                                 }
@@ -122,7 +150,6 @@ const TypingBox = ({ text, textTyped }: TypingBoxProps) => {
                                 if (typedCorrectly[index0][index1] == true) {
                                     charClass = styles.charCorrect
                                     testId = "char-correct"
-
                                 } else if (
                                     typedCorrectly[index0][index1] == false
                                 ) {
@@ -138,8 +165,14 @@ const TypingBox = ({ text, textTyped }: TypingBoxProps) => {
                                         key={index1}
                                         className={styles.charContainer}
                                     >
-                                        <span className={caretClass} data-testid={caretTestId}></span>
-                                        <span className={charClass} data-testid={testId}>
+                                        <span
+                                            className={caretClass}
+                                            data-testid={caretTestId}
+                                        ></span>
+                                        <span
+                                            className={charClass}
+                                            data-testid={testId}
+                                        >
                                             {char === " " ? "\u00A0" : char}
                                         </span>
                                     </span>
@@ -168,6 +201,19 @@ const partitionText = (text: string): [string[][], (boolean | null)[][]] => {
         }
     })
     return [partitionedText, typedCorrectly]
+}
+
+const calculateCharsAndErrors = (typedCorrectly: (boolean | null)[][]) => {
+    let totalChars = 0
+    let errors = 0
+    typedCorrectly.forEach(word => {
+        word.forEach(char => {
+            if (char === true) ++totalChars
+            else if (char === false) ++errors
+            else console.log("Error")
+        })
+    })
+    return { totalChars, errors }
 }
 
 export default TypingBox
