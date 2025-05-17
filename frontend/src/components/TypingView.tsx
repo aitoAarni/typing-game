@@ -3,6 +3,7 @@ import styles from "./TypingView.module.scss"
 import TypingBox from "./TypingBox"
 import TypingFinished from "./TypingFinished"
 import WordDefinitionService from "../services/WordDefinitionService"
+import LoadingSpinner from "./LoadingSpinner"
 
 //const text = "hello world"
 
@@ -20,7 +21,7 @@ const TypingView = ({ textService }: TypingViewProps) => {
             setTypingTextLoading(true)
             const newText = await textService.getNewText()
             setTypingText(newText)
-            setTypingTextLoading(false)
+            //setTypingTextLoading(false)
         }
         if (isTyping) {
             setNewText()
@@ -35,6 +36,7 @@ const TypingView = ({ textService }: TypingViewProps) => {
                     textTyped={() => setIsTyping(false)}
                 />
             )}
+            {typingTextLoading && <LoadingSpinner posY={200}  />}
             {!isTyping && (
                 <TypingFinished
                     statistics={{
