@@ -21,7 +21,7 @@ const TypingView = ({ textService }: TypingViewProps) => {
             setTypingTextLoading(true)
             const newText = await textService.getNewText()
             setTypingText(newText)
-            //setTypingTextLoading(false)
+            setTypingTextLoading(false)
         }
         if (isTyping) {
             setNewText()

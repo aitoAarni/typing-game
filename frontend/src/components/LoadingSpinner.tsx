@@ -10,13 +10,10 @@ const LoadingSpinner = ({ posX, posY }: LoadingSpinnerProps) => {
     const style: React.CSSProperties = {
         position:
             posX !== undefined || posY !== undefined ? "absolute" : undefined,
+        left: posX,
+        top: posY,
     }
-    if (posY !== undefined) {
-        style.top = `${posY}px`
-    }
-    if (posX !== undefined) {
-        style.left = `${posX}px`
-    }
+
     return (
         <div
             className={styles.spinner}
