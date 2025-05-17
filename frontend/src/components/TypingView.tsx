@@ -36,7 +36,7 @@ const TypingView = ({ textService }: TypingViewProps) => {
                     textTyped={() => setIsTyping(false)}
                 />
             )}
-            {typingTextLoading && <LoadingSpinner posY={200}  />}
+            {typingTextLoading && <LoadingSpinner posY={270}  />}
             {!isTyping && (
                 <TypingFinished
                     statistics={{
