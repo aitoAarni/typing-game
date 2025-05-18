@@ -5,7 +5,7 @@ import { getRemoteWordDefinition } from "../services/GetRemoteText"
 
 const HomeView = () => {
     
-    const textService = new WordDefinitionService(0, getRemoteWordDefinition)
+    const textService = WordDefinitionService.newInstance(getRemoteWordDefinition)
 
     return (
         <div className={styles.container} data-testid="home-view">

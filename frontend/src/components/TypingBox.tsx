@@ -79,7 +79,7 @@ const TypingBox = ({
         return () => {
             window.removeEventListener("keydown", handleKeyDown)
         }
-    }, [])
+    }, [text])
 
     useEffect(() => {
         if (

@@ -2,6 +2,7 @@ import { BrowserStorage, StorageAdapter } from "../storage/LocalStorage"
 
 // for testability
 export const injectionDefinitionService = (storage: StorageAdapter) => {
+
     const setDefinitionId = (id: number) => {
         storage.setItem("definitionId", id.toString())
     }
