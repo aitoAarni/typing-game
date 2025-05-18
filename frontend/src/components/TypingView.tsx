@@ -1,4 +1,4 @@
-import { use, useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import styles from "./TypingView.module.scss"
 import TypingBox from "./TypingBox"
 import TypingFinished from "./TypingFinished"
@@ -34,7 +34,7 @@ const TypingView = ({ textService }: TypingViewProps) => {
         const endTime = new Date().getTime()
         const time = (endTime - startTimeRef.current) / 1000
         const words = typingText.split(/\s+/).length
-        const wpm = Math.round(totalChars / 5 / (time / 60))
+        const wpm = Math.round((totalChars - errors) / 5 / (time / 60))
         const accuracy = ((totalChars - errors) / totalChars * 100).toFixed(2)
         setTypingStatistics({
             accuracy: accuracy,

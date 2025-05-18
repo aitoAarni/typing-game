@@ -24,6 +24,8 @@ const TypingBox = ({
     const [scrollOffset, setScrollOffset] = useState<number>(0)
     const [isAnimating, setIsAnimating] = useState<boolean>(false)
     
+    const totalCharsTypedRef = useRef<number>(0)
+    const totalErrorsRef = useRef<number>(0)
     const currentCharRef = useRef<string>("")
     const startedTypingRef = useRef<boolean>(false)
     
@@ -60,6 +62,10 @@ const TypingBox = ({
             }
             copy[currentIndex[0]][currentIndex[1]] =
                 char === charList[currentIndex[0]][currentIndex[1]]
+            if (copy[currentIndex[0]][currentIndex[1]] === false) {
+                totalErrorsRef.current += 1
+            }
+            totalCharsTypedRef.current += 1
             setCurrentIndex(prev => {
                 if (prev[1] + 1 < charList[prev[0]].length) {
                     return [prev[0], prev[1] + 1]
@@ -87,11 +93,8 @@ const TypingBox = ({
             currentIndex[0] === charList.length - 1 &&
             currentIndex[1] === charList[charList.length - 1].length
         ) {
+            calculateStatistics(totalCharsTypedRef.current, totalErrorsRef.current)
             textTyped()
-            const { totalChars, errors } = calculateCharsAndErrors(
-                typedCorrectly
-            )
-            calculateStatistics(totalChars, errors)
         }
         if (isAnimating) return
         const container = document.querySelector(`.${styles.container}`)
@@ -203,17 +206,5 @@ const partitionText = (text: string): [string[][], (boolean | null)[][]] => {
     return [partitionedText, typedCorrectly]
 }
 
-const calculateCharsAndErrors = (typedCorrectly: (boolean | null)[][]) => {
-    let totalChars = 0
-    let errors = 0
-    typedCorrectly.forEach(word => {
-        word.forEach(char => {
-            if (char === true) ++totalChars
-            else if (char === false) ++errors
-            else console.log("Error")
-        })
-    })
-    return { totalChars, errors }
-}
 
 export default TypingBox
