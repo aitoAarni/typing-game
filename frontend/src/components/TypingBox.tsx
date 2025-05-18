@@ -23,12 +23,49 @@ const TypingBox = ({
     const [keyPressInt, setKeyPressInt] = useState<number>(0)
     const [scrollOffset, setScrollOffset] = useState<number>(0)
     const [isAnimating, setIsAnimating] = useState<boolean>(false)
-    
+
     const totalCharsTypedRef = useRef<number>(0)
     const totalErrorsRef = useRef<number>(0)
     const currentCharRef = useRef<string>("")
     const startedTypingRef = useRef<boolean>(false)
-    
+
+    const currentIndexRef = useRef<number[]>([0, 0])
+    const charListRef = useRef<string[][]>([])
+
+    const keyPressed = (event: KeyboardEvent) => {
+        if (typedCorrectly.length === 0 || charList.length === 0) return
+        const char = event.key
+        const typedCorrectlyCopy = [...typedCorrectly]
+        const currentIndex = currentIndexRef.current
+        if (char.length === 1) {
+            if (!startedTypingRef.current) {
+                startTimer()
+                startedTypingRef.current = true
+            }
+            typedCorrectlyCopy[currentIndex[0]][currentIndex[1]] =
+                char === charListRef.current[currentIndex[0]][currentIndex[1]]
+            if (
+                typedCorrectlyCopy[currentIndex[0]][currentIndex[1]] === false
+            ) {
+                totalErrorsRef.current += 1
+            }
+            totalCharsTypedRef.current += 1
+            currentIndexRef.current = setNewIndex(
+                currentIndex,
+                charListRef.current
+            )
+        } else if (char === "Backspace") {
+            if (currentIndex[1] === 0 && currentIndex[0] > 0) {
+                currentIndex[0] = currentIndex[0] - 1
+                currentIndex[1] = charList[currentIndex[0]].length - 1
+            } else if (currentIndex[1] > 0) {
+                currentIndex[1] = currentIndex[1] - 1
+            }
+            typedCorrectlyCopy[currentIndex[0]][currentIndex[1]] = null
+            currentIndexRef.current = currentIndex
+        }
+        setTypedCorrectly(typedCorrectlyCopy)
+    }
 
     useEffect(() => {
         if (text?.length) {
@@ -93,7 +130,10 @@ const TypingBox = ({
             currentIndex[0] === charList.length - 1 &&
             currentIndex[1] === charList[charList.length - 1].length
         ) {
-            calculateStatistics(totalCharsTypedRef.current, totalErrorsRef.current)
+            calculateStatistics(
+                totalCharsTypedRef.current,
+                totalErrorsRef.current
+            )
             textTyped()
         }
         if (isAnimating) return
@@ -205,6 +245,14 @@ const partitionText = (text: string): [string[][], (boolean | null)[][]] => {
     })
     return [partitionedText, typedCorrectly]
 }
-
+const setNewIndex = (currentIndex: number[], charList: string[][]) => {
+    if (currentIndex[1] + 1 < charList[currentIndex[0]].length) {
+        return [currentIndex[0], currentIndex[1] + 1]
+    } else if (currentIndex[0] + 1 < charList.length) {
+        return [currentIndex[0] + 1, 0]
+    } else {
+        return [currentIndex[0], charList[currentIndex[0]].length]
+    }
+}
 
 export default TypingBox
