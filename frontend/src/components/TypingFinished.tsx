@@ -19,6 +19,7 @@ const TypingFinished = ({ statistics, typeAgain }: TypingFinishedProps) => {
                     <p className={styles.typingStat}>
                         {statistics.wordCount} words
                     </p>
+                    <p className={styles.typingStat}>{statistics.errorCount}</p>
                 </div>
             )}
             <button onClick={() => typeAgain()}>New Text</button>
