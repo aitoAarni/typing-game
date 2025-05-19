@@ -2,9 +2,11 @@ import { Response, Request } from "express"
 
 export const getWordDefinition = (req: Request, res: Response) => {
     const id = parseInt(req.params.id, 10)
+    if (isNaN(id) || id < 0) {
+        res.status(400).send("Invalid ID")
+    }
     const listId = id % 102
     const definition = definitions[listId]
-    console.log("sending definition with id " + id)
     res.status(200).send(
         definition.word +
             ": " +
