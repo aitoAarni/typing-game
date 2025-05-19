@@ -1,7 +1,10 @@
 import express, { Request, Response } from "express"
+import cors from "cors"
 import textRouter from "./routes/textRoutes"
 const app = express()
 const PORT = 3000
+
+app.use(cors())
 
 app.get("/", (req: Request, res: Response) => {
     res.send("Hello World!")
