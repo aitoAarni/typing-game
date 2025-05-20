@@ -28,6 +28,7 @@ services:
             - /app/node_modules
         environment:
             - NODE_ENV=development
+            - API_URL=${API_URL}
         command: npm run dev -- --host
 
     db:
