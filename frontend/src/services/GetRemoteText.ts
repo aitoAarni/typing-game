@@ -1,5 +1,6 @@
 const getRemoteWordDefinition = async (id: number): Promise<string> => {
-    const url = "http://localhost:3000/text/wordDefinition/" + String(id)
+    
+    const url = `${}txt/wordDefinition/` + String(id)
     try {
         const response = await fetch(url)
         if (!response.ok) throw new Error("Error fetching data")
