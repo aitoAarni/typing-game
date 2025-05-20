@@ -1,7 +1,7 @@
 import { queryDatabase } from "../database/db"
 import { definitionSchema } from "../types/definitions"
 
-export const getWordDefinitionDb = async (id: number): Promise<any> => {
+export const getWordDefinitionDb = async (id: number) => {
     const query = `SELECT * FROM definitions WHERE id = $1`
     const definitionArray = await queryDatabase(query, [id])
     if (definitionArray.length === 0) {
