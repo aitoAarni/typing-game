@@ -1,6 +1,7 @@
+import { API_URL } from "../config"
+
 const getRemoteWordDefinition = async (id: number): Promise<string> => {
-    
-    const url = `${}txt/wordDefinition/` + String(id)
+    const url = `${API_URL}/text/wordDefinition/` + String(id)
     try {
         const response = await fetch(url)
         if (!response.ok) throw new Error("Error fetching data")
