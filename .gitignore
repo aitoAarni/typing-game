@@ -1,5 +1,6 @@
 
-# Logs
+.env
+
 frontend/logs
 *.log
 frontend/npm-debug.log*
