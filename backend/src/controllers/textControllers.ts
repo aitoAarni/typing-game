@@ -1,6 +1,10 @@
 import { Response, Request } from "express"
+import pool from "../database/pool";
 
-export const getWordDefinition = (req: Request, res: Response) => {
+export const getWordDefinition = async (req: Request, res: Response) => {
+    console.log("env: ", process.env.DB_HOST)
+    const result = await pool.query('SELECT NOW()');
+    console.log(result.rows);
     const id = parseInt(req.params.id, 10)
     if (isNaN(id) || id < 0) {
         res.status(400).send("Invalid ID")
