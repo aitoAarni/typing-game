@@ -1,24 +1,24 @@
 import { WordDefinition } from "../types/types"
-import DefinitionService from "./LocalStorage"
+import LocalStorageService from "./LocalStorageService"
 
 class WordDefinitionService {
     id: number
     currentDefinition: WordDefinition | Promise<WordDefinition>
     nextDefinition: WordDefinition | Promise<WordDefinition>
     fetchWordDefinition: (id: number) => Promise<WordDefinition>
-    definitionService: typeof DefinitionService
+    localStorageService: typeof LocalStorageService
 
-    constructor(id: number, fetchWordDefinition: (id: number) => Promise<WordDefinition>, definitionService: typeof DefinitionService) { 
+    constructor(id: number, fetchWordDefinition: (id: number) => Promise<WordDefinition>, localStorageService: typeof LocalStorageService) { 
         this.id = id - 1
         this.currentDefinition = {} as WordDefinition
         this.nextDefinition = fetchWordDefinition(id)
         this.fetchWordDefinition = fetchWordDefinition
-        this.definitionService = definitionService
+        this.localStorageService = localStorageService
     }
     
-    static newInstance(fetchWordDefinition: (id: number) => Promise<WordDefinition>, definitionService: typeof DefinitionService=DefinitionService) {
-        const id = definitionService.getDefinitionId() + 1
-        return new WordDefinitionService(id, fetchWordDefinition, definitionService)
+    static newInstance(fetchWordDefinition: (id: number) => Promise<WordDefinition>, localStorageService: typeof LocalStorageService=LocalStorageService) {
+        const id = localStorageService.getDefinitionId() + 1
+        return new WordDefinitionService(id, fetchWordDefinition, localStorageService)
     }
 
     async getNewDefinition() {
@@ -35,7 +35,7 @@ class WordDefinitionService {
     } 
     
     updateStorageId() {
-        this.definitionService.setDefinitionId(this.id)
+        this.localStorageService.setDefinitionId(this.id)
     }
     
 }

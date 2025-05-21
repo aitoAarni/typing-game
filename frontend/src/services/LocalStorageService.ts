@@ -1,7 +1,7 @@
 import { BrowserStorage, StorageAdapter } from "../storage/LocalStorage"
 
 // for testability
-export const injectionDefinitionService = (storage: StorageAdapter) => {
+export const injectionStorageService = (storage: StorageAdapter) => {
 
     const setDefinitionId = (id: number) => {
         storage.setItem("definitionId", id.toString())
@@ -14,8 +14,12 @@ export const injectionDefinitionService = (storage: StorageAdapter) => {
         }
         return 0
     }
-    return { setDefinitionId, getDefinitionId }
+
+    const setToken = (token: string) => {
+        storage.setItem("token", token)
+    }
+    return { setDefinitionId, getDefinitionId, setToken }
 }
 
-const DefinitionService = injectionDefinitionService(new BrowserStorage())
-export default DefinitionService
+const LocalStorage = injectionStorageService(new BrowserStorage())
+export default LocalStorage
