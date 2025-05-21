@@ -1,5 +1,5 @@
 import { queryDatabase } from "../database/db"
-import { definitionSchema } from "../types/definitions"
+import { definitionSchema } from "../types/typeGuards"
 
 export const getWordDefinitionDb = async (id: number) => {
     const query = `SELECT * FROM definitions WHERE id = $1`
