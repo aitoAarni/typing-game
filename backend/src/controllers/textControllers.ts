@@ -1,6 +1,5 @@
 import { Response, Request } from "express"
-import { getWordDefinitionDb } from "../services/textServices";
-
+import { getWordDefinitionDb } from "../services/textServices"
 
 export const getWordDefinition = async (req: Request, res: Response) => {
     const paramID = parseInt(req.params.id, 10)
@@ -9,11 +8,5 @@ export const getWordDefinition = async (req: Request, res: Response) => {
     }
     const id = paramID % 102
     const definition = await getWordDefinitionDb(id)
-    res.status(200).send(
-        definition.word +
-            ": " +
-            definition.definition +
-            " - " +
-            definition.sentence
-    )
+    res.status(200).json(definition)
 }
