@@ -5,11 +5,11 @@ import { getRemoteWordDefinition } from "../services/GetRemoteText"
 
 const HomeView = () => {
     
-    const textService = WordDefinitionService.newInstance(getRemoteWordDefinition)
+    const wordDefinitionService = WordDefinitionService.newInstance(getRemoteWordDefinition)
 
     return (
         <div className={styles.container} data-testid="home-view">
-            <TypingView textService={textService}/>
+            <TypingView definitionService={wordDefinitionService}/>
         </div>
     )
 }

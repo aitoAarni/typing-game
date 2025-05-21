@@ -25,6 +25,7 @@ class WordDefinitionService {
         this.id++
         this.updateStorageId()
         this.currentDefinition = this.nextDefinition
+        console.log("this.currentDefinition", this.currentDefinition)
         this.fetchNextDefinition()
         return this.currentDefinition
     }

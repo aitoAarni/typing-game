@@ -20,7 +20,7 @@ export interface TypingStatistics {
 
 const TypingView = ({ definitionService }: TypingViewProps) => {
     const [isTyping, setIsTyping] = useState<boolean>(true)
-    const [typingText, setTypingText] = useState<string>("")
+    const [wordDefinition, setWordDefinition] = useState<WordDefinition | null>(null)
     const [typingTextLoading, setTypingTextLoading] = useState<boolean>(true)
     const [typingStatistics, setTypingStatistics] =
         useState<null | TypingStatistics>(null)
@@ -32,9 +32,11 @@ const TypingView = ({ definitionService }: TypingViewProps) => {
     }
 
     const calculateStatistics = (totalChars: number, errors: number) => {
+        if (!wordDefinition) return
+        const text = createTextFromDefinition(wordDefinition)
         const endTime = new Date().getTime()
         const time = (endTime - startTimeRef.current) / 1000
-        const words = typingText.split(/\s+/).length
+        const words = text.split(/\s+/).length
         const wpm = Math.round((totalChars - errors) / 5 / (time / 60))
         const accuracy = (((totalChars - errors) / totalChars) * 100).toFixed(2)
         setTypingStatistics({
@@ -50,8 +52,7 @@ const TypingView = ({ definitionService }: TypingViewProps) => {
         const setNewText = async () => {
             setTypingTextLoading(true)
             const newDefinition = await definitionService.getNewDefinition()
-            const newText = createTextFromDefinition(newDefinition)
-            setTypingText(newText)
+            setWordDefinition(newDefinition)
             setTypingTextLoading(false)
         }
         if (isTyping) {
@@ -63,7 +64,7 @@ const TypingView = ({ definitionService }: TypingViewProps) => {
         <div className={styles.container}>
             {isTyping && !typingTextLoading && (
                 <TypingBox
-                    text={typingText}
+                    text={createTextFromDefinition(wordDefinition)}
                     textTyped={() => setIsTyping(false)}
                     calculateStatistics={calculateStatistics}
                     startTimer={turnTimerOn}
@@ -72,6 +73,7 @@ const TypingView = ({ definitionService }: TypingViewProps) => {
             {typingTextLoading && <LoadingSpinner posY={270} />}
             {!isTyping && (
                 <TypingFinished
+                    wordDefinition={wordDefinition!}
                     statistics={typingStatistics}
                     typeAgain={() => setIsTyping(true)}
                 />
@@ -80,7 +82,8 @@ const TypingView = ({ definitionService }: TypingViewProps) => {
     )
 }
 
-const createTextFromDefinition = (definitionObject: WordDefinition) => {
+const createTextFromDefinition = (definitionObject: WordDefinition | null) => {
+    if (!definitionObject) return ""
     const string =
         definitionObject.word +
         ": " +
