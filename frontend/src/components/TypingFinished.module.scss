@@ -18,6 +18,7 @@
     color: $primary-color;
     border-radius: 10px;
     border: 1px solid $primary-color;
+    margin-bottom: 20px;
 }
 
 .wordDefinition {
@@ -28,6 +29,7 @@
 .typingStatsContainer {
     display: flex;
     flex-direction: row;
+    margin-bottom: 20px;
 }
 
 .typingStat {

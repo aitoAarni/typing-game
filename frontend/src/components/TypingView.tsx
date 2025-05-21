@@ -20,7 +20,9 @@ export interface TypingStatistics {
 
 const TypingView = ({ definitionService }: TypingViewProps) => {
     const [isTyping, setIsTyping] = useState<boolean>(true)
-    const [wordDefinition, setWordDefinition] = useState<WordDefinition | null>(null)
+    const [wordDefinition, setWordDefinition] = useState<WordDefinition | null>(
+        null
+    )
     const [typingTextLoading, setTypingTextLoading] = useState<boolean>(true)
     const [typingStatistics, setTypingStatistics] =
         useState<null | TypingStatistics>(null)
