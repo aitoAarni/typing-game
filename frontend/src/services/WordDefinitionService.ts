@@ -1,37 +1,40 @@
+import { WordDefinition } from "../types/types"
 import DefinitionService from "./LocalStorage"
 
 class WordDefinitionService {
     id: number
-    currentText: string | Promise<string>
-    nextText: string | Promise<string>
-    fetchText: (id: number) => Promise<string>
+    currentDefinition: WordDefinition | Promise<WordDefinition>
+    nextDefinition: WordDefinition | Promise<WordDefinition>
+    fetchWordDefinition: (id: number) => Promise<WordDefinition>
+    definitionService: typeof DefinitionService
 
-    constructor(id: number, fetcText: (id: number) => Promise<string>) {
+    constructor(id: number, fetchWordDefinition: (id: number) => Promise<WordDefinition>, definitionService: typeof DefinitionService) { 
         this.id = id - 1
-        this.currentText = ''
-        this.nextText = fetcText(id)
-        this.fetchText = fetcText
+        this.currentDefinition = {} as WordDefinition
+        this.nextDefinition = fetchWordDefinition(id)
+        this.fetchWordDefinition = fetchWordDefinition
+        this.definitionService = definitionService
     }
     
-    static newInstance(fetchText: (id: number) => Promise<string>) {
-        const id = DefinitionService.getDefinitionId() + 1
-        return new WordDefinitionService(id, fetchText)
+    static newInstance(fetchWordDefinition: (id: number) => Promise<WordDefinition>, definitionService: typeof DefinitionService=DefinitionService) {
+        const id = definitionService.getDefinitionId() + 1
+        return new WordDefinitionService(id, fetchWordDefinition, definitionService)
     }
 
-    async getNewText() {
+    async getNewDefinition() {
         this.id++
         this.updateStorageId()
-        this.currentText = this.nextText
-        this.fetchNextText()
-        return this.currentText
+        this.currentDefinition = this.nextDefinition
+        this.fetchNextDefinition()
+        return this.currentDefinition
     }
 
-    fetchNextText() {
-        this.nextText = this.fetchText(this.id + 1)
+    fetchNextDefinition() {
+        this.nextDefinition = this.fetchWordDefinition(this.id + 1)
     } 
     
     updateStorageId() {
-        DefinitionService.setDefinitionId(this.id)
+        this.definitionService.setDefinitionId(this.id)
     }
     
 }

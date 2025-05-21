@@ -1,13 +1,13 @@
 import { API_URL } from "../config"
+import { WordDefinitionSchema } from "../types/TypeGuards"
 
-const getRemoteWordDefinition = async (id: number): Promise<string> => {
+const getRemoteWordDefinition = async (id: number) => {
     const url = `${API_URL}/text/wordDefinition/` + String(id)
     try {
         const response = await fetch(url)
         if (!response.ok) throw new Error("Error fetching data")
-        const text = response.text()
-        console.log("text", text)
-        return text
+        const definitionObject = WordDefinitionSchema.parse(response.text())
+        return definitionObject
     } catch (error) {
         throw new Error("Network error: " + error)
     }

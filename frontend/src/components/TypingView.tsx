@@ -4,10 +4,10 @@ import TypingBox from "./TypingBox"
 import TypingFinished from "./TypingFinished"
 import WordDefinitionService from "../services/WordDefinitionService"
 import LoadingSpinner from "./LoadingSpinner"
-
+import { WordDefinition } from "../types/types"
 
 interface TypingViewProps {
-    textService: WordDefinitionService
+    definitionService: WordDefinitionService
 }
 
 export interface TypingStatistics {
@@ -18,11 +18,12 @@ export interface TypingStatistics {
     errorCount: number
 }
 
-const TypingView = ({ textService }: TypingViewProps) => {
+const TypingView = ({ definitionService }: TypingViewProps) => {
     const [isTyping, setIsTyping] = useState<boolean>(true)
     const [typingText, setTypingText] = useState<string>("")
     const [typingTextLoading, setTypingTextLoading] = useState<boolean>(true)
-    const [typingStatistics, setTypingStatistics] = useState<null | TypingStatistics>(null)
+    const [typingStatistics, setTypingStatistics] =
+        useState<null | TypingStatistics>(null)
 
     const startTimeRef = useRef<number>(0)
 
@@ -35,7 +36,7 @@ const TypingView = ({ textService }: TypingViewProps) => {
         const time = (endTime - startTimeRef.current) / 1000
         const words = typingText.split(/\s+/).length
         const wpm = Math.round((totalChars - errors) / 5 / (time / 60))
-        const accuracy = ((totalChars - errors) / totalChars * 100).toFixed(2)
+        const accuracy = (((totalChars - errors) / totalChars) * 100).toFixed(2)
         setTypingStatistics({
             accuracy: accuracy,
             wpm: wpm,
@@ -48,7 +49,8 @@ const TypingView = ({ textService }: TypingViewProps) => {
     useEffect(() => {
         const setNewText = async () => {
             setTypingTextLoading(true)
-            const newText = await textService.getNewText()
+            const newDefinition = await definitionService.getNewDefinition()
+            const newText = createTextFromDefinition(newDefinition)
             setTypingText(newText)
             setTypingTextLoading(false)
         }
@@ -76,6 +78,16 @@ const TypingView = ({ textService }: TypingViewProps) => {
             )}
         </div>
     )
+}
+
+const createTextFromDefinition = (definitionObject: WordDefinition) => {
+    const string =
+        definitionObject.word +
+        ": " +
+        definitionObject.definition +
+        " - " +
+        definitionObject.sentence
+    return string
 }
 
 export default TypingView
