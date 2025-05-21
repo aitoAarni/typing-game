@@ -38,12 +38,12 @@
 
 .charCorrect {
     @extend %charBase;
-    color: greenyellow;
+    color: $primary-color;
 }
 
 .charIncorrect {
     @extend %charBase;
-    color: red;
+    color: $color-incorrect;
 }
 
 .charUntyped {
