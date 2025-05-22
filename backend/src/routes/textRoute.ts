@@ -1,4 +1,4 @@
-import express, {Request, Response} from "express"
+import express from "express"
 import { getWordDefinition } from "../controllers/textControllers"
 const textRouter = express.Router()
 

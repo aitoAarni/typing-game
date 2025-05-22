@@ -6,6 +6,7 @@ const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
 
 export const authGoogle = async (req: Request, res: Response) => {
     console.log("Google auth controller")
+    console.log("Request body: ", req.body)
     const credentials = req.body.credentials
     console.log("Credentials: ", credentials)
     if (typeof credentials !== "string") {
