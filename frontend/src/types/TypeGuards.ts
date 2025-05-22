@@ -11,5 +11,5 @@ export const AuthResponseSchema = z.object({
     token: z.string(),
     username: z.string(),
     email: z.string(),
-    id: z.string(),
+    id: z.number(),
 })

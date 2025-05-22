@@ -2,10 +2,8 @@ import { CredentialResponse } from "@react-oauth/google"
 import { API_URL } from "../config"
 import { AuthResponseSchema } from "../types/TypeGuards"
 
-const LoginGoogle = async (credentials: CredentialResponse) => {
+const loginGoogle = async (credentials: CredentialResponse) => {
     const url = API_URL + "/auth/google"
-    console.log("url", url)
-    console.log("credential: ", credentials.credential)
     const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -31,4 +29,4 @@ const LoginGoogle = async (credentials: CredentialResponse) => {
     }
 }
 
-export default LoginGoogle
+export default loginGoogle

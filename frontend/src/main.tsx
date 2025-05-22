@@ -4,6 +4,7 @@ import App from "./App.jsx"
 import "./global.scss"
 import { GoogleOAuthProvider } from "@react-oauth/google"
 import { OAuthID } from "./config.js"
+import AuthProvider from "./contexts/AuthContext.js"
 
 const container = document.getElementById("root")
 if (!container) {
@@ -12,8 +13,10 @@ if (!container) {
 
 ReactDOM.createRoot(container).render(
     <GoogleOAuthProvider clientId={OAuthID}>
-        <BrowserRouter>
-            <App />
-        </BrowserRouter>
+        <AuthProvider>
+            <BrowserRouter>
+                <App />
+            </BrowserRouter>
+        </AuthProvider>
     </GoogleOAuthProvider>
 )
