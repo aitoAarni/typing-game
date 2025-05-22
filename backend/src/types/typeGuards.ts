@@ -7,4 +7,6 @@ export const definitionSchema = z.object({
     sentence: z.string(),
 })
 
+
 export type Definition = z.infer<typeof definitionSchema>
+
