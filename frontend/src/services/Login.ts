@@ -1,24 +1,34 @@
+import { CredentialResponse } from "@react-oauth/google"
 import { API_URL } from "../config"
-import LocalStorage from "./LocalStorageService"
+import { AuthResponseSchema } from "../types/TypeGuards"
 
-const LoginGoogle = async (token: string) => {
+const LoginGoogle = async (credentials: CredentialResponse) => {
     const url = API_URL + "/auth/google"
+    console.log("url", url)
+    console.log("credential: ", credentials.credential)
     const response = await fetch(url, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-            token,
-        }),
+        body: JSON.stringify({ credentials: credentials.credential }),
     })
 
     if (!response.ok) {
         throw new Error("Network error: " + response.statusText)
     }
 
-    const data = await response.json()
-    LocalStorage.setToken(data.token)
+    const data = AuthResponseSchema.parse(await response.json())
+    const user = {
+        id: data.id,
+        username: data.username,
+        email: data.email,
+    }
+
+    return {
+        token: data.token,
+        user,
+    }
 }
 
 export default LoginGoogle
