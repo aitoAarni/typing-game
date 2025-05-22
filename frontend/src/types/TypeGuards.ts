@@ -6,3 +6,10 @@ export const WordDefinitionSchema = z.object({
     definition: z.string(),
     sentence: z.string(),
 })
+
+export const AuthResponseSchema = z.object({
+    token: z.string(),
+    username: z.string(),
+    email: z.string(),
+    id: z.string(),
+})
