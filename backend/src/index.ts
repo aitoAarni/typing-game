@@ -2,6 +2,7 @@ import express, { Request, Response } from "express"
 import cors from "cors"
 import textRouter from "./routes/textRoute"
 import authRouter from "./routes/authRoute"
+import { errorHandler } from "./middleware"
 const app = express()
 const PORT = 3000
 
@@ -15,6 +16,8 @@ app.get("/", (req: Request, res: Response) => {
 app.use("/text", textRouter)
 
 app.use("/auth", authRouter)
+
+app.use(errorHandler)
 
 app.listen(PORT, () => {
     console.log("Backend listening on PORT " + PORT)

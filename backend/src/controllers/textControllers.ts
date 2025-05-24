@@ -1,12 +1,21 @@
-import { Response, Request } from "express"
+import { Response, Request, NextFunction } from "express"
 import { getWordDefinitionDb } from "../services/textServices"
+import { HTTPError } from "../utils"
 
-export const getWordDefinition = async (req: Request, res: Response) => {
-    const paramID = parseInt(req.params.id, 10)
-    if (isNaN(paramID) || paramID < 0) {
-        res.status(400).send("Invalid ID")
+export const getWordDefinition = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    try {
+        const paramID = parseInt(req.params.id, 10)
+        if (isNaN(paramID) || paramID < 0) {
+            throw new HTTPError(400, "Invalid ID")
+        }
+        const id = paramID % 102
+        const definition = await getWordDefinitionDb(id)
+        res.status(200).json(definition)
+    } catch (error) {
+        next(error)
     }
-    const id = paramID % 102
-    const definition = await getWordDefinitionDb(id)
-    res.status(200).json(definition)
 }
