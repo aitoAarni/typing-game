@@ -8,5 +8,11 @@ export const definitionSchema = z.object({
 })
 
 
-export type Definition = z.infer<typeof definitionSchema>
+export const databaseUserSchema = z.object({
+    id: z.number(),
+    googleId: z.string().nullable(),
+    email: z.string().email(),
+    username: z.string(),
+    password: z.string().nullable(),
+})
 
