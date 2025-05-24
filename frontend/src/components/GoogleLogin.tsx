@@ -9,9 +9,11 @@ const GoogleLoginComponent = () => {
     const handleLogin = async (credentials: CredentialResponse) => {
         try {
             const { token, user } = await loginGoogle(credentials)
+            console.log("Login successful", { token, user })
             LocalStorage.setToken(token)
             LocalStorage.setUser(user)
             authUpdate()
+
         } catch (error) {
             console.error("Login failed", error)
         }

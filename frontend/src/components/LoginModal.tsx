@@ -13,8 +13,10 @@ const LoginModal = ({ closeModal }: LoginModalProps) => {
     console.log("LoginModal rendered")
     const authUpdate = useAuthUpdate()
     const handleLogin = async (credentials: CredentialResponse) => {
+        console.log("Handling login with credentials:", credentials)
         try {
             const { token, user } = await loginGoogle(credentials)
+            console.log("Login successful", { token, user })
             LocalStorage.setToken(token)
             LocalStorage.setUser(user)
             authUpdate()
