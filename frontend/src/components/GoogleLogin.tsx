@@ -11,8 +11,6 @@ const GoogleLoginComponent = () => {
             const { token, user } = await loginGoogle(credentials)
             LocalStorage.setToken(token)
             LocalStorage.setUser(user)
-            console.log("token", token)
-            console.log("user", user)
             authUpdate()
         } catch (error) {
             console.error("Login failed", error)
