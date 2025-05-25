@@ -3,6 +3,6 @@ import { getWordDefinition } from "../controllers/textControllers"
 const textRouter = express.Router()
 
 
-textRouter.get("/wordDefinition/:id", getWordDefinition)
+textRouter.get("/word-definition/:id", getWordDefinition)
 
 export default textRouter

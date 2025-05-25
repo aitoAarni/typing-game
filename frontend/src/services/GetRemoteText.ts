@@ -2,7 +2,7 @@ import { API_URL } from "../config"
 import { WordDefinitionSchema } from "../types/TypeGuards"
 
 const getRemoteWordDefinition = async (id: number) => {
-    const url = `${API_URL}/text/wordDefinition/` + String(id)
+    const url = `${API_URL}/text/word-definition/` + String(id)
     try {
         const response = await fetch(url)
         if (!response.ok) throw new Error("Error fetching data")
