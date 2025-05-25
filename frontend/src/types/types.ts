@@ -20,4 +20,17 @@ export interface TypingStatistics {
     time: number
     wordCount: number
     errorCount: number
+    correctChars: number
+    totalChars: number
+}
+
+export interface TypingSessionRemote {
+    
+                typed_text?: string
+                total_characters: number
+                correct_characters: number
+                error_count: number
+                word_count: number
+                accuracy: number
+                time_seconds: number
 }

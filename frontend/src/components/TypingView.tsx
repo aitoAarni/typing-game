@@ -6,6 +6,8 @@ import WordDefinitionService from "../services/WordDefinitionService"
 import LoadingSpinner from "./LoadingSpinner"
 import { WordDefinition } from "../types/types"
 import { TypingStatistics } from "../types/types"
+import useAuth from "../hooks/useAuth"
+import { sendTypingSession } from "../services/TypingSessionService"
 
 interface TypingViewProps {
     definitionService: WordDefinitionService
@@ -26,22 +28,27 @@ const TypingView = ({ definitionService }: TypingViewProps) => {
     const turnTimerOn = () => {
         startTimeRef.current = new Date().getTime()
     }
-
-    const calculateStatistics = (totalChars: number, errors: number) => {
+    const { token } = useAuth()
+    const calculateStatistics = async (totalChars: number, errors: number) => {
         if (!wordDefinition) return
-        const text = createTextFromDefinition(wordDefinition)
         const endTime = new Date().getTime()
+        const text = createTextFromDefinition(wordDefinition)
         const time = (endTime - startTimeRef.current) / 1000
+        const textLength = text.length
         const words = text.split(/\s+/).length
         const wpm = Math.round((totalChars - errors) / 5 / (time / 60))
         const accuracy = (((totalChars - errors) / totalChars) * 100).toFixed(2)
-        setTypingStatistics({
+        const statistics ={
             accuracy: accuracy,
             wpm: wpm,
             time: time,
             wordCount: words,
             errorCount: errors,
-        })
+            correctChars: words,
+            totalChars: textLength,
+        } 
+        setTypingStatistics(statistics)
+
     }
 
     useEffect(() => {
@@ -51,8 +58,22 @@ const TypingView = ({ definitionService }: TypingViewProps) => {
             setWordDefinition(newDefinition)
             setTypingTextLoading(false)
         }
+        const sendStatistics = async () => {
+            if (!typingStatistics || !token) return
+            const statistics = {
+                total_characters: typingStatistics.totalChars,
+                correct_characters: typingStatistics.correctChars,
+                error_count: typingStatistics.errorCount,
+                word_count: typingStatistics.wordCount,
+                accuracy: Number(typingStatistics.accuracy),
+                time_seconds: typingStatistics.time,
+            }
+            await sendTypingSession(statistics, token)
+        }
         if (isTyping) {
             setNewText()
+        } else {
+            sendStatistics()
         }
     }, [isTyping])
 
