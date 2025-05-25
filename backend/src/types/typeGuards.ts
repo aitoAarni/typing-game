@@ -28,7 +28,7 @@ export const typingSessionRequestSchema = z.object({
 export const typingSessionDatabaseSchema = typingSessionRequestSchema.extend({
     user_id: z.number(),
     created_at: z.date(),
-    accuracy: z.string()
+    accuracy: z.coerce.number()
 })
 
 export const typingSessionsTotalSchema = z.object({

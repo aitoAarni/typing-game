@@ -11,10 +11,7 @@ export const setTypingSession = async (
     next: NextFunction
 ) => {
     try {
-        console.log("req.body", req.body)
-        console.log(1)
         const typingSessionReq = typingSessionRequestSchema.parse(req.body)
-        console.log(2)
         const typingSessionLog = await addTypingSession(
             typingSessionReq,
             req.user?.id
@@ -34,7 +31,6 @@ export const getTypingSessions = async (
     next: NextFunction
 ) => {
     try {
-        console.log("req.user", req.user)
         const id = req.user?.id
         const result = await queryTypingSessions(id)
         res.status(200).json({
