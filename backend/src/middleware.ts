@@ -7,6 +7,7 @@ export const errorHandler = (
     res: Response,
     next: NextFunction
 ) => {
+    console.log("Error occurred:", err)
     if (err instanceof HTTPError) {
         res.status(err.status).json({ error: err.message })
     } else {

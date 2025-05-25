@@ -8,13 +8,13 @@ export type DatabaseUser = z.infer<typeof databaseUserSchema>
 
 export type GoogleUser = Pick<
     DatabaseUser,
-    "googleId" | "email" | "username"
+    "google_id" | "email" | "username"
 > & {
-    googleId: string
+    google_id: string
 }
 
 export interface CreateUser {
-    googleId?: string
+    google_id?: string
     email: string
     username: string
     password?: string

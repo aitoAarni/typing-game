@@ -10,7 +10,7 @@ export const definitionSchema = z.object({
 
 export const databaseUserSchema = z.object({
     id: z.number(),
-    googleId: z.string().nullable(),
+    google_id: z.string().nullable(),
     email: z.string().email(),
     username: z.string(),
     password: z.string().nullable(),

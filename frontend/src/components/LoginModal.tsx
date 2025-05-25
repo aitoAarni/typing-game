@@ -22,6 +22,7 @@ const LoginModal = ({ closeModal }: LoginModalProps) => {
             authUpdate()
         } catch (error) {
             console.error("Login failed", error)
+            console.log("Error details:", error)
         }
     }
 
