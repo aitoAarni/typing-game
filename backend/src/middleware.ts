@@ -1,5 +1,5 @@
 import { NextFunction, Response, Request } from "express"
-import jwt, {JwtPayload} from "jsonwebtoken"
+import jwt, { JwtPayload } from "jsonwebtoken"
 import { HTTPError } from "./utils"
 
 // added here because Docker didn't work without

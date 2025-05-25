@@ -1,4 +1,6 @@
 import { NextFunction, Request, Response } from "express"
+import { typingSessionRequestSchema } from "../types/typeGuards"
+import { addTypingSession } from "../services/typingSessionServices"
 
 export const setTypingSession = async (
     req: Request,
@@ -6,10 +8,14 @@ export const setTypingSession = async (
     next: NextFunction
 ) => {
     try {
-        console.log("Received typing session data:", req.body)
-        console.log("user: ", req.user)
+        console.log("req.body", req.body)
+        console.log(1)
+        const typingSessionReq = typingSessionRequestSchema.parse(req.body)
+        console.log(2)
+        const typingSessionLog = await addTypingSession(typingSessionReq, req.user?.id)
+
         res.status(201).json({
-            user: req.user 
+            typingSessionLog
         })
     } catch (error) {
         next(error)

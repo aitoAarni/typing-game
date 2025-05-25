@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { definitionSchema } from "./typeGuards"
+import { definitionSchema, typingSessionDatabaseSchema, typingSessionRequestSchema } from "./typeGuards"
 import { databaseUserSchema } from "./typeGuards"
 import { JwtPayload } from "jsonwebtoken"
 
@@ -21,7 +21,6 @@ export interface CreateUser {
     password?: string
 }
 
+export type TypingSessionRequest = z.infer<typeof typingSessionRequestSchema>
 
-// export interface TokenRequest extends Request {
-// user?: JwtPayload
-// }
+export type TypingSessionDatabase =z.infer<typeof typingSessionDatabaseSchema>
