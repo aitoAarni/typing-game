@@ -13,9 +13,9 @@ app.get("/", (req: Request, res: Response) => {
     res.send("Hello World!")
 })
 
-app.use("/text", textRouter)
+app.use("/api/text", textRouter)
 
-app.use("/auth", authRouter)
+app.use("/api/auth", authRouter)
 
 app.use(errorHandler)
 

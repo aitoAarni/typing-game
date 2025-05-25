@@ -1,4 +1,4 @@
-import { queryDatabase } from "../database/db"
+import { queryDatabase } from "../database/query"
 import { definitionSchema } from "../types/typeGuards"
 
 export const getWordDefinitionDb = async (id: number) => {

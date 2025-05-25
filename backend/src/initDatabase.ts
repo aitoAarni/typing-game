@@ -1,4 +1,4 @@
-import { queryDatabase } from "./database/db"
+import { queryDatabase } from "./database/query"
 import dotenv from "dotenv"
 
 dotenv.config()
@@ -19,7 +19,11 @@ const insertDefinitions = async () => {
     VALUES ($1, $2, $3)
     ON CONFLICT (word) DO NOTHING;`
     for (const definition of seedDefinitions) {
-        await queryDatabase(query, [definition.word, definition.definition, definition.sentence])
+        await queryDatabase(query, [
+            definition.word,
+            definition.definition,
+            definition.sentence,
+        ])
     }
     console.log("Definitions seeded successfully.")
 }
