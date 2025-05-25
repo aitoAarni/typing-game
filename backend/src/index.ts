@@ -3,6 +3,7 @@ import cors from "cors"
 import textRouter from "./routes/textRoute"
 import authRouter from "./routes/authRoute"
 import { errorHandler } from "./middleware"
+import typingSessionRouter from "./routes/typingSessionRoute"
 const app = express()
 const PORT = 3000
 
@@ -16,6 +17,8 @@ app.get("/", (req: Request, res: Response) => {
 app.use("/api/text", textRouter)
 
 app.use("/api/auth", authRouter)
+
+app.use("/api/typing-session", typingSessionRouter)
 
 app.use(errorHandler)
 

@@ -29,6 +29,7 @@ export const authGoogle = async (
         let databaseUser = await getUserByGoogleId(google_id)
 
         const user = {
+
             google_id,
             email: email ?? "",
             username: name ?? "username",
@@ -37,9 +38,14 @@ export const authGoogle = async (
             databaseUser = await createUser(user)
         }
 
-        const jwtToeken = generateToken(user)
+        const tokenUser = {
+            id: databaseUser.id,
+            username: databaseUser.username,
+            email: databaseUser.email,
+        }
+        const jwtToken = generateToken(tokenUser)
         res.status(201).json({
-            token: jwtToeken,
+            token: jwtToken,
             id: databaseUser.id,
             username: databaseUser.username,
             email: databaseUser.email,
