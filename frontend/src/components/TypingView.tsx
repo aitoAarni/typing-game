@@ -5,18 +5,12 @@ import TypingFinished from "./TypingFinished"
 import WordDefinitionService from "../services/WordDefinitionService"
 import LoadingSpinner from "./LoadingSpinner"
 import { WordDefinition } from "../types/types"
+import { TypingStatistics } from "../types/types"
 
 interface TypingViewProps {
     definitionService: WordDefinitionService
 }
 
-export interface TypingStatistics {
-    accuracy: number | string
-    wpm: number
-    time: number
-    wordCount: number
-    errorCount: number
-}
 
 const TypingView = ({ definitionService }: TypingViewProps) => {
     const [isTyping, setIsTyping] = useState<boolean>(true)

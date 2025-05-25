@@ -13,3 +13,11 @@ export interface AuthContextType {
     setUser: (user: User | null) => void
     setToken: (token: string | null) => void
 }
+
+export interface TypingStatistics {
+    accuracy: number | string
+    wpm: number
+    time: number
+    wordCount: number
+    errorCount: number
+}

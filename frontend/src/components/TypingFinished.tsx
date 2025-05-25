@@ -1,6 +1,6 @@
 import { WordDefinition } from "../types/types"
 import styles from "./TypingFinished.module.scss"
-import { TypingStatistics } from "./TypingView"
+import { TypingStatistics } from "../types/types"
 
 interface TypingFinishedProps {
     wordDefinition: WordDefinition
