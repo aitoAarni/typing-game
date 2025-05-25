@@ -7,8 +7,9 @@ export const setTypingSession = async (
 ) => {
     try {
         console.log("Received typing session data:", req.body)
+        console.log("user: ", req.user)
         res.status(201).json({
-            message: "Typing session data received successfully",
+            user: req.user 
         })
     } catch (error) {
         next(error)

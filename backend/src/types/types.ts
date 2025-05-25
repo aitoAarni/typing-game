@@ -1,6 +1,7 @@
 import { z } from "zod"
 import { definitionSchema } from "./typeGuards"
 import { databaseUserSchema } from "./typeGuards"
+import { JwtPayload } from "jsonwebtoken"
 
 export type Definition = z.infer<typeof definitionSchema>
 
@@ -19,3 +20,8 @@ export interface CreateUser {
     username: string
     password?: string
 }
+
+
+// export interface TokenRequest extends Request {
+// user?: JwtPayload
+// }

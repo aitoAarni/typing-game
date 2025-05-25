@@ -18,6 +18,7 @@ export const tokenHandler = (
     res: Response,
     next: NextFunction
 ) => {
+    console.log("In authorization middleware")
     const authHeader = req.headers.authorization
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
         return next(new HTTPError(401, "Unauthorized: No token provided"))
