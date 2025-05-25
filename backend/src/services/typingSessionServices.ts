@@ -1,6 +1,10 @@
 import { TypingSessionRequest } from "../types/types"
 import { queryDatabase } from "../database/query"
-import { typingSessionDatabaseSchema } from "../types/typeGuards"
+import {
+    typingSessionDatabaseSchema,
+    typingSessionsTotalSchema,
+} from "../types/typeGuards"
+import { HTTPError } from "../utils"
 
 export const addTypingSession = async (
     typingSession: TypingSessionRequest,
@@ -19,11 +23,31 @@ export const addTypingSession = async (
         typingSession.accuracy,
         typingSession.time_seconds,
     ]
-    
+
     const result = await queryDatabase(query, values)
     console.log("result", result)
     if (result.rowCount === 0) {
         throw new Error("Failed to add typing session")
     }
     return typingSessionDatabaseSchema.parse(result[0])
+}
+
+export const queryTypingSessions = async (user_id: number) => {
+    const query = `SELECT 
+    user_id,
+    COUNT(*)::INT AS total_sessions,
+    SUM(correct_characters)::INT AS total_correct_characters,
+    SUM(total_characters)::INT AS total_characters,
+    SUM(error_count)::INT AS total_errors,
+    SUM(word_count)::INT AS total_words,
+    ROUND(AVG(accuracy)::NUMERIC, 2)::FLOAT AS average_accuracy,
+    SUM(time_seconds)::INT AS total_seconds
+     FROM typing_sessions WHERE user_id = $1 GROUP BY user_id;`
+    const result = await queryDatabase(query, [user_id])
+    if (result.rowCount === 0) {
+        throw new HTTPError(404, "No typing sessions found for this user")
+    }
+    console.log("result", result)
+    const typingSessionsTotal = typingSessionsTotalSchema.parse(result[0])
+    return typingSessionsTotal
 }

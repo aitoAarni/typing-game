@@ -30,3 +30,14 @@ export const typingSessionDatabaseSchema = typingSessionRequestSchema.extend({
     created_at: z.date(),
     accuracy: z.string()
 })
+
+export const typingSessionsTotalSchema = z.object({
+    user_id: z.number(),
+    total_sessions: z.number(),
+    total_correct_characters: z.number(),
+    total_characters: z.number(),
+    total_errors: z.number(),
+    total_words: z.number(),
+    average_accuracy: z.number(),
+    total_seconds: z.number(),
+})
