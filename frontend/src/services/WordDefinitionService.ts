@@ -17,7 +17,7 @@ class WordDefinitionService {
     }
     
     static newInstance(fetchWordDefinition: (id: number) => Promise<WordDefinition>, localStorageService: typeof LocalStorageService=LocalStorageService) {
-        const id = localStorageService.getDefinitionId() + 1
+        const id = localStorageService.getDefinitionId()
         return new WordDefinitionService(id, fetchWordDefinition, localStorageService)
     }
 
@@ -25,7 +25,6 @@ class WordDefinitionService {
         this.id++
         this.updateStorageId()
         this.currentDefinition = this.nextDefinition
-        console.log("this.currentDefinition", this.currentDefinition)
         this.fetchNextDefinition()
         return this.currentDefinition
     }
