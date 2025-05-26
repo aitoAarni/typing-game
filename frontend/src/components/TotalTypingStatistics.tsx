@@ -2,12 +2,15 @@ import { TypingSessionTotal } from "../types/types"
 import styles from "./TotalTypingStatistics.module.scss"
 
 interface TotalTypingStatisticsProps {
-    typingStatistics: TypingSessionTotal
+    typingStatistics: TypingSessionTotal | null
 }
 
 const TotalTypingStatistics = ({
     typingStatistics,
 }: TotalTypingStatisticsProps) => {
+    if (!typingStatistics) {
+        return <div className={styles.container}>No statistics available</div>
+    }
     return (
         <div className={styles.container}>
             <div className={styles.statsGrid}>
@@ -74,8 +77,9 @@ function formatTime(totalSeconds: number): string {
     const seconds = totalSeconds % 60
     return `${hours ? String(hours).padStart(2, "0") + "h" : ""}
     
-    ${minutes ? String(minutes).padStart(2, "0") + "m" : ""
-    } ${String(seconds).padStart(2, "0")}s`
+    ${minutes ? String(minutes).padStart(2, "0") + "m" : ""} ${String(
+        seconds
+    ).padStart(2, "0")}s`
 }
 
 function calcWpm(correctChars: number, totalSeconds: number): number {

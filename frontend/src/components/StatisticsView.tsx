@@ -7,6 +7,7 @@ import TotalTypingStatistics from "./TotalTypingStatistics"
 import styles from "./StatisticsView.module.scss"
 
 const StatisticsView = () => {
+    const [isLoading, setIsLoading] = useState<boolean>(true)
     const [statistics, setStatistics] = useState<TypingSessionTotal | null>(
         null
     )
@@ -14,8 +15,13 @@ const StatisticsView = () => {
     useEffect(() => {
         const getStatistics = async () => {
             if (token) {
-                const stats = await getTypingSession(token)
-                setStatistics(stats)
+                try {
+                    setIsLoading(true)
+                    const stats = await getTypingSession(token)
+                    setStatistics(stats)
+                } finally {
+                    setIsLoading(false)
+                }
             }
         }
         getStatistics()
@@ -23,10 +29,10 @@ const StatisticsView = () => {
 
     return (
         <div className={styles.container}>
-            {statistics ? (
-                <TotalTypingStatistics typingStatistics={statistics} />
+            {isLoading ? (
+            <LoadingSpinner posX={100} posY={100} />
             ) : (
-                <LoadingSpinner posX={100} posY={100} />
+                <TotalTypingStatistics typingStatistics={statistics} />
             )}
         </div>
     )
