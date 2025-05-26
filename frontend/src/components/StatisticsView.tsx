@@ -12,6 +12,7 @@ const StatisticsView = () => {
         null
     )
     const { token } = useAuth()
+    console.log("otken", token)
     useEffect(() => {
         const getStatistics = async () => {
             if (token) {
@@ -22,6 +23,9 @@ const StatisticsView = () => {
                 } finally {
                     setIsLoading(false)
                 }
+            } else {
+                setStatistics(null)
+                setIsLoading(false)
             }
         }
         getStatistics()
@@ -30,7 +34,7 @@ const StatisticsView = () => {
     return (
         <div className={styles.container}>
             {isLoading ? (
-            <LoadingSpinner posX={100} posY={100} />
+                <LoadingSpinner posX={100} posY={100} />
             ) : (
                 <TotalTypingStatistics typingStatistics={statistics} />
             )}
