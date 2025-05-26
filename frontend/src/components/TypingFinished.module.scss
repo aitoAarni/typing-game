@@ -38,3 +38,12 @@
     font-family: $font-family-base;
     color: $primary-color;
 }
+
+.buttonContainer {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: row;
+    gap: 6rem;
+    justify-content: space-between;
+    align-items: center;
+}

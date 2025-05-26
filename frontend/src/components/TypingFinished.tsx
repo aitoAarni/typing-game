@@ -35,10 +35,15 @@ const TypingFinished = ({
                     <p className={styles.typingStat}>
                         {statistics.wordCount} words
                     </p>
-                    <p className={styles.typingStat}>misatkes {statistics.errorCount}</p>
+                    <p className={styles.typingStat}>
+                        misatkes {statistics.errorCount}
+                    </p>
                 </div>
             )}
-            <Button1  onClick={() => typeAgain()}>next</Button1>
+            <div className={styles.buttonContainer}>
+                <Button1 onClick={() => {}}>again</Button1>
+                <Button1 onClick={() => typeAgain()}>next</Button1>
+            </div>
         </div>
     )
 }

@@ -8,10 +8,10 @@ const NavBar = () => {
     const loggedIn = useLoggedIn()
     return (
         <div className={styles.container}>
-            {loggedIn && <StatisticsButton />}
             <TypeButton />
             {loggedIn ? (
                 <>
+                    <StatisticsButton />
                     <LogoutButton />
                 </>
             ) : (
