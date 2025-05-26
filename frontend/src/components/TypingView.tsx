@@ -39,9 +39,10 @@ const TypingView = ({ definitionService }: TypingViewProps) => {
         const textLength = text.length
         const words = text.split(/\s+/).length
         const wpm = Math.round(correctChars / 5 / (time / 60))
-        const accuracy = ((correctChars / (correctChars + errors)) * 100).toFixed(
-            2
-        )
+        const accuracy = (
+            (correctChars / (correctChars + errors)) *
+            100
+        ).toFixed(2)
         console.log("accuracy", accuracy)
         const statistics = {
             accuracy: accuracy,
@@ -74,13 +75,14 @@ const TypingView = ({ definitionService }: TypingViewProps) => {
                 accuracy: Number(typingStatistics.accuracy),
                 time_seconds: typingStatistics.time,
             }
-            console.log("sending statistics", statistics)
             await sendTypingSession(statistics, token)
         }
         if (isTyping) {
             setNewText()
         } else {
-            sendStatistics()
+            if (typingStatistics && typingStatistics.wpm > 28) {
+                sendStatistics()
+            }
         }
     }, [isTyping])
 
