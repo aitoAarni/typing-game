@@ -19,7 +19,7 @@ const TypingBox = ({
     const [scrollOffset, setScrollOffset] = useState<number>(0)
     const [isAnimating, setIsAnimating] = useState<boolean>(false)
 
-    const totalCharsTypedRef = useRef<number>(0)
+    const correctCharsRef = useRef<number>(0)
     const totalErrorsRef = useRef<number>(0)
     const startedTypingRef = useRef<boolean>(false)
     const currentIndexRef = useRef<number[]>([0, 0])
@@ -27,7 +27,11 @@ const TypingBox = ({
     const typedCorrectlyRef = useRef<(boolean | null)[][]>([])
 
     const keyPressed = (event: KeyboardEvent) => {
-        if (typedCorrectlyRef.current.length === 0 || charListRef.current.length === 0) return
+        if (
+            typedCorrectlyRef.current.length === 0 ||
+            charListRef.current.length === 0
+        )
+            return
         const char = event.key
         const currentIndex = currentIndexRef.current
         if (char.length === 1) {
@@ -38,11 +42,13 @@ const TypingBox = ({
             typedCorrectlyRef.current[currentIndex[0]][currentIndex[1]] =
                 char === charListRef.current[currentIndex[0]][currentIndex[1]]
             if (
-                typedCorrectlyRef.current[currentIndex[0]][currentIndex[1]] === false
+                typedCorrectlyRef.current[currentIndex[0]][currentIndex[1]] ===
+                false
             ) {
                 totalErrorsRef.current += 1
+            } else {
+                correctCharsRef.current += 1
             }
-            totalCharsTypedRef.current += 1
             currentIndexRef.current = setNewIndex(
                 currentIndex,
                 charListRef.current
@@ -50,7 +56,8 @@ const TypingBox = ({
         } else if (char === "Backspace") {
             if (currentIndex[1] === 0 && currentIndex[0] > 0) {
                 currentIndex[0] = currentIndex[0] - 1
-                currentIndex[1] = charListRef.current[currentIndex[0]].length - 1
+                currentIndex[1] =
+                    charListRef.current[currentIndex[0]].length - 1
             } else if (currentIndex[1] > 0) {
                 currentIndex[1] = currentIndex[1] - 1
             }
@@ -84,12 +91,10 @@ const TypingBox = ({
     useEffect(() => {
         if (
             currentIndexRef.current[0] === charListRef.current.length - 1 &&
-            currentIndexRef.current[1] === charListRef.current[charListRef.current.length - 1].length
+            currentIndexRef.current[1] ===
+                charListRef.current[charListRef.current.length - 1].length
         ) {
-            calculateStatistics(
-                totalCharsTypedRef.current,
-                totalErrorsRef.current
-            )
+            calculateStatistics(correctCharsRef.current, totalErrorsRef.current)
             textTyped()
         }
         if (isAnimating) return
@@ -110,7 +115,10 @@ const TypingBox = ({
             setScrollOffset(prev => prev - lineHeight)
         }
     }, [frameNumber])
-    if (charListRef.current.length === 0 || typedCorrectlyRef.current.length === 0) {
+    if (
+        charListRef.current.length === 0 ||
+        typedCorrectlyRef.current.length === 0
+    ) {
         return (
             <div
                 className={styles.container}
@@ -146,11 +154,15 @@ const TypingBox = ({
                                 }
                                 let charClass
                                 let testId
-                                if (typedCorrectlyRef.current[index0][index1] == true) {
+                                if (
+                                    typedCorrectlyRef.current[index0][index1] ==
+                                    true
+                                ) {
                                     charClass = styles.charCorrect
                                     testId = "char-correct"
                                 } else if (
-                                    typedCorrectlyRef.current[index0][index1] == false
+                                    typedCorrectlyRef.current[index0][index1] ==
+                                    false
                                 ) {
                                     testId = "char-incorrect"
                                     charClass = styles.charIncorrect

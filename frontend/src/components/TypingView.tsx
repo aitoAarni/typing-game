@@ -13,7 +13,6 @@ interface TypingViewProps {
     definitionService: WordDefinitionService
 }
 
-
 const TypingView = ({ definitionService }: TypingViewProps) => {
     const [isTyping, setIsTyping] = useState<boolean>(true)
     const [wordDefinition, setWordDefinition] = useState<WordDefinition | null>(
@@ -29,26 +28,31 @@ const TypingView = ({ definitionService }: TypingViewProps) => {
         startTimeRef.current = new Date().getTime()
     }
     const { token } = useAuth()
-    const calculateStatistics = async (totalChars: number, errors: number) => {
-        if (!wordDefinition) return
+    const calculateStatistics = async (
+        correctChars: number,
+        errors: number
+    ) => {
+        if (!wordDefinition || correctChars + errors === 0) return
         const endTime = new Date().getTime()
         const text = createTextFromDefinition(wordDefinition)
         const time = (endTime - startTimeRef.current) / 1000
         const textLength = text.length
         const words = text.split(/\s+/).length
-        const wpm = Math.round((totalChars - errors) / 5 / (time / 60))
-        const accuracy = (((totalChars - errors) / totalChars) * 100).toFixed(2)
-        const statistics ={
+        const wpm = Math.round(correctChars / 5 / (time / 60))
+        const accuracy = ((correctChars / (correctChars + errors)) * 100).toFixed(
+            2
+        )
+        console.log("accuracy", accuracy)
+        const statistics = {
             accuracy: accuracy,
             wpm: wpm,
             time: time,
             wordCount: words,
             errorCount: errors,
-            correctChars: words,
+            correctChars,
             totalChars: textLength,
-        } 
+        }
         setTypingStatistics(statistics)
-
     }
 
     useEffect(() => {
@@ -59,6 +63,8 @@ const TypingView = ({ definitionService }: TypingViewProps) => {
             setTypingTextLoading(false)
         }
         const sendStatistics = async () => {
+            console.log("sending statistics")
+            console.log("typing statistics", typingStatistics)
             if (!typingStatistics || !token) return
             const statistics = {
                 total_characters: typingStatistics.totalChars,
@@ -68,6 +74,7 @@ const TypingView = ({ definitionService }: TypingViewProps) => {
                 accuracy: Number(typingStatistics.accuracy),
                 time_seconds: typingStatistics.time,
             }
+            console.log("sending statistics", statistics)
             await sendTypingSession(statistics, token)
         }
         if (isTyping) {

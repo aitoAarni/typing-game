@@ -1,17 +1,53 @@
 @use "../styles/variables.scss" as *;
 
 .container {
-    display: inline-flex;
-    margin: 50px;
-    align-items: center;
-    justify-content: center;
+    display: flex;
+    padding: 2rem 3rem;
+    margin-top: 4rem;
+    // max-width: 700px;
     background-color: $background-color-secondary;
     border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    color: $primary-color;
+    font-family: $font-family-base;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    flex-shrink: 1;
+
+    &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 40px rgb(0, 0, 0);
+    }
+}
+
+.statsGrid {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
 }
 
 .statistic {
+    display: flex;
+    flex-direction: column;
+    background: rgba(255, 255, 255, 0.04);
     margin: 20px;
-    font-size: $text-size-smaller;
-    font-family: $font-family-base;
-    color: $primary-color;
+    justify-content: center;
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+
+    .label {
+        font-size: 1rem;
+        opacity: 0.8;
+        margin-bottom: 0.3rem;
+    }
+
+    .value {
+        font-size: $text-size-smaller;
+        font-weight: 600;
+        color: $primary-color;
+        text-align: center;
+    }
 }
