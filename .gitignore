@@ -1,6 +1,8 @@
 
 .env
 
+todo.txt
+
 frontend/logs
 *.log
 frontend/npm-debug.log*
