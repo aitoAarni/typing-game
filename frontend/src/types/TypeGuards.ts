@@ -13,3 +13,14 @@ export const AuthResponseSchema = z.object({
     email: z.string(),
     id: z.number(),
 })
+
+export const TypingSessionTotalSchema = z.object({
+    user_id: z.number(),
+    total_sessions: z.number(),
+    total_correct_characters: z.number(),
+    total_characters: z.number(),
+    total_errors: z.number(),
+    total_words: z.number(),
+    average_accuracy: z.number(),
+    total_seconds: z.number(),
+})
