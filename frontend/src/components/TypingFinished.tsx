@@ -1,6 +1,7 @@
 import { WordDefinition } from "../types/types"
 import styles from "./TypingFinished.module.scss"
 import { TypingStatistics } from "../types/types"
+import { Button1 } from "./Buttons"
 
 interface TypingFinishedProps {
     wordDefinition: WordDefinition
@@ -37,7 +38,7 @@ const TypingFinished = ({
                     <p className={styles.typingStat}>misatkes {statistics.errorCount}</p>
                 </div>
             )}
-            <button className={styles.button} onClick={() => typeAgain()}>next</button>
+            <Button1  onClick={() => typeAgain()}>next</Button1>
         </div>
     )
 }

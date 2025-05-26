@@ -1,6 +1,7 @@
 import styles from "./LoginButton.module.scss"
 import { useState } from "react"
 import LoginModal from "./LoginModal"
+import { Button2 } from "./Buttons"
 
 const LoginButton = () => {
     const [modalOpen, setModalOpen] = useState<boolean>(false)
@@ -12,9 +13,9 @@ const LoginButton = () => {
     }
     return (
         <div className={styles.container}>
-            <button className={styles.button} onClick={openModal}>
+            <Button2 onClick={openModal}>
                 Login
-            </button>
+            </Button2>
             {modalOpen && <LoginModal closeModal={closeModal} />}
         </div>
     )

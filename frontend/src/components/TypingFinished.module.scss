@@ -38,30 +38,3 @@
     font-family: $font-family-base;
     color: $primary-color;
 }
-
-.button {
-    display: inline-Block;
-    width: 150px;
-    font-family:  $font-family-base;
-    font-size: $text-size-smaller;
-    height: 50px;
-    border-radius: 10px;
-    border: none;
-    background-color: $primary-color;
-    color: $background-color;
-    cursor: pointer;
-    transition: background-color 0.2s ease-out, color 0.2s ease-out, border 0.2s ease-out;
-    &:hover {
-        background-color: $background-color;
-        color: $primary-color;
-        border: 1px solid $primary-color;
-        box-shadow: 0 6px 16px $primary-color;
-        }
-
-    &:active {
-        background-color: $background-color;
-        color: $color-correct;
-        border: 1px solid $color-correct;
-        box-shadow: 0 6px 16px $color-correct;
-    }
-}
