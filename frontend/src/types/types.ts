@@ -1,5 +1,5 @@
-import { z } from "zod";
-import { AuthResponseSchema, WordDefinitionSchema } from "./TypeGuards";
+import { z } from "zod"
+import { AuthResponseSchema, TypingSessionTotalSchema, WordDefinitionSchema } from "./TypeGuards"
 
 export type WordDefinition = z.infer<typeof WordDefinitionSchema>
 
@@ -25,12 +25,13 @@ export interface TypingStatistics {
 }
 
 export interface TypingSessionRemote {
-    
-                typed_text?: string
-                total_characters: number
-                correct_characters: number
-                error_count: number
-                word_count: number
-                accuracy: number
-                time_seconds: number
+    typed_text?: string
+    total_characters: number
+    correct_characters: number
+    error_count: number
+    word_count: number
+    accuracy: number
+    time_seconds: number
 }
+
+export type TypingSessionTotal = z.infer<typeof TypingSessionTotalSchema>

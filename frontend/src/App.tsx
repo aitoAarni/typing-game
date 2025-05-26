@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom"
 import HomeView from "./components/HomeView"
-import GoogleLoginComponent from "./components/GoogleLogin"
 import NavBar from "./components/NavBar"
+import StatisticsView from "./components/StatisticsView"
 
 function App() {
     return (
@@ -11,7 +11,7 @@ function App() {
             <NavBar />
             <Routes>
                 <Route path="/" element={<HomeView />} />
-                <Route path="/login" element={<GoogleLoginComponent />} />
+                <Route path="/statistics" element={<StatisticsView />} />
             </Routes>
         </div>
     )
