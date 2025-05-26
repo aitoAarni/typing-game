@@ -17,18 +17,18 @@ export const databaseUserSchema = z.object({
 
 export const typingSessionRequestSchema = z.object({
     typed_text: z.string().optional().nullable(),
-    total_characters: z.number(),
-    correct_characters: z.number(),
-    error_count: z.number(),
-    word_count: z.number(),
-    accuracy: z.number(),
-    time_seconds: z.number(),
+    total_characters: z.number().positive(),
+    correct_characters: z.number().positive(),
+    error_count: z.number().positive(),
+    word_count: z.number().positive(),
+    accuracy: z.number().positive().max(100),
+    time_seconds: z.number().positive(),
 })
 
 export const typingSessionDatabaseSchema = typingSessionRequestSchema.extend({
     user_id: z.number(),
     created_at: z.date(),
-    accuracy: z.coerce.string()
+    accuracy: z.coerce.string(),
 })
 
 export const typingSessionsTotalSchema = z.object({

@@ -11,14 +11,12 @@ export const setTypingSession = async (
     next: NextFunction
 ) => {
     try {
-        console.log("body: ", req.body)
         const typingSessionReq = typingSessionRequestSchema.parse(req.body)
         const typingSessionLog = await addTypingSession(
             typingSessionReq,
             req.user?.id
         )
 
-        console.log("typingSessionLog saved", typingSessionLog)
         res.status(201).json({
             typingSessionLog,
         })
