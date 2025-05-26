@@ -35,7 +35,6 @@ export const getTypingSession = async (token: string) => {
     }
 
     const data = await result.json()
-    console.log("Received data:", data.typingSessions)
     const typingSession = TypingSessionTotalSchema.parse(data.typingSessions)
 
     return typingSession

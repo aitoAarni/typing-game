@@ -3,6 +3,8 @@ import useAuth from "../hooks/useAuth"
 import { TypingSessionTotal } from "../types/types"
 import { getTypingSession } from "../services/TypingSessionService"
 import LoadingSpinner from "./LoadingSpinner"
+import TotalTypingStatistics from "./TotalTypingStatistics"
+import styles from "./StatisticsView.module.scss"
 
 const StatisticsView = () => {
     const [statistics, setStatistics] = useState<TypingSessionTotal | null>(
@@ -20,9 +22,9 @@ const StatisticsView = () => {
     }, [token])
 
     return (
-        <div>
+        <div className={styles.container}>
             {statistics ? (
-                <p>{statistics.total_characters}</p>
+                <TotalTypingStatistics typingStatistics={statistics} />
             ) : (
                 <LoadingSpinner posX={100} posY={100} />
             )}

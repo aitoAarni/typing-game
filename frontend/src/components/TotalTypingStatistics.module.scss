@@ -1,0 +1,17 @@
+@use "../styles/variables.scss" as *;
+
+.container {
+    display: inline-flex;
+    margin: 50px;
+    align-items: center;
+    justify-content: center;
+    background-color: $background-color-secondary;
+    border-radius: 20px;
+}
+
+.statistic {
+    margin: 20px;
+    font-size: $text-size-smaller;
+    font-family: $font-family-base;
+    color: $primary-color;
+}
