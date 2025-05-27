@@ -17,12 +17,12 @@ export const databaseUserSchema = z.object({
 
 export const typingSessionRequestSchema = z.object({
     typed_text: z.string().optional().nullable(),
-    total_characters: z.number().positive(),
-    correct_characters: z.number().positive(),
-    error_count: z.number().positive(),
-    word_count: z.number().positive(),
-    accuracy: z.number().positive().max(100),
-    time_seconds: z.number().positive(),
+    total_characters: z.number().nonnegative(),
+    correct_characters: z.number().nonnegative(),
+    error_count: z.number().nonnegative(),
+    word_count: z.number().nonnegative(),
+    accuracy: z.number().nonnegative().max(100),
+    time_seconds: z.number().nonnegative(),
 })
 
 export const typingSessionDatabaseSchema = typingSessionRequestSchema.extend({
