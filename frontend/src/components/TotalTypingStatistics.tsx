@@ -1,4 +1,5 @@
 import { TypingSessionTotal } from "../types/types"
+import Card from "./Card"
 import styles from "./TotalTypingStatistics.module.scss"
 
 interface TotalTypingStatisticsProps {
@@ -12,7 +13,7 @@ const TotalTypingStatistics = ({
         return <div className={styles.container}>No statistics available</div>
     }
     return (
-        <div className={styles.container}>
+        <Card>
             <div className={styles.statsGrid}>
                 <div className={styles.statistic}>
                     <span className={styles.label}>Texts typed</span>
@@ -66,7 +67,7 @@ const TotalTypingStatistics = ({
                     </span>
                 </div>
             </div>
-        </div>
+        </Card>
     )
 }
 
