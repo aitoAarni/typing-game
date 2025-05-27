@@ -5,14 +5,20 @@ import { Button1 } from "./Buttons"
 
 interface TypingFinishedProps {
     wordDefinition: WordDefinition
+    nextWord: string
     statistics: TypingStatistics | null
-    typeAgain: () => void
+    typeNext: () => void,
+    typeAgain: () => void,
+    skipNext: () => void
 }
 
 const TypingFinished = ({
     wordDefinition,
+    nextWord,
     statistics,
+    typeNext,
     typeAgain,
+    skipNext,
 }: TypingFinishedProps) => {
     return (
         <div className={styles.container}>
@@ -40,9 +46,11 @@ const TypingFinished = ({
                     </p>
                 </div>
             )}
+            <p className={styles.nextWord}>Next word {nextWord}</p>
             <div className={styles.buttonContainer}>
-                <Button1 onClick={() => {}}>again</Button1>
-                <Button1 onClick={() => typeAgain()}>next</Button1>
+                <Button1 onClick={typeAgain}>again</Button1>
+                <Button1 onClick={typeNext}>next</Button1>
+                <Button1 onClick={skipNext}>skip</Button1>
             </div>
         </div>
     )

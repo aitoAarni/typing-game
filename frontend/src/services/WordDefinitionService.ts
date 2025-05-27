@@ -8,35 +8,56 @@ class WordDefinitionService {
     fetchWordDefinition: (id: number) => Promise<WordDefinition>
     localStorageService: typeof LocalStorageService
 
-    constructor(id: number, fetchWordDefinition: (id: number) => Promise<WordDefinition>, localStorageService: typeof LocalStorageService) { 
-        this.id = id - 1
-        this.currentDefinition = {} as WordDefinition
-        this.nextDefinition = fetchWordDefinition(id)
+    constructor(
+        id: number,
+        fetchWordDefinition: (id: number) => Promise<WordDefinition>,
+        localStorageService: typeof LocalStorageService
+    ) {
+        this.id = id
+        this.currentDefinition = fetchWordDefinition(id)
+        this.nextDefinition = fetchWordDefinition(id + 1)
         this.fetchWordDefinition = fetchWordDefinition
         this.localStorageService = localStorageService
-    }
-    
-    static newInstance(fetchWordDefinition: (id: number) => Promise<WordDefinition>, localStorageService: typeof LocalStorageService=LocalStorageService) {
-        const id = localStorageService.getDefinitionId()
-        return new WordDefinitionService(id, fetchWordDefinition, localStorageService)
+        this.updateStorageId()
     }
 
+    static newInstance(
+        fetchWordDefinition: (id: number) => Promise<WordDefinition>,
+        localStorageService: typeof LocalStorageService = LocalStorageService
+    ) {
+        const id = localStorageService.getDefinitionId()
+        return new WordDefinitionService(
+            id + 1,
+            fetchWordDefinition,
+            localStorageService
+        )
+    }
+    async getCurrentDefinition() {
+        return this.currentDefinition
+    }
     async getNewDefinition() {
-        this.id++
-        this.updateStorageId()
+        this.increaseDefinitionId()
         this.currentDefinition = this.nextDefinition
-        this.fetchNextDefinition()
+        this.setNextDefinition()
         return this.currentDefinition
     }
 
-    fetchNextDefinition() {
+    setNextDefinition() {
         this.nextDefinition = this.fetchWordDefinition(this.id + 1)
-    } 
-    
+    }
+
+    getNextDefinition() {
+        return this.nextDefinition
+    }
+
+    increaseDefinitionId() {
+        this.id++
+        this.updateStorageId()
+    }
+
     updateStorageId() {
         this.localStorageService.setDefinitionId(this.id)
     }
-    
 }
 
 export default WordDefinitionService

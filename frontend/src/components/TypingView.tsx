@@ -56,11 +56,32 @@ const TypingView = ({ definitionService }: TypingViewProps) => {
         setTypingStatistics(statistics)
     }
 
+    const typeNext = async () => {
+        setTypingTextLoading(true)
+        setIsTyping(true)
+        const newDefinition = await definitionService.getNewDefinition()
+        setWordDefinition(newDefinition)
+        setTypingTextLoading(false)
+    }
+
+    const typeAgain = async () => {
+        setTypingTextLoading(true)
+        setIsTyping(true)
+        const definition = await definitionService.getCurrentDefinition()
+        console.log("same definition", definition)
+        setWordDefinition(definition)
+        setTypingTextLoading(false)
+    }
+
+    const skipNext = () => {
+        definitionService.increaseDefinitionId()
+    }
+
     useEffect(() => {
-        const setNewText = async () => {
-            setTypingTextLoading(true)
-            const newDefinition = await definitionService.getNewDefinition()
-            setWordDefinition(newDefinition)
+        
+        const setInitialDefinition = async () => {
+            const definition = await definitionService.getCurrentDefinition()
+            setWordDefinition(definition)
             setTypingTextLoading(false)
         }
         const sendStatistics = async () => {
@@ -77,9 +98,11 @@ const TypingView = ({ definitionService }: TypingViewProps) => {
             }
             await sendTypingSession(statistics, token)
         }
-        if (isTyping) {
-            setNewText()
-        } else {
+        if (wordDefinition === null && isTyping) {
+            console.log("setting initial definition")
+            setInitialDefinition()
+        }
+        if (!isTyping) {
             if (typingStatistics && typingStatistics.wpm > 28) {
                 sendStatistics()
             }
@@ -100,8 +123,11 @@ const TypingView = ({ definitionService }: TypingViewProps) => {
             {!isTyping && (
                 <TypingFinished
                     wordDefinition={wordDefinition!}
+                    nextWord="Coinside"
                     statistics={typingStatistics}
-                    typeAgain={() => setIsTyping(true)}
+                    typeNext={typeNext}
+                    typeAgain={typeAgain}
+                    skipNext={skipNext}
                 />
             )}
         </div>
