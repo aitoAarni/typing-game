@@ -69,7 +69,6 @@ const TypingView = ({ definitionService }: TypingViewProps) => {
         setTypingTextLoading(true)
         setIsTyping(true)
         const definition = await definitionService.getCurrentDefinition()
-        console.log("same definition", definition)
         setWordDefinition(definition)
         setTypingTextLoading(false)
     }

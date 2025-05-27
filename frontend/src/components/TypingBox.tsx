@@ -29,6 +29,7 @@ const TypingBox = ({
     const currentIndexRef = useRef<number[]>([0, 0])
     const charListRef = useRef<string[][]>([])
     const typedCorrectlyRef = useRef<(boolean | null)[][]>([])
+    const controlPressedRef = useRef<boolean>(false)
 
     const keyPressed = (event: KeyboardEvent) => {
         if (
@@ -58,22 +59,48 @@ const TypingBox = ({
                 charListRef.current
             )
         } else if (char === "Backspace") {
-            if (currentIndex[1] === 0 && currentIndex[0] > 0) {
-                currentIndex[0] = currentIndex[0] - 1
-                currentIndex[1] =
-                    charListRef.current[currentIndex[0]].length - 1
-            } else if (currentIndex[1] > 0) {
-                currentIndex[1] = currentIndex[1] - 1
+            if (controlPressedRef.current) {
+                controlAndBackspace()
+            } else {
+                if (currentIndex[1] === 0 && currentIndex[0] > 0) {
+                    currentIndex[0] = currentIndex[0] - 1
+                    currentIndex[1] =
+                        charListRef.current[currentIndex[0]].length - 1
+                } else if (currentIndex[1] > 0) {
+                    currentIndex[1] = currentIndex[1] - 1
+                }
+                typedCorrectlyRef.current[currentIndex[0]][currentIndex[1]] =
+                    null
+                currentIndexRef.current = currentIndex
             }
-            typedCorrectlyRef.current[currentIndex[0]][currentIndex[1]] = null
-            currentIndexRef.current = currentIndex
         } else if (char === "Enter") {
             nextText()
         } else if (char === "Escape") {
             retryText()
+        } else if (char === "Control") {
+            controlPressedRef.current = true
         }
 
         setFrameNumber(prev => prev + 1)
+    }
+
+    const controlAndBackspace = () => {
+        let wordIndex = currentIndexRef.current[0]
+        const charIndex = currentIndexRef.current[1]
+        const currentChar = charListRef.current[wordIndex][charIndex]
+        if (wordIndex === 0 && charIndex === 0) return
+        if (charIndex === 0 && currentChar !== " ") {
+            wordIndex--
+            typedCorrectlyRef.current[wordIndex][0] = null
+        }
+        if (charIndex === 0) {
+            wordIndex--
+        }
+        const wordLength = charListRef.current[wordIndex].length
+        for (let i = wordLength - 1; i >= 0; i--) {
+            typedCorrectlyRef.current[wordIndex][i] = null
+        }
+        currentIndexRef.current = [wordIndex, 0]
     }
     useEffect(() => {
         currentIndexRef.current = [0, 0]
@@ -90,10 +117,18 @@ const TypingBox = ({
         const handleKeyDown = (event: KeyboardEvent) => {
             keyPressed(event)
         }
+        const handleKeyUp = (event: KeyboardEvent) => {
+            const key = event.key
+            if (key === "Control") {
+                controlPressedRef.current = false
+            }
+        }
         window.addEventListener("keydown", handleKeyDown)
+        window.addEventListener("keyup", handleKeyUp)
         setFrameNumber(prev => prev + 1)
         return () => {
             window.removeEventListener("keydown", handleKeyDown)
+            window.removeEventListener("keyup", handleKeyUp)
         }
     }, [text])
 
@@ -209,14 +244,14 @@ const TypingBox = ({
                     })}
                 </div>
             </div>
-        <div className={styles.hotkeyContainer}>
-            <span className={styles.hotkey}>
-                <span className={styles.key}>Esc</span> - Retry
-            </span>
-            <span className={styles.hotkey}>
-                <span className={styles.key}>Enter</span> - Next
-            </span>
-        </div>
+            <div className={styles.hotkeyContainer}>
+                <span className={styles.hotkey}>
+                    <span className={styles.key}>Esc</span> - Retry
+                </span>
+                <span className={styles.hotkey}>
+                    <span className={styles.key}>Enter</span> - Next
+                </span>
+            </div>
         </div>
     )
 }
