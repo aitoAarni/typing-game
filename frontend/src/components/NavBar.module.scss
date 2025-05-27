@@ -6,6 +6,7 @@
     justify-content: flex-end;
     align-items: center;
     height: 4rem;
+    flex-shrink: 0;
     width: 100%;
     background-color: $primary-color;
     padding: 0 30px;
