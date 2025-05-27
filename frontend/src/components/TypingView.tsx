@@ -82,7 +82,6 @@ const TypingView = ({ definitionService }: TypingViewProps) => {
     }
 
     useEffect(() => {
-        
         const setInitialDefinition = async () => {
             setTypingTextLoading(true)
             const definition = await definitionService.getCurrentDefinition()

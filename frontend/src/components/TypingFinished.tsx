@@ -2,6 +2,7 @@ import { WordDefinition } from "../types/types"
 import styles from "./TypingFinished.module.scss"
 import { TypingStatistics } from "../types/types"
 import { Button1 } from "./Buttons"
+import { useEffect } from "react"
 
 interface TypingFinishedProps {
     wordDefinition: WordDefinition
@@ -20,6 +21,26 @@ const TypingFinished = ({
     typeAgain,
     skipNext,
 }: TypingFinishedProps) => {
+    useEffect(() => {
+        const handleKeyDown = (event: KeyboardEvent) => {
+            const key = event.key
+            switch (key) {
+                case "Enter":
+                    typeNext()
+                    break
+                case " ":
+                    skipNext()
+                    break
+                case "r":
+                    typeAgain()
+                    break
+            }
+        }
+        window.addEventListener("keydown", handleKeyDown)
+        return () => {
+            window.removeEventListener("keydown", handleKeyDown)
+        }
+    }, [])
     return (
         <div className={styles.container}>
             <div className={styles.wordDefinitionContainer}>
@@ -31,48 +52,57 @@ const TypingFinished = ({
                     {wordDefinition.sentence}
                 </p>
             </div>
-                <div className={styles.cardContainer}>
-                    {statistics && (
-                        <div className={styles.typingStatsContainer}>
-                            <div className={styles.statistic}>
-                                <span className={styles.label}>WPM</span>
-                                <span className={styles.value}>
-                                    {statistics.wpm}
-                                </span>
-                            </div>
-                            <div className={styles.statistic}>
-                                <span className={styles.label}>Accuracy</span>
-                                <span className={styles.value}>
-                                    {statistics.accuracy}%
-                                </span>
-                            </div>
-                            <div className={styles.statistic}>
-                                <span className={styles.label}>Time</span>
-                                <span className={styles.value}>
-                                    {statistics.time} s
-                                </span>
-                            </div>
-                            <div className={styles.statistic}>
-                                <span className={styles.label}>Words</span>
-                                <span className={styles.value}>
-                                    {statistics.wordCount}
-                                </span>
-                            </div>
-                            <div className={styles.statistic}>
-                                <span className={styles.label}>Mistakes</span>
-                                <span className={styles.value}>
-                                    {statistics.errorCount}
-                                </span>
-                            </div>
+            <div className={styles.cardContainer}>
+                {statistics && (
+                    <div className={styles.typingStatsContainer}>
+                        <div className={styles.statistic}>
+                            <span className={styles.label}>WPM</span>
+                            <span className={styles.value}>
+                                {statistics.wpm}
+                            </span>
                         </div>
-                    )}
-                    <p className={styles.nextWord}>Next word - {nextWord}</p>
-                    <div className={styles.buttonContainer}>
-                        <Button1 onClick={typeAgain}>again</Button1>
+                        <div className={styles.statistic}>
+                            <span className={styles.label}>Accuracy</span>
+                            <span className={styles.value}>
+                                {statistics.accuracy}%
+                            </span>
+                        </div>
+                        <div className={styles.statistic}>
+                            <span className={styles.label}>Time</span>
+                            <span className={styles.value}>
+                                {statistics.time} s
+                            </span>
+                        </div>
+                        <div className={styles.statistic}>
+                            <span className={styles.label}>Words</span>
+                            <span className={styles.value}>
+                                {statistics.wordCount}
+                            </span>
+                        </div>
+                        <div className={styles.statistic}>
+                            <span className={styles.label}>Mistakes</span>
+                            <span className={styles.value}>
+                                {statistics.errorCount}
+                            </span>
+                        </div>
+                    </div>
+                )}
+                <p className={styles.nextWord}>Next word - {nextWord}</p>
+                <div className={styles.buttonContainer}>
+                    <div className={styles.buttonGroup}>
+                        <Button1 onClick={typeAgain}>retry</Button1>
+                        <span style={{ color: "#606060" }}>Press r</span>
+                    </div>
+                    <div className={styles.buttonGroup}>
                         <Button1 onClick={typeNext}>next</Button1>
+                        <span style={{ color: "#606060" }}>Press Enter</span>
+                    </div>
+                    <div className={styles.buttonGroup}>
                         <Button1 onClick={skipNext}>skip</Button1>
+                        <span style={{ color: "#606060" }}>Press Space</span>
                     </div>
                 </div>
+            </div>
         </div>
     )
 }
