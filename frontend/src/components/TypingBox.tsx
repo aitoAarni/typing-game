@@ -107,7 +107,7 @@ const TypingBox = ({
             textTyped()
         }
         if (isAnimating) return
-        const container = document.querySelector(`.${styles.container}`)
+        const container = document.querySelector(`.${styles.typingContainer}`)
         if (!container) return
 
         const caretElement = container.querySelector(`.${styles.caret}`)
@@ -130,78 +130,93 @@ const TypingBox = ({
     ) {
         return (
             <div
-                className={styles.container}
+                className={styles.typingContainer}
                 data-testid="typing-container"
             ></div>
         )
     }
     return (
-        <div className={styles.container} data-testid="typing-container">
+        <div className={styles.container}>
             <div
-                onTransitionEnd={() => setIsAnimating(false)}
-                className={styles.inner}
-                style={{ transform: `translateY(-${scrollOffset}px)` }}
+                className={styles.typingContainer}
+                data-testid="typing-container"
             >
                 <div
-                    style={{
-                        height: lineHeight,
-                        width: "100%",
-                    }}
-                ></div>
-                {charListRef.current.map((word, index0) => {
-                    return (
-                        <span key={index0} className={styles.wordContainer}>
-                            {word.map((char, index1) => {
-                                let caretClass = styles.noCaret
-                                let caretTestId = "no-caret"
-                                if (
-                                    currentIndexRef.current[0] === index0 &&
-                                    currentIndexRef.current[1] === index1
-                                ) {
-                                    caretClass = styles.caret
-                                    caretTestId = "caret"
-                                }
-                                let charClass
-                                let testId
-                                if (
-                                    typedCorrectlyRef.current[index0][index1] ==
-                                    true
-                                ) {
-                                    charClass = styles.charCorrect
-                                    testId = "char-correct"
-                                } else if (
-                                    typedCorrectlyRef.current[index0][index1] ==
-                                    false
-                                ) {
-                                    testId = "char-incorrect"
-                                    charClass = styles.charIncorrect
-                                } else {
-                                    testId = "char-untyped"
-                                    charClass = styles.charUntyped
-                                }
+                    onTransitionEnd={() => setIsAnimating(false)}
+                    className={styles.inner}
+                    style={{ transform: `translateY(-${scrollOffset}px)` }}
+                >
+                    <div
+                        style={{
+                            height: lineHeight,
+                            width: "100%",
+                        }}
+                    ></div>
+                    {charListRef.current.map((word, index0) => {
+                        return (
+                            <span key={index0} className={styles.wordContainer}>
+                                {word.map((char, index1) => {
+                                    let caretClass = styles.noCaret
+                                    let caretTestId = "no-caret"
+                                    if (
+                                        currentIndexRef.current[0] === index0 &&
+                                        currentIndexRef.current[1] === index1
+                                    ) {
+                                        caretClass = styles.caret
+                                        caretTestId = "caret"
+                                    }
+                                    let charClass
+                                    let testId
+                                    if (
+                                        typedCorrectlyRef.current[index0][
+                                            index1
+                                        ] == true
+                                    ) {
+                                        charClass = styles.charCorrect
+                                        testId = "char-correct"
+                                    } else if (
+                                        typedCorrectlyRef.current[index0][
+                                            index1
+                                        ] == false
+                                    ) {
+                                        testId = "char-incorrect"
+                                        charClass = styles.charIncorrect
+                                    } else {
+                                        testId = "char-untyped"
+                                        charClass = styles.charUntyped
+                                    }
 
-                                return (
-                                    <span
-                                        key={index1}
-                                        className={styles.charContainer}
-                                    >
+                                    return (
                                         <span
-                                            className={caretClass}
-                                            data-testid={caretTestId}
-                                        ></span>
-                                        <span
-                                            className={charClass}
-                                            data-testid={testId}
+                                            key={index1}
+                                            className={styles.charContainer}
                                         >
-                                            {char === " " ? "\u00A0" : char}
+                                            <span
+                                                className={caretClass}
+                                                data-testid={caretTestId}
+                                            ></span>
+                                            <span
+                                                className={charClass}
+                                                data-testid={testId}
+                                            >
+                                                {char === " " ? "\u00A0" : char}
+                                            </span>
                                         </span>
-                                    </span>
-                                )
-                            })}
-                        </span>
-                    )
-                })}
+                                    )
+                                })}
+                            </span>
+                        )
+                    })}
+                </div>
             </div>
+        <div className={styles.hotkeyContainer}>
+            <span className={styles.hotkey}>
+                <span className={styles.key}>Esc</span> - Retry
+            </span>
+            <span className={styles.hotkey}>
+                <span className={styles.key}>Enter</span> - Next
+            </span>
+        </div>
         </div>
     )
 }

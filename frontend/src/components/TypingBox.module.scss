@@ -1,8 +1,14 @@
 @use "../styles/variables" as *;
 
 
-
 .container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+}
+
+.typingContainer {
     display: flex;
     
     flex-direction: row;
@@ -69,6 +75,31 @@
     background-color: transparent;
 }
 
+.hotkeyContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 6rem;
+    margin-top: 10rem;
+}
+
+.hotkey {
+    display: inline;
+    padding: 5px 10px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    color: $background-color-secondary;
+    font-family: $font-family-base;
+}
+
+.key {
+    display: inline;
+    border-radius: 5px;
+    color: $background-color-secondary;
+    font-family: $font-family-base;
+}
+
 @keyframes blink {
     from,
     to {
@@ -78,3 +109,4 @@
         opacity: 0.2;
     }
 }
+
