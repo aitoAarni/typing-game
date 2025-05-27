@@ -32,12 +32,13 @@ class WordDefinitionService {
             localStorageService
         )
     }
-    async getCurrentDefinition() {
+    getCurrentDefinition() {
         return this.currentDefinition
     }
-    async getNewDefinition() {
+
+    getNewDefinition() {
         this.increaseDefinitionId()
-        this.currentDefinition = this.nextDefinition
+        this.currentDefinition = this.getNextDefinition()
         this.setNextDefinition()
         return this.currentDefinition
     }

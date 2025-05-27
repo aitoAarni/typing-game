@@ -18,6 +18,7 @@ const TypingView = ({ definitionService }: TypingViewProps) => {
     const [wordDefinition, setWordDefinition] = useState<WordDefinition | null>(
         null
     )
+    const [nextWord, setNextWord] = useState<string>("")
     const [typingTextLoading, setTypingTextLoading] = useState<boolean>(true)
     const [typingStatistics, setTypingStatistics] =
         useState<null | TypingStatistics>(null)
@@ -73,20 +74,22 @@ const TypingView = ({ definitionService }: TypingViewProps) => {
         setTypingTextLoading(false)
     }
 
-    const skipNext = () => {
+    const skipNext = async () => {
         definitionService.increaseDefinitionId()
+        definitionService.setNextDefinition()
+        const nextDefinition = await definitionService.getNextDefinition()
+        setNextWord(nextDefinition.word)
     }
 
     useEffect(() => {
         
         const setInitialDefinition = async () => {
+            setTypingTextLoading(true)
             const definition = await definitionService.getCurrentDefinition()
             setWordDefinition(definition)
             setTypingTextLoading(false)
         }
         const sendStatistics = async () => {
-            console.log("sending statistics")
-            console.log("typing statistics", typingStatistics)
             if (!typingStatistics || !token) return
             const statistics = {
                 total_characters: typingStatistics.totalChars,
@@ -98,11 +101,17 @@ const TypingView = ({ definitionService }: TypingViewProps) => {
             }
             await sendTypingSession(statistics, token)
         }
+        const updateNextWord = async () => {
+            const nextDefinition = await definitionService.getNextDefinition()
+            setNextWord(nextDefinition.word)
+        }
         if (wordDefinition === null && isTyping) {
             console.log("setting initial definition")
             setInitialDefinition()
         }
         if (!isTyping) {
+            updateNextWord()
+
             if (typingStatistics && typingStatistics.wpm > 28) {
                 sendStatistics()
             }
@@ -123,7 +132,7 @@ const TypingView = ({ definitionService }: TypingViewProps) => {
             {!isTyping && (
                 <TypingFinished
                     wordDefinition={wordDefinition!}
-                    nextWord="Coinside"
+                    nextWord={nextWord}
                     statistics={typingStatistics}
                     typeNext={typeNext}
                     typeAgain={typeAgain}
