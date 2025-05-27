@@ -12,7 +12,6 @@ const StatisticsView = () => {
         null
     )
     const { token } = useAuth()
-    console.log("otken", token)
     useEffect(() => {
         const getStatistics = async () => {
             if (token) {

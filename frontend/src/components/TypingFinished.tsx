@@ -7,8 +7,8 @@ interface TypingFinishedProps {
     wordDefinition: WordDefinition
     nextWord: string
     statistics: TypingStatistics | null
-    typeNext: () => void,
-    typeAgain: () => void,
+    typeNext: () => void
+    typeAgain: () => void
     skipNext: () => void
 }
 
@@ -31,27 +31,48 @@ const TypingFinished = ({
                     {wordDefinition.sentence}
                 </p>
             </div>
-            {statistics && (
-                <div className={styles.typingStatsContainer}>
-                    <p className={styles.typingStat}>
-                        accuracy {statistics.accuracy}%
-                    </p>
-                    <p className={styles.typingStat}>{statistics.wpm} wpm</p>
-                    <p className={styles.typingStat}>{statistics.time} s</p>
-                    <p className={styles.typingStat}>
-                        {statistics.wordCount} words
-                    </p>
-                    <p className={styles.typingStat}>
-                        misatkes {statistics.errorCount}
-                    </p>
+                <div className={styles.cardContainer}>
+                    {statistics && (
+                        <div className={styles.typingStatsContainer}>
+                            <div className={styles.statistic}>
+                                <span className={styles.label}>WPM</span>
+                                <span className={styles.value}>
+                                    {statistics.wpm}
+                                </span>
+                            </div>
+                            <div className={styles.statistic}>
+                                <span className={styles.label}>Accuracy</span>
+                                <span className={styles.value}>
+                                    {statistics.accuracy}%
+                                </span>
+                            </div>
+                            <div className={styles.statistic}>
+                                <span className={styles.label}>Time</span>
+                                <span className={styles.value}>
+                                    {statistics.time} s
+                                </span>
+                            </div>
+                            <div className={styles.statistic}>
+                                <span className={styles.label}>Words</span>
+                                <span className={styles.value}>
+                                    {statistics.wordCount}
+                                </span>
+                            </div>
+                            <div className={styles.statistic}>
+                                <span className={styles.label}>Mistakes</span>
+                                <span className={styles.value}>
+                                    {statistics.errorCount}
+                                </span>
+                            </div>
+                        </div>
+                    )}
+                    <p className={styles.nextWord}>Next word - {nextWord}</p>
+                    <div className={styles.buttonContainer}>
+                        <Button1 onClick={typeAgain}>again</Button1>
+                        <Button1 onClick={typeNext}>next</Button1>
+                        <Button1 onClick={skipNext}>skip</Button1>
+                    </div>
                 </div>
-            )}
-            <p className={styles.nextWord}>Next word {nextWord}</p>
-            <div className={styles.buttonContainer}>
-                <Button1 onClick={typeAgain}>again</Button1>
-                <Button1 onClick={typeNext}>next</Button1>
-                <Button1 onClick={skipNext}>skip</Button1>
-            </div>
         </div>
     )
 }
