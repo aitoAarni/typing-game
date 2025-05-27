@@ -125,6 +125,8 @@ const TypingView = ({ definitionService }: TypingViewProps) => {
                     textTyped={() => setIsTyping(false)}
                     calculateStatistics={calculateStatistics}
                     startTimer={turnTimerOn}
+                    nextText={typeNext}
+                    retryText={typeAgain}
                 />
             )}
             {typingTextLoading && <LoadingSpinner posY={270} />}

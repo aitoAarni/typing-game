@@ -6,6 +6,8 @@ interface TypingBoxProps {
     textTyped: () => void
     calculateStatistics: (totalChars: number, errors: number) => void
     startTimer: () => void
+    nextText: () => void
+    retryText: () => void
 }
 
 const TypingBox = ({
@@ -13,6 +15,8 @@ const TypingBox = ({
     textTyped,
     calculateStatistics,
     startTimer,
+    nextText,
+    retryText,
 }: TypingBoxProps) => {
     const lineHeight = 60
     const [frameNumber, setFrameNumber] = useState<number>(0)
@@ -63,7 +67,12 @@ const TypingBox = ({
             }
             typedCorrectlyRef.current[currentIndex[0]][currentIndex[1]] = null
             currentIndexRef.current = currentIndex
+        } else if (char === "Enter") {
+            nextText()
+        } else if (char === "Escape") {
+            retryText()
         }
+
         setFrameNumber(prev => prev + 1)
     }
     useEffect(() => {
