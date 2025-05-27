@@ -12,7 +12,10 @@ export const getWordDefinition = async (
         if (isNaN(paramID) || paramID < 0) {
             throw new HTTPError(400, "Invalid ID")
         }
-        const id = paramID % 102
+        let id = paramID % 100
+        if (paramID >99) {
+            id++
+        }
         const definition = await getWordDefinitionDb(id)
         res.status(200).json(definition)
     } catch (error) {
