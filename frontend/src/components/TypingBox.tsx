@@ -30,7 +30,6 @@ const TypingBox = ({
     const charListRef = useRef<string[][]>([])
     const typedCorrectlyRef = useRef<(boolean | null)[][]>([])
     const controlPressedRef = useRef<boolean>(false)
-
     const keyPressed = (event: KeyboardEvent) => {
         if (
             typedCorrectlyRef.current.length === 0 ||
@@ -40,24 +39,31 @@ const TypingBox = ({
         const char = event.key
         const currentIndex = currentIndexRef.current
         if (char.length === 1) {
+            const charAtIndex =
+                charListRef.current[currentIndex[0]][currentIndex[1]]
             if (!startedTypingRef.current) {
                 startTimer()
                 startedTypingRef.current = true
             }
-            typedCorrectlyRef.current[currentIndex[0]][currentIndex[1]] =
-                char === charListRef.current[currentIndex[0]][currentIndex[1]]
-            if (
-                typedCorrectlyRef.current[currentIndex[0]][currentIndex[1]] ===
-                false
-            ) {
+            const correctChar = char === charAtIndex
+
+            if (charAtIndex === " " && !correctChar) {
                 totalErrorsRef.current += 1
             } else {
-                correctCharsRef.current += 1
+                typedCorrectlyRef.current[currentIndex[0]][currentIndex[1]] =
+                    correctChar
+
+                if (correctChar) {
+                    correctCharsRef.current += 1
+                } else {
+                    totalErrorsRef.current += 1
+                }
+
+                currentIndexRef.current = setNewIndex(
+                    currentIndex,
+                    charListRef.current
+                )
             }
-            currentIndexRef.current = setNewIndex(
-                currentIndex,
-                charListRef.current
-            )
         } else if (char === "Backspace") {
             if (controlPressedRef.current) {
                 controlAndBackspace()
