@@ -92,19 +92,19 @@ const TypingFinished = ({
                     <div className={styles.buttonGroup}>
                         <Button1 onClick={typeAgain}>retry</Button1>
                         <span className={styles.hotkey}>
-                            <span className={styles.key}>R</span> -&gt; Retry
+                            <span className={styles.key}>R</span> - Retry
                         </span>
                     </div>
                     <div className={styles.buttonGroup}>
                         <Button1 onClick={typeNext}>next</Button1>
                         <span className={styles.hotkey}>
-                            <span className={styles.key}>Enter</span> -&gt; Next
+                            <span className={styles.key}>Enter</span> - Next
                         </span>
                     </div>
                     <div className={styles.buttonGroup}>
                         <Button1 onClick={skipNext}>skip</Button1>
                         <span className={styles.hotkey}>
-                            <span className={styles.key}>Space</span> -&gt; Skip
+                            <span className={styles.key}>Space</span> - Skip
                         </span>
                     </div>
                 </div>

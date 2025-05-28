@@ -30,7 +30,12 @@ const TypingBox = ({
     const charListRef = useRef<string[][]>([])
     const typedCorrectlyRef = useRef<(boolean | null)[][]>([])
     const controlPressedRef = useRef<boolean>(false)
+    const containerRef = useRef<HTMLDivElement | null>(null)
+
     const keyPressed = (event: KeyboardEvent) => {
+        if (document.activeElement !== containerRef.current) {
+            return
+        }
         if (
             typedCorrectlyRef.current.length === 0 ||
             charListRef.current.length === 0
@@ -110,6 +115,7 @@ const TypingBox = ({
     }
     useEffect(() => {
         currentIndexRef.current = [0, 0]
+
         if (text?.length) {
             const [partitionedText, typedCorrectlyInitial] = partitionText(text)
             if (
@@ -129,9 +135,17 @@ const TypingBox = ({
                 controlPressedRef.current = false
             }
         }
+
         window.addEventListener("keydown", handleKeyDown)
         window.addEventListener("keyup", handleKeyUp)
         setFrameNumber(prev => prev + 1)
+
+        setTimeout(() => {
+            if (containerRef.current) {
+                containerRef.current.focus()
+            }
+        }, 0)
+
         return () => {
             window.removeEventListener("keydown", handleKeyDown)
             window.removeEventListener("keyup", handleKeyUp)
@@ -177,7 +191,7 @@ const TypingBox = ({
         )
     }
     return (
-        <div className={styles.container}>
+        <div ref={containerRef} className={styles.container} tabIndex={0}>
             <div
                 className={styles.typingContainer}
                 data-testid="typing-container"
