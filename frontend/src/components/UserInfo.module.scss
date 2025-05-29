@@ -1,0 +1,12 @@
+@use "../styles/variables.scss" as *;
+
+.container {
+    display: flex;
+    gap: 0 4rem;
+}
+
+.userInfo {
+    font-size: $text-size;
+    color: $primary-color;
+
+}

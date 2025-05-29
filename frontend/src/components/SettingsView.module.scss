@@ -1,0 +1,15 @@
+@use "../styles/variables.scss" as *;
+
+.container {
+    display: flex;
+    flex: 1;
+    background-color: $background-color;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.settings {
+    color: $primary-color;
+    font-size: $text-size;
+}
