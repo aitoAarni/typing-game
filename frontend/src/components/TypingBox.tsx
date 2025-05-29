@@ -22,6 +22,7 @@ const TypingBox = ({
     const [frameNumber, setFrameNumber] = useState<number>(0)
     const [scrollOffset, setScrollOffset] = useState<number>(0)
     const [isAnimating, setIsAnimating] = useState<boolean>(false)
+    const [isFocused, setIsFocused] = useState<boolean>(false)
 
     const correctCharsRef = useRef<number>(0)
     const totalErrorsRef = useRef<number>(0)
@@ -31,8 +32,11 @@ const TypingBox = ({
     const typedCorrectlyRef = useRef<(boolean | null)[][]>([])
     const controlPressedRef = useRef<boolean>(false)
     const containerRef = useRef<HTMLDivElement | null>(null)
-
     const keyPressed = (event: KeyboardEvent) => {
+        console.log(
+            "div focused",
+            document.activeElement === containerRef.current
+        )
         if (document.activeElement !== containerRef.current) {
             return
         }
@@ -143,6 +147,7 @@ const TypingBox = ({
         setTimeout(() => {
             if (containerRef.current) {
                 containerRef.current.focus()
+                setIsFocused(true)
             }
         }, 0)
 
@@ -190,11 +195,25 @@ const TypingBox = ({
             ></div>
         )
     }
+    const handleFocus = () => {
+        setIsFocused(true)
+    }
+    const handleBlur = () => {
+        setIsFocused(false)
+    }
+    console.log("isFocused", isFocused)
     return (
-        <div ref={containerRef} className={styles.container} tabIndex={0}>
+        <div
+            ref={containerRef}
+            className={styles.container}
+            tabIndex={0}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+        >
             <div
                 className={styles.typingContainer}
                 data-testid="typing-container"
+                style={{ filter: isFocused ? undefined : "blur(3px)" }}
             >
                 <div
                     onTransitionEnd={() => setIsAnimating(false)}
