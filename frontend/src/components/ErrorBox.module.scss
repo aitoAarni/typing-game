@@ -1,0 +1,17 @@
+@use "../styles/variables.scss" as *;
+
+.container {
+    display: flex;
+    position: fixed;
+    background-color: $color-incorrect;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12;
+    top: 4rem;
+
+}
+
+.text {
+    color: white;
+    font-size: $text-size-smaller;
+}

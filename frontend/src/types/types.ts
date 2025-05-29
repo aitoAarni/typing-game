@@ -13,6 +13,10 @@ export interface AuthContextType {
     setUser: (user: User | null) => void
     setToken: (token: string | null) => void
 }
+export interface ErrorContextType {
+    errorMessage: string | null
+    setErrorMessage: React.Dispatch<React.SetStateAction<string | null>>
+}
 
 export interface TypingStatistics {
     accuracy: number | string

@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef, CSSProperties } from "react"
 import styles from "./TypingBox.module.scss"
+import useError from "../hooks/useError"
 
 interface TypingBoxProps {
     text?: string
@@ -18,6 +19,7 @@ const TypingBox = ({
     nextText,
     retryText,
 }: TypingBoxProps) => {
+    const { setErrorMessage } = useError()
     const lineHeight = 60
     const [frameNumber, setFrameNumber] = useState<number>(0)
     const [scrollOffset, setScrollOffset] = useState<number>(0)

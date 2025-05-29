@@ -21,10 +21,10 @@ const TypingView = ({ definitionService }: TypingViewProps) => {
     const [nextWord, setNextWord] = useState<string>("")
     const [typingTextLoading, setTypingTextLoading] = useState<boolean>(true)
     const [typingStatistics, setTypingStatistics] =
-        useState<null | TypingStatistics>(null)
-
+    useState<null | TypingStatistics>(null)
+    
     const startTimeRef = useRef<number>(0)
-
+    
     const turnTimerOn = () => {
         startTimeRef.current = new Date().getTime()
     }
@@ -104,7 +104,6 @@ const TypingView = ({ definitionService }: TypingViewProps) => {
             setNextWord(nextDefinition.word)
         }
         if (wordDefinition === null && isTyping) {
-            console.log("setting initial definition")
             setInitialDefinition()
         }
         if (!isTyping) {
