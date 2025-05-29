@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useState, useRef, CSSProperties } from "react"
 import styles from "./TypingBox.module.scss"
 
 interface TypingBoxProps {
@@ -32,12 +32,14 @@ const TypingBox = ({
     const typedCorrectlyRef = useRef<(boolean | null)[][]>([])
     const controlPressedRef = useRef<boolean>(false)
     const containerRef = useRef<HTMLDivElement | null>(null)
+    const typingContainerRef = useRef<HTMLDivElement | null>(null)
     const keyPressed = (event: KeyboardEvent) => {
-        console.log(
-            "div focused",
-            document.activeElement === containerRef.current
-        )
+        const char = event.key
         if (document.activeElement !== containerRef.current) {
+            if (char) {
+                setIsFocused(true)
+                containerRef.current?.focus()
+            }
             return
         }
         if (
@@ -45,7 +47,6 @@ const TypingBox = ({
             charListRef.current.length === 0
         )
             return
-        const char = event.key
         const currentIndex = currentIndexRef.current
         if (char.length === 1) {
             const charAtIndex =
@@ -201,7 +202,13 @@ const TypingBox = ({
     const handleBlur = () => {
         setIsFocused(false)
     }
-    console.log("isFocused", isFocused)
+
+    const blurTextTop = typingContainerRef.current
+        ? (typingContainerRef.current?.getBoundingClientRect().top +
+              typingContainerRef.current?.getBoundingClientRect().bottom) /
+          2
+        : 0
+
     return (
         <div
             ref={containerRef}
@@ -210,15 +217,25 @@ const TypingBox = ({
             onFocus={handleFocus}
             onBlur={handleBlur}
         >
+            {isFocused ? null : (
+                <BlurMessage
+                    style={{
+                        top: blurTextTop,
+                    }}
+                />
+            )}
             <div
                 className={styles.typingContainer}
                 data-testid="typing-container"
-                style={{ filter: isFocused ? undefined : "blur(3px)" }}
+                style={isFocused ? undefined : { filter: "blur(3px)" }}
             >
                 <div
+                    ref={typingContainerRef}
                     onTransitionEnd={() => setIsAnimating(false)}
                     className={styles.inner}
-                    style={{ transform: `translateY(-${scrollOffset}px)` }}
+                    style={{
+                        transform: `translateY(-${scrollOffset}px)`,
+                    }}
                 >
                     <div
                         style={{
@@ -291,6 +308,16 @@ const TypingBox = ({
                     <span className={styles.key}>Enter</span> - Next
                 </span>
             </div>
+        </div>
+    )
+}
+
+const BlurMessage = ({ style }: { style?: CSSProperties | undefined }) => {
+    return (
+        <div className={styles.blurMessage} style={style}>
+            <p className={styles.blurText}>
+                Click here or Press any key to focus and start typing
+            </p>
         </div>
     )
 }

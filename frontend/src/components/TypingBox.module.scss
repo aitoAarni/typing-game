@@ -98,6 +98,17 @@
     font-family: $font-family-base;
 }
 
+.blurMessage {
+    position: absolute;
+    z-index: 10;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.blurText {
+    color: white;
+    font-size: $text-size-smaller
+}
 @keyframes blink {
     from,
     to {
@@ -107,3 +118,4 @@
         opacity: 0.2;
     }
 }
+
