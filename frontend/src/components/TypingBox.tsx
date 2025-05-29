@@ -119,6 +119,7 @@ const TypingBox = ({
         currentIndexRef.current = [wordIndex, 0]
     }
     useEffect(() => {
+        console.log("any")
         currentIndexRef.current = [0, 0]
 
         if (text?.length) {
@@ -147,6 +148,7 @@ const TypingBox = ({
 
         setTimeout(() => {
             if (containerRef.current) {
+                console.log("focussing?")
                 containerRef.current.focus()
                 setIsFocused(true)
             }

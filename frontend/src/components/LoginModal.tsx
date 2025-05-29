@@ -10,24 +10,19 @@ interface LoginModalProps {
 }
 
 const LoginModal = ({ closeModal }: LoginModalProps) => {
-    console.log("LoginModal rendered")
     const authUpdate = useAuthUpdate()
     const handleLogin = async (credentials: CredentialResponse) => {
-        console.log("Handling login with credentials:", credentials)
         try {
             const { token, user } = await loginGoogle(credentials)
-            console.log("Login successful", { token, user })
             LocalStorage.setToken(token)
             LocalStorage.setUser(user)
             authUpdate()
         } catch (error) {
-            console.error("Login failed", error)
-            console.log("Error details:", error)
+            console.error(error)
         }
     }
 
     const onError = () => {
-        console.log("Login Failed")
     }
     return (
         <div className={styles.container} onClick={closeModal}>
