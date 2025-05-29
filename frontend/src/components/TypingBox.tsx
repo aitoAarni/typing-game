@@ -316,7 +316,7 @@ const BlurMessage = ({ style }: { style?: CSSProperties | undefined }) => {
     return (
         <div className={styles.blurMessage} style={style}>
             <p className={styles.blurText}>
-                Click here or Press any key to focus and start typing
+                Click here or press any key to focus and start typing
             </p>
         </div>
     )
