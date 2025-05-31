@@ -1,10 +1,6 @@
-import { createContext, useContext } from "react"
+import { useContext } from "react"
+import { ErrorContext } from "../contexts/ErrorContext"
 
-import { ErrorContextType } from "../types/types"
-
-export const ErrorContext = createContext<ErrorContextType | undefined>(
-    undefined
-)
 
 const useError = () => {
     const context = useContext(ErrorContext)

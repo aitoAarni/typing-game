@@ -6,6 +6,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google"
 import { OAuthID } from "./config.js"
 import AuthProvider from "./providers/AuthProvider.js"
 import ErrorProvider from "./providers/ErrorProvider.js"
+import TypingProvider from "./providers/TypingProvider.js"
 
 const container = document.getElementById("root")
 if (!container) {
@@ -16,9 +17,11 @@ ReactDOM.createRoot(container).render(
     <GoogleOAuthProvider clientId={OAuthID}>
         <ErrorProvider>
             <AuthProvider>
-                <BrowserRouter>
-                    <App />
-                </BrowserRouter>
+                <TypingProvider>
+                    <BrowserRouter>
+                        <App />
+                    </BrowserRouter>
+                </TypingProvider>
             </AuthProvider>
         </ErrorProvider>
     </GoogleOAuthProvider>

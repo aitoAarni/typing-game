@@ -1,5 +1,5 @@
 import { ReactNode, useState } from "react"
-import { ErrorContext } from "../hooks/useError"
+import { ErrorContext } from "../contexts/ErrorContext"
 
 const ErrorProvider = ({ children }: { children: ReactNode }) => {
     const [errorMessage, setErrorMessage] = useState<string | null>(null)

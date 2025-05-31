@@ -18,6 +18,11 @@ export interface ErrorContextType {
     setErrorMessage: React.Dispatch<React.SetStateAction<string | null>>
 }
 
+export interface TypingContextType {
+    typingEnabled: boolean
+    setTypingEnabled: React.Dispatch<React.SetStateAction<boolean>>
+}
+
 export interface TypingStatistics {
     accuracy: number | string
     wpm: number
