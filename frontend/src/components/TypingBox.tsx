@@ -1,6 +1,5 @@
 import { useEffect, useState, useRef, CSSProperties } from "react"
 import styles from "./TypingBox.module.scss"
-import useError from "../hooks/useError"
 
 interface TypingBoxProps {
     text?: string
@@ -340,6 +339,7 @@ const partitionText = (text: string): [string[][], (boolean | null)[][]] => {
     })
     return [partitionedText, typedCorrectly]
 }
+
 const setNewIndex = (currentIndex: number[], charList: string[][]) => {
     if (currentIndex[1] + 1 < charList[currentIndex[0]].length) {
         return [currentIndex[0], currentIndex[1] + 1]
