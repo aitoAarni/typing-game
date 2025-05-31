@@ -4,6 +4,7 @@ import { useEffect } from "react"
 interface ErrorBoxProps {
     errorText: string | null
     setError: React.Dispatch<React.SetStateAction<string | null>>
+    className?: string
 }
 
 const ErrorBox = ({ errorText, setError }: ErrorBoxProps) => {
@@ -15,7 +16,6 @@ const ErrorBox = ({ errorText, setError }: ErrorBoxProps) => {
         }
     }, [errorText])
 
-    console.log("errroriii message: ", errorText)
     return !errorText ? null : (
         <div
             onClick={() => {

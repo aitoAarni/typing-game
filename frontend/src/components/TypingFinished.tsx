@@ -44,6 +44,7 @@ const TypingFinished = ({
             window.removeEventListener("keydown", handleKeyDown)
         }
     }, [typingEnabled])
+    
     return (
         <div className={styles.container}>
             <div className={styles.wordDefinitionContainer}>
