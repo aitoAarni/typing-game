@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef, CSSProperties } from "react"
 import styles from "./TypingBox.module.scss"
+import useTypingEnabled from "../hooks/useTypingEnabled"
 
 interface TypingBoxProps {
     text?: string
@@ -33,8 +34,12 @@ const TypingBox = ({
     const controlPressedRef = useRef<boolean>(false)
     const containerRef = useRef<HTMLDivElement | null>(null)
     const typingContainerRef = useRef<HTMLDivElement | null>(null)
+    const { typingEnabled } = useTypingEnabled()
     const keyPressed = (event: KeyboardEvent) => {
         const char = event.key
+        if (!typingEnabled) {
+            return
+        }
         if (document.activeElement !== containerRef.current) {
             if (char) {
                 setIsFocused(true)
@@ -48,6 +53,7 @@ const TypingBox = ({
         )
             return
         const currentIndex = currentIndexRef.current
+
         if (char.length === 1) {
             const charAtIndex =
                 charListRef.current[currentIndex[0]][currentIndex[1]]
@@ -96,7 +102,6 @@ const TypingBox = ({
         } else if (char === "Control") {
             controlPressedRef.current = true
         }
-
         setFrameNumber(prev => prev + 1)
     }
 
@@ -119,19 +124,6 @@ const TypingBox = ({
         currentIndexRef.current = [wordIndex, 0]
     }
     useEffect(() => {
-        console.log("any")
-        currentIndexRef.current = [0, 0]
-
-        if (text?.length) {
-            const [partitionedText, typedCorrectlyInitial] = partitionText(text)
-            if (
-                partitionedText.length > 0 &&
-                typedCorrectlyInitial.length > 0
-            ) {
-                typedCorrectlyRef.current = typedCorrectlyInitial
-                charListRef.current = partitionedText
-            }
-        }
         const handleKeyDown = (event: KeyboardEvent) => {
             keyPressed(event)
         }
@@ -145,18 +137,31 @@ const TypingBox = ({
         window.addEventListener("keydown", handleKeyDown)
         window.addEventListener("keyup", handleKeyUp)
         setFrameNumber(prev => prev + 1)
+        return () => {
+            window.removeEventListener("keydown", handleKeyDown)
+            window.removeEventListener("keyup", handleKeyUp)
+        }
+    }, [typingEnabled])
 
+    useEffect(() => {
+        currentIndexRef.current = [0, 0]
+
+        if (text?.length) {
+            const [partitionedText, typedCorrectlyInitial] = partitionText(text)
+            if (
+                partitionedText.length > 0 &&
+                typedCorrectlyInitial.length > 0
+            ) {
+                typedCorrectlyRef.current = typedCorrectlyInitial
+                charListRef.current = partitionedText
+            }
+        }
         setTimeout(() => {
             if (containerRef.current) {
                 containerRef.current.focus()
                 setIsFocused(true)
             }
         }, 50)
-
-        return () => {
-            window.removeEventListener("keydown", handleKeyDown)
-            window.removeEventListener("keyup", handleKeyUp)
-        }
     }, [text])
 
     useEffect(() => {
