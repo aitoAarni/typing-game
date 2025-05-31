@@ -1,7 +1,6 @@
 import { useEffect, useState, useRef, CSSProperties } from "react"
 import styles from "./TypingBox.module.scss"
 import useTypingEnabled from "../hooks/useTypingEnabled"
-import useError from "../hooks/useError"
 
 interface TypingBoxProps {
     text?: string
@@ -36,15 +35,13 @@ const TypingBox = ({
     const containerRef = useRef<HTMLDivElement | null>(null)
     const typingContainerRef = useRef<HTMLDivElement | null>(null)
     const { typingEnabled } = useTypingEnabled()
-    const { setErrorMessage } = useError()
     const keyPressed = (event: KeyboardEvent) => {
-        setErrorMessage("erroriii is here because we are testing")
         const char = event.key
         if (!typingEnabled) {
             return
         }
         if (document.activeElement !== containerRef.current) {
-            if (char) {
+            if (char.length === 1) {
                 setIsFocused(true)
                 containerRef.current?.focus()
             }
