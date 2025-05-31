@@ -1,7 +1,7 @@
 import { ReactNode, useState } from "react"
 import { ErrorContext } from "../hooks/useError"
 
-export const ErrorProvider = ({ children }: { children: ReactNode }) => {
+const ErrorProvider = ({ children }: { children: ReactNode }) => {
     const [errorMessage, setErrorMessage] = useState<string | null>(null)
     return (
         <ErrorContext.Provider value={{ errorMessage, setErrorMessage }}>
@@ -9,3 +9,5 @@ export const ErrorProvider = ({ children }: { children: ReactNode }) => {
         </ErrorContext.Provider>
     )
 }
+
+export default ErrorProvider

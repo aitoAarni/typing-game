@@ -4,8 +4,8 @@ import App from "./App.jsx"
 import "./global.scss"
 import { GoogleOAuthProvider } from "@react-oauth/google"
 import { OAuthID } from "./config.js"
-import AuthProvider from "./contexts/AuthContext.js"
-import { ErrorProvider } from "./contexts/ErrorContext.js"
+import AuthProvider from "./providers/AuthProvider.js"
+import ErrorProvider from "./providers/ErrorProvider.js"
 
 const container = document.getElementById("root")
 if (!container) {
