@@ -10,7 +10,7 @@
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.253);
-    z-index: 1;
+    z-index: 20;
 }
 
 .modal {
@@ -31,6 +31,7 @@
     transition: all 0.3s ease;
     animation: fadeInUp 0.3s ease;
     overflow: hidden;
+    z-index: 21;
 }
 
 @keyframes fadeInUp {
@@ -75,11 +76,9 @@
     color: rgba(255, 255, 255, 0.6);
     transition: transform 0.2s ease;
     border-radius: 10px;
-    //background-color: aqua;
 
     &:hover {
         transform: scale(1.03);
-        //background-color: $primary-color;
-        color: $primary-color;
+        color: white;
     }
 }

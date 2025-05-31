@@ -19,7 +19,6 @@ const TypingBox = ({
     nextText,
     retryText,
 }: TypingBoxProps) => {
-    const { setErrorMessage } = useError()
     const lineHeight = 60
     const [frameNumber, setFrameNumber] = useState<number>(0)
     const [scrollOffset, setScrollOffset] = useState<number>(0)
@@ -150,11 +149,10 @@ const TypingBox = ({
 
         setTimeout(() => {
             if (containerRef.current) {
-                console.log("focussing?")
                 containerRef.current.focus()
                 setIsFocused(true)
             }
-        }, 0)
+        }, 50)
 
         return () => {
             window.removeEventListener("keydown", handleKeyDown)
