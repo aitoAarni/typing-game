@@ -3,6 +3,7 @@ import styles from "./TypingFinished.module.scss"
 import { TypingStatistics } from "../types/types"
 import { Button1 } from "./Buttons"
 import { useEffect } from "react"
+import useTypingEnabled from "../hooks/useTypingEnabled"
 
 interface TypingFinishedProps {
     wordDefinition: WordDefinition
@@ -21,9 +22,11 @@ const TypingFinished = ({
     typeAgain,
     skipNext,
 }: TypingFinishedProps) => {
+    const { typingEnabled } = useTypingEnabled()
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
             const key = event.key
+            if (!typingEnabled) return
             switch (key) {
                 case "Enter":
                     typeNext()
@@ -40,7 +43,7 @@ const TypingFinished = ({
         return () => {
             window.removeEventListener("keydown", handleKeyDown)
         }
-    }, [])
+    }, [typingEnabled])
     return (
         <div className={styles.container}>
             <div className={styles.wordDefinitionContainer}>
