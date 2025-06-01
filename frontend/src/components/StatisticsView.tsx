@@ -33,9 +33,11 @@ const StatisticsView = () => {
     return (
         <div className={styles.container}>
             {isLoading ? (
-                <LoadingSpinner posX={100} posY={100} />
+                <LoadingSpinner style={{top: "20%"}} />
             ) : (
+                <>
                 <TotalTypingStatistics typingStatistics={statistics} />
+                </>
             )}
         </div>
     )

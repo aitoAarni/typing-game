@@ -2,18 +2,10 @@ import React from "react"
 import styles from "./LoadingSpinner.module.scss"
 
 interface LoadingSpinnerProps {
-    posX?: number
-    posY?: number
+    style?: React.CSSProperties
 }
 
-const LoadingSpinner = ({ posX, posY }: LoadingSpinnerProps) => {
-    const style: React.CSSProperties = {
-        position:
-            posX !== undefined || posY !== undefined ? "absolute" : undefined,
-        left: posX,
-        top: posY,
-    }
-
+const LoadingSpinner = ({ style }: LoadingSpinnerProps) => {
     return (
         <div
             className={styles.spinner}

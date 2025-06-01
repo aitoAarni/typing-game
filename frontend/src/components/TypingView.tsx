@@ -21,10 +21,10 @@ const TypingView = ({ definitionService }: TypingViewProps) => {
     const [nextWord, setNextWord] = useState<string>("")
     const [typingTextLoading, setTypingTextLoading] = useState<boolean>(true)
     const [typingStatistics, setTypingStatistics] =
-    useState<null | TypingStatistics>(null)
-    
+        useState<null | TypingStatistics>(null)
+
     const startTimeRef = useRef<number>(0)
-    
+
     const turnTimerOn = () => {
         startTimeRef.current = new Date().getTime()
     }
@@ -44,7 +44,6 @@ const TypingView = ({ definitionService }: TypingViewProps) => {
             (correctChars / (correctChars + errors)) *
             100
         ).toFixed(2)
-        console.log("accuracy", accuracy)
         const statistics = {
             accuracy: accuracy,
             wpm: wpm,
@@ -127,7 +126,9 @@ const TypingView = ({ definitionService }: TypingViewProps) => {
                     retryText={typeAgain}
                 />
             )}
-            {typingTextLoading && <LoadingSpinner posY={270} />}
+            {typingTextLoading && (
+                <LoadingSpinner style={{ left: "50%", top: "20%" }} />
+            )}
             {!isTyping && (
                 <TypingFinished
                     wordDefinition={wordDefinition!}
