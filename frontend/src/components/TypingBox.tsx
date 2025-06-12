@@ -23,7 +23,7 @@ const TypingBox = ({
     const [frameNumber, setFrameNumber] = useState<number>(0)
     const [scrollOffset, setScrollOffset] = useState<number>(0)
     const [isAnimating, setIsAnimating] = useState<boolean>(false)
-    const [isFocused, setIsFocused] = useState<boolean>(false)
+    const [isFocused, setIsFocused] = useState<boolean>(true)
 
     const correctCharsRef = useRef<number>(0)
     const totalErrorsRef = useRef<number>(0)
