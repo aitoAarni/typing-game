@@ -14,11 +14,11 @@ app.get("/", (req: Request, res: Response) => {
     res.send("Hello World!")
 })
 
-app.use("/api/text", textRouter)
+app.use("/text", textRouter)
 
-app.use("/api/auth", authRouter)
+app.use("/auth", authRouter)
 
-app.use("/api/typing-session", typingSessionRouter)
+app.use("/typing-session", typingSessionRouter)
 
 app.use(errorHandler)
 

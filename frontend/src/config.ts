@@ -1,5 +1,5 @@
 export const API_URL =
-    import.meta.env.MODE === "development" ? "http://localhost:3000/api" : ""
+    import.meta.env.MODE === "development" ? "http://localhost:8080/api" : ""
 
 export const OAuthID =
     import.meta.env.MODE === "development"
