@@ -5,7 +5,7 @@ import authRouter from "./routes/authRoute"
 import { errorHandler } from "./middleware"
 import typingSessionRouter from "./routes/typingSessionRoute"
 const app = express()
-const PORT = 3000
+const PORT = process.env.PORT ? process.env.PORT : 3000
 
 app.use(cors())
 app.use(express.json())
