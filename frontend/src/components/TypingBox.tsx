@@ -40,8 +40,16 @@ const TypingBox = ({
         if (!typingEnabled) {
             return
         }
+        if (char === "Control") {
+            controlPressedRef.current = true
+        } else if (char === "Enter") {
+            nextText()
+        } else if (char === "Escape") {
+            retryText()
+        }
+
         if (document.activeElement !== containerRef.current) {
-            if (char.length === 1) {
+            if (char.length === 1 && !controlPressedRef.current) {
                 setIsFocused(true)
                 containerRef.current?.focus()
             }
@@ -54,7 +62,7 @@ const TypingBox = ({
             return
         const currentIndex = currentIndexRef.current
 
-        if (char.length === 1) {
+        if (char.length === 1 && !controlPressedRef.current) {
             const charAtIndex =
                 charListRef.current[currentIndex[0]][currentIndex[1]]
             if (!startedTypingRef.current) {
@@ -95,12 +103,6 @@ const TypingBox = ({
                     null
                 currentIndexRef.current = currentIndex
             }
-        } else if (char === "Enter") {
-            nextText()
-        } else if (char === "Escape") {
-            retryText()
-        } else if (char === "Control") {
-            controlPressedRef.current = true
         }
         setFrameNumber(prev => prev + 1)
     }
@@ -210,12 +212,6 @@ const TypingBox = ({
         setIsFocused(false)
     }
 
-    const blurTextTop = typingContainerRef.current
-        ? (typingContainerRef.current?.getBoundingClientRect().top +
-              typingContainerRef.current?.getBoundingClientRect().bottom) /
-          2
-        : 0
-
     return (
         <div
             ref={containerRef}
@@ -224,13 +220,7 @@ const TypingBox = ({
             onFocus={handleFocus}
             onBlur={handleBlur}
         >
-            {isFocused ? null : (
-                <BlurMessage
-                    style={{
-                        top: blurTextTop,
-                    }}
-                />
-            )}
+            {isFocused ? null : <BlurMessage />}
             <div
                 className={styles.typingContainer}
                 data-testid="typing-container"
@@ -321,7 +311,7 @@ const TypingBox = ({
 
 const BlurMessage = ({ style }: { style?: CSSProperties | undefined }) => {
     return (
-        <div className={styles.blurMessage} style={style}>
+        <div className={styles.blurContainer} style={style}>
             <p className={styles.blurText}>
                 Click here or press any key to focus and start typing
             </p>

@@ -126,9 +126,11 @@ const TypingView = ({ definitionService }: TypingViewProps) => {
                     retryText={typeAgain}
                 />
             )}
+
             {typingTextLoading && (
                 <LoadingSpinner style={{ left: "50%", top: "20%" }} />
             )}
+
             {!isTyping && (
                 <TypingFinished
                     wordDefinition={wordDefinition!}
