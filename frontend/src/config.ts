@@ -3,7 +3,6 @@ export const API_URL: string =
         ? "http://localhost:3000"
         : import.meta.env.VITE_API_URL
 
-console.log("API_URL:", API_URL)
 
 export const OAuthID: string =
     import.meta.env.MODE === "development"

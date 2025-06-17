@@ -3,7 +3,6 @@ import styles from "./SettingsView.module.scss"
 import UserInfo from "./UserInfo"
 
 const SettingsView = () => {
-    console.log("profile here I aaam")
     const { user } = useAuth()
     return (
         <div className={styles.container}>

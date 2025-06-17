@@ -11,6 +11,8 @@ const client = new Client({
     connectionString: databaseUrl,
 })
 
+const dropTableQuery = `DROP TABLE IF EXISTS typing_sessions;`
+
 const createUserSessionQuery = `CREATE TABLE IF NOT EXISTS typing_sessions (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id),
@@ -20,7 +22,7 @@ const createUserSessionQuery = `CREATE TABLE IF NOT EXISTS typing_sessions (
     word_count INTEGER NOT NULL,
     error_count INTEGER NOT NULL,
     accuracy NUMERIC(5,2) NOT NULL,
-    time_seconds INTEGER NOT NULL,
+    time_seconds DOUBLE PRECISION NOT NULL,
     created_at TIMESTAMP DEFAULT NOW()
 );`
 
