@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS typing_sessions (
     word_count INTEGER NOT NULL,
     error_count INTEGER NOT NULL,
     accuracy NUMERIC(5,2) NOT NULL,
-    time_seconds INTEGER NOT NULL,
+    time_seconds DOUBLE PRECISION NOT NULL,
     created_at TIMESTAMP DEFAULT NOW()
 );
 
