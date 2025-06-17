@@ -11,8 +11,6 @@ app.use(cors())
 app.use(express.json())
 
 app.get("/", (req: Request, res: Response) => {
-    console.log("Received request at root endpoint")
-    console.log(process.env)
     res.send("Hello World!")
 })
 

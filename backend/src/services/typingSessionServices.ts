@@ -25,7 +25,6 @@ export const addTypingSession = async (
     ]
 
     const result = await queryDatabase(query, values)
-    console.log("result", result)
     if (result.rowCount === 0) {
         throw new Error("Failed to add typing session")
     }
@@ -47,7 +46,6 @@ export const queryTypingSessions = async (user_id: number) => {
     if (result.rowCount === 0) {
         throw new HTTPError(404, "No typing sessions found for this user")
     }
-    console.log("result", result)
     const typingSessionsTotal = typingSessionsTotalSchema.parse(result[0])
     return typingSessionsTotal
 }
