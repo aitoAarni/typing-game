@@ -8,7 +8,7 @@ process.env.server === "true"
     : dotenv.config({ path: ".env" })
 
 const definitions = JSON.parse(
-    await fs.readFile("./data/definitions.json", "utf-8")
+    await fs.readFile("../data/definitions.json", "utf-8")
 )
 console.log("url: ", process.env.DATABASE_URL)
 const databaseUrl = process.env.DATABASE_URL
