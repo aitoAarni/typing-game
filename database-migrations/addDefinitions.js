@@ -1,10 +1,16 @@
 import { Client } from "pg"
-import "dotenv/config"
+import dotenv from "dotenv"
 import fs from "fs/promises"
+
+console.log("process.env.server: ", process.env.server)
+process.env.server === "true"
+    ? dotenv.config({ path: ".env.prod" })
+    : dotenv.config({ path: ".env" })
 
 const definitions = JSON.parse(
     await fs.readFile("./data/definitions.json", "utf-8")
 )
+console.log("url: ", process.env.DATABASE_URL)
 const databaseUrl = process.env.DATABASE_URL
 
 const client = new Client({
