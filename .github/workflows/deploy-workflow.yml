@@ -28,15 +28,12 @@ jobs:
             - name: Trigger Railway Redeploy
               env:
                   RAILWAY_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}
+                  ENV_ID: ${{ secrets.RAILWAY_BACKEND_ENVIRONMENT_ID }}
+
               run: |
                   curl -X POST https://backboard.railway.app/graphql/v2 \
                   -H "Authorization: Bearer $RAILWAY_TOKEN" \
                   -H "Content-Type: application/json" \
-                  --data '{
-                      "query": "mutation Deploy($input: RedeployEnvironmentInput!) { redeployEnvironment(input: $input) { id } }",
-                      "variables": {
-                      "input": {
-                          "environmentId": "${{secrets.RAILWAY_BACKEND_ENVIRONMENT_ID}}"
-                      }
-                      }
-                  }'
+                  --data "$(jq -n \
+                    --arg envId "$ENV_ID" \
+                    '{ query: "mutation Redeploy($input: RedeployEnvironmentInput!) { redeployEnvironment(input: $input) { id } }", variables: { input: { environmentId: $envId } } }')"
