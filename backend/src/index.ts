@@ -14,6 +14,10 @@ app.get("/", (req: Request, res: Response) => {
     res.send("Hello World!")
 })
 
+app.get("/health", (req: Request, res: Response) => {
+    res.status(200).json({ message: "Server is healthy" })
+})
+
 app.use("/text", textRouter)
 
 app.use("/auth", authRouter)
