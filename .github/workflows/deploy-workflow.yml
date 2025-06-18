@@ -20,3 +20,7 @@ jobs:
 
             - name: Push Docker image
               run: docker push aitoaarni/typing-game-backend:latest
+
+            - name: Deploy on render
+              run: |
+                  curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }}
