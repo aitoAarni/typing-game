@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express"
 import { typingSessionRequestSchema } from "../types/typeGuards"
 import {
     addTypingSession,
+    queryTypingSessionActivity,
     queryTypingSessions,
 } from "../services/typingSessionServices"
 
@@ -36,6 +37,20 @@ export const getTypingSessions = async (
         res.status(200).json({
             typingSessions: result,
         })
+    } catch (error) {
+        next(error)
+    }
+}
+
+export const getTypingSessionsActivity = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    try {
+        const id = req.user?.id
+        const typingSessionActivityList = await queryTypingSessionActivity(id)
+        res.status(200).json(typingSessionActivityList)
     } catch (error) {
         next(error)
     }

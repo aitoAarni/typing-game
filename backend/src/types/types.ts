@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { definitionSchema, typingSessionDatabaseSchema, typingSessionRequestSchema, typingSessionsTotalSchema } from "./typeGuards"
+import { definitionSchema, typingSessionActivitySchema, typingSessionDatabaseSchema, typingSessionRequestSchema, typingSessionsTotalSchema } from "./typeGuards"
 import { databaseUserSchema } from "./typeGuards"
 import { JwtPayload } from "jsonwebtoken"
 
@@ -26,3 +26,5 @@ export type TypingSessionRequest = z.infer<typeof typingSessionRequestSchema>
 export type TypingSessionDatabase =z.infer<typeof typingSessionDatabaseSchema>
 
 export type TypingSessionsTotal = z.infer<typeof typingSessionsTotalSchema>
+
+export type  TypingSessionActivity = z.infer<typeof typingSessionActivitySchema>
