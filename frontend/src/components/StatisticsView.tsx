@@ -5,6 +5,7 @@ import { getTypingSession } from "../services/TypingSessionService"
 import LoadingSpinner from "./LoadingSpinner"
 import TotalTypingStatistics from "./TotalTypingStatistics"
 import styles from "./StatisticsView.module.scss"
+import ActivityMap from "./activityMap/ActivityMap"
 
 const StatisticsView = () => {
     const [isLoading, setIsLoading] = useState<boolean>(true)
@@ -37,6 +38,7 @@ const StatisticsView = () => {
             ) : (
                 <>
                 <TotalTypingStatistics typingStatistics={statistics} />
+                <ActivityMap />
                 </>
             )}
         </div>
