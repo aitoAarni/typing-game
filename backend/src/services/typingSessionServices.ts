@@ -66,7 +66,7 @@ GROUP BY
     user_id,
     DATE(created_at)
 ORDER BY
-    session_date DESC;`
+    session_date ASC;`
     const result = await queryDatabase(query, [user_id])
     if (result.rowCount === 0) {
         throw new HTTPError(
