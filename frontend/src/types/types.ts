@@ -1,5 +1,10 @@
 import { z } from "zod"
-import { AuthResponseSchema, typingSessionActivitySchema, TypingSessionTotalSchema, WordDefinitionSchema } from "./TypeGuards"
+import {
+    AuthResponseSchema,
+    typingSessionActivitySchema,
+    TypingSessionTotalSchema,
+    WordDefinitionSchema,
+} from "./TypeGuards"
 
 export type WordDefinition = z.infer<typeof WordDefinitionSchema>
 
@@ -43,6 +48,15 @@ export interface TypingSessionRemote {
     time_seconds: number
 }
 
-export type TypingSessionActivity = z.infer<typeof typingSessionActivitySchema>
+export type TypingSessionActivityStrict = z.infer<
+    typeof typingSessionActivitySchema
+>
+
+export type TypingSessionActivity = Omit<
+    TypingSessionActivityStrict,
+    "user_id"
+> & {
+    user_id: number | null
+}
 
 export type TypingSessionTotal = z.infer<typeof TypingSessionTotalSchema>
