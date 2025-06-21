@@ -1,17 +1,21 @@
 @use "../../styles/variables.scss" as *;
 
 .card {
+    display: flex;
     background-color: $background-color-secondary;
     padding: 2rem;
     border-radius: 20px;
+    box-sizing: border-box;
 }
 
 .activityContainer {
     display: flex;
-    max-height: 12rem;
+    max-height: 11.9rem;
     flex-direction: column;
     flex-wrap: wrap;
     gap: 0.7rem;
+    overflow-x: auto;
+    overflow-y: auto;
 }
 
 p {
@@ -35,11 +39,25 @@ p {
 .cell:hover .onHover {
     display: block;
     position: absolute;
-    bottom : 25px;
+    bottom: 25px;
     padding: 0 1rem;
     left: 50%;
     transform: translateX(-50%);
     border-radius: 15px;
     background-color: rgba(0, 0, 0, 0.7);
     z-index: 10;
+}
+
+.daysContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+}
+
+.day {
+    display: relative;
+    color: rgba(0, 0, 0, 0.575);
+    height: 1rem;
+    margin: 0;
+    margin-right: 0.5rem;
 }

@@ -5,9 +5,11 @@
     flex-direction: column;
     height: 100%;
     width: 100%;
-    padding-top: 4rem;
+    padding: 4rem 2rem;
+    box-sizing: border-box;
     background-color: $background-color;
     justify-content: flex-start;
     align-items: center;
-    gap: 2rem;
+    gap: 4rem;
+    overflow-y: auto;
 }

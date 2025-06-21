@@ -2,6 +2,8 @@ import { TypingSessionActivity } from "../../types/types"
 import { formatTime } from "../../utils"
 import styles from "./ActivityMap.module.scss"
 
+const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+
 const ActivityMap = ({
     typingActivity,
 }: {
@@ -9,6 +11,13 @@ const ActivityMap = ({
 }) => {
     return (
         <div className={styles.card}>
+            <div className={styles.daysContainer}>
+                {daysOfWeek.map((day, index) => (
+                    <p key={index} className={styles.day}>
+                        {day}
+                    </p>
+                ))}
+            </div>
             <div className={styles.activityContainer}>
                 {typingActivity.map((_, index) => (
                     <Cell key={index} activity={typingActivity[index]} />
