@@ -9,6 +9,7 @@ import LoadingSpinner from "./LoadingSpinner"
 import TotalTypingStatistics from "./TotalTypingStatistics"
 import styles from "./StatisticsView.module.scss"
 import ActivityMap from "./activityMap/ActivityMap"
+import { datesEqual } from "../utils"
 
 const StatisticsView = () => {
     const [isLoading, setIsLoading] = useState<boolean>(true)
@@ -31,7 +32,6 @@ const StatisticsView = () => {
                     console.log("incompleteTypingActivity", incompleteTypingActivity)
                     const startDate = new Date()
                     startDate.setDate(startDate.getDate() - 365)
-                    // startDate.setDate(startDate.getDate() - 30)
                     startDate.setDate(startDate.getDate() - startDate.getDay())
                     const typingActivityFilled = fillTypingSessionActivityList(
                         startDate,
@@ -77,7 +77,8 @@ const fillTypingSessionActivityList = (
     today.setHours(0, 0, 0, 0)
     let index = 0
     for (; startDate <= today; startDate.setDate(startDate.getDate() + 1)) {
-        if (data[index] && data[index].session_date <= startDate) {
+        
+        if (data[index] && datesEqual(data[index].session_date, startDate)) {
             activityList.push(data[index])
             index++
         } else {
