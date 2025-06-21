@@ -29,7 +29,6 @@ const StatisticsView = () => {
                     const incompleteTypingActivity =
                         await getTypingSessionActivity(token)
 
-                    console.log("incompleteTypingActivity", incompleteTypingActivity)
                     const startDate = new Date()
                     startDate.setDate(startDate.getDate() - 365)
                     startDate.setDate(startDate.getDate() - startDate.getDay())

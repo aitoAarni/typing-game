@@ -1,4 +1,5 @@
 import { TypingSessionActivity } from "../../types/types"
+import { formatTime } from "../../utils"
 import styles from "./ActivityMap.module.scss"
 
 const ActivityMap = ({
@@ -7,18 +8,17 @@ const ActivityMap = ({
     typingActivity: TypingSessionActivity[]
 }) => {
     return (
-        <div className={styles.container}>
-            {typingActivity.map((_, index) => (
-                <Cell key={index} activity={typingActivity[index]} />
-            ))}
+        <div className={styles.card}>
+            <div className={styles.activityContainer}>
+                {typingActivity.map((_, index) => (
+                    <Cell key={index} activity={typingActivity[index]} />
+                ))}
+            </div>
         </div>
     )
 }
 
 const Cell = ({ activity }: { activity: TypingSessionActivity }) => {
-    const d1 = new Date()
-    d1.setDate(d1.getDate() - 7)
-
     const threshold = 0.05
     const hourDecimal = activity.total_seconds / 2000
     const alpha =
@@ -28,7 +28,14 @@ const Cell = ({ activity }: { activity: TypingSessionActivity }) => {
         <div
             className={styles.cell}
             style={hourDecimal === 0 ? undefined : { backgroundColor: color }}
-        ></div>
+        >
+            <div className={styles.onHover}>
+                <p>
+                    {formatTime(activity.total_seconds)} on{" "}
+                    {activity.session_date.toLocaleDateString()}
+                </p>
+            </div>
+        </div>
     )
 }
 
