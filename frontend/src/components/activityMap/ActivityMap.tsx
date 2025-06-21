@@ -17,13 +17,15 @@ const ActivityMap = ({
 }
 
 const Cell = ({ activity }: { activity: TypingSessionActivity }) => {
-    const hourDecimal = activity.total_seconds / 240
-    const alpha = hourDecimal > 1 ? 1 : hourDecimal
-    const color = "rgba(255, 102, 255, " + String(alpha) + ")"
+    const threshold = 0.2
+    const hourDecimal = activity.total_seconds / 3600
+    const alpha =
+        hourDecimal > 1 ? 1 - threshold : Math.max(hourDecimal - threshold, 0)
+    const color = "rgba(217, 255, 0, " + String(alpha + threshold) + ")"
     return (
         <div
             className={styles.cell}
-            style={alpha === 0 ? undefined : { backgroundColor: color }}
+            style={hourDecimal === 0 ? undefined : { backgroundColor: color }}
         ></div>
     )
 }
