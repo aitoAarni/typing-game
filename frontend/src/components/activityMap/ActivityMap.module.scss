@@ -6,6 +6,7 @@
     padding: 2rem;
     border-radius: 20px;
     box-sizing: border-box;
+    min-width: 97rem;
 }
 
 .activityContainer {
@@ -14,8 +15,6 @@
     flex-direction: column;
     flex-wrap: wrap;
     gap: 0.7rem;
-    overflow-x: auto;
-    overflow-y: auto;
 }
 
 p {
