@@ -11,10 +11,11 @@
 
 .activityContainer {
     display: flex;
-    max-height: 11.9rem;
+    height: 11.9rem;
     flex-direction: column;
     flex-wrap: wrap;
     gap: 0.7rem;
+    min-width: 93rem;
 }
 
 p {
