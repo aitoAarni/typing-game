@@ -1,5 +1,8 @@
 import { API_URL } from "../config"
-import { TypingSessionTotalSchema } from "../types/TypeGuards"
+import {
+    typingSessionActivitySchema,
+    TypingSessionTotalSchema,
+} from "../types/TypeGuards"
 import { TypingSessionRemote } from "../types/types"
 
 export const sendTypingSession = async (
@@ -38,4 +41,20 @@ export const getTypingSession = async (token: string) => {
     const typingSession = TypingSessionTotalSchema.parse(data.typingSessions)
 
     return typingSession
+}
+
+export const getTypingSessionActivity = async (token: string) => {
+    const url = API_URL + "/typing-session/activity"
+    const result = await fetch(url, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+        },
+    })
+    const data = await result.json()
+    const typingSessionActivity = data.map((row: unknown) =>
+        typingSessionActivitySchema.parse(row)
+    )
+    return typingSessionActivity
 }

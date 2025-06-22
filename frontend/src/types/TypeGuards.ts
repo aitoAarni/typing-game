@@ -24,3 +24,9 @@ export const TypingSessionTotalSchema = z.object({
     average_accuracy: z.number(),
     total_seconds: z.number(),
 })
+
+export const typingSessionActivitySchema = z.object({
+    user_id: z.number(),
+    session_date: z.string().transform(val => new Date(val)),
+    total_seconds: z.number(),
+})

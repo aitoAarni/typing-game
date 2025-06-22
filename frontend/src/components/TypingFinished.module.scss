@@ -30,6 +30,7 @@
 
 .wordDefinition {
     text-align: center;
+    color: $primary-color;
 }
 
 .typingStatsContainer {
@@ -92,8 +93,6 @@
     align-items: center;
     gap: 1rem 0;
 }
-
-
 
 .hotkey {
     display: inline;

@@ -2,9 +2,14 @@
 
 .container {
     display: flex;
-    flex: 1;
-    padding-top: 4rem;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    padding: 4rem 2rem;
+    box-sizing: border-box;
     background-color: $background-color;
-    justify-content: center;
-    align-items: flex-start;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 4rem;
+    overflow: auto;
 }

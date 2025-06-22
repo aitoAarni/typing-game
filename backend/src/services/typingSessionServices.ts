@@ -1,6 +1,7 @@
-import { TypingSessionRequest } from "../types/types"
+import { TypingSessionActivity, TypingSessionRequest } from "../types/types"
 import { queryDatabase } from "../database/query"
 import {
+    typingSessionActivitySchema,
     typingSessionDatabaseSchema,
     typingSessionsTotalSchema,
 } from "../types/typeGuards"
@@ -48,4 +49,33 @@ export const queryTypingSessions = async (user_id: number) => {
     }
     const typingSessionsTotal = typingSessionsTotalSchema.parse(result[0])
     return typingSessionsTotal
+}
+
+export const queryTypingSessionActivity = async (user_id: number) => {
+    const query = `
+    SELECT
+    user_id,
+    DATE(created_at) AS session_date,
+    SUM(time_seconds) AS total_seconds
+FROM
+    typing_sessions
+WHERE
+    user_id = $1
+    AND created_at >= NOW() - INTERVAL '1 year'
+GROUP BY
+    user_id,
+    DATE(created_at)
+ORDER BY
+    session_date ASC;`
+    const result = await queryDatabase(query, [user_id])
+    if (result.rowCount === 0) {
+        throw new HTTPError(
+            404,
+            "No typing session activity found for this user"
+        )
+    }
+    const typingSessionActivityList: TypingSessionActivity[] = result.map(
+        (row: unknown) => typingSessionActivitySchema.parse(row)
+    )
+    return typingSessionActivityList
 }
