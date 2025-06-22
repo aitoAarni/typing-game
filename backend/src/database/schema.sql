@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS typing_sessions (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id),
-    typed_text TEXT,
+    definition_id INTEGER REFERENCE definitions(id),
     correct_characters INTEGER NOT NULL,
     total_characters INTEGER NOT NULL,
     word_count INTEGER NOT NULL,

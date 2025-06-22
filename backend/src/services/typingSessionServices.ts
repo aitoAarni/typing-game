@@ -11,12 +11,12 @@ export const addTypingSession = async (
     typingSession: TypingSessionRequest,
     user_id: number
 ) => {
-    const query = `INSERT INTO typing_sessions (user_id, typed_text, correct_characters,
+    const query = `INSERT INTO typing_sessions (definition_id, user_id, correct_characters,
         total_characters, error_count, word_count, accuracy, time_seconds) 
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *;`
     const values = [
+        typingSession.definition_id,
         user_id,
-        typingSession.typed_text ?? null,
         typingSession.correct_characters,
         typingSession.total_characters,
         typingSession.error_count,
