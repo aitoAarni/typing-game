@@ -29,6 +29,7 @@ export interface TypingContextType {
 }
 
 export interface TypingStatistics {
+    definition_id: number
     accuracy: number | string
     wpm: number
     time: number
