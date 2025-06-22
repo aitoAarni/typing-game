@@ -1,12 +1,9 @@
-
 export const datesEqual = (date1: Date, date2: Date) => {
-    if (date1.getDate() !== date2.getDate()) return false
-    if (date1.getMonth() !== date2.getMonth()) return false
-    if (date1.getFullYear() !== date2.getFullYear()) return false
+    if (date1.getUTCDate() !== date2.getUTCDate()) return false
+    if (date1.getUTCMonth() !== date2.getUTCMonth()) return false
+    if (date1.getUTCFullYear() !== date2.getUTCFullYear()) return false
     return true
 }
-
-
 
 export function formatTime(totalSeconds: number): string {
     const hours = Math.floor(totalSeconds / 3600)
