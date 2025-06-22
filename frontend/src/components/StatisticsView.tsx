@@ -30,9 +30,9 @@ const StatisticsView = () => {
                         await getTypingSessionActivity(token)
 
                     const startDate = new Date()
-                    startDate.setDate(startDate.getDate() - 365)
-                    startDate.setDate(
-                        startDate.getDate() - dayMapping[startDate.getUTCDay()]
+                    startDate.setUTCDate(startDate.getUTCDate() - 365)
+                    startDate.setUTCDate(
+                        startDate.getUTCDate() - dayMapping[startDate.getUTCDay()]
                     )
                     const typingActivityFilled = fillTypingSessionActivityList(
                         startDate,

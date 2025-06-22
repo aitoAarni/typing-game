@@ -1,14 +1,5 @@
 @use "../../styles/variables.scss" as *;
 
-.card {
-    display: flex;
-    background-color: $background-color-secondary;
-    padding: 2rem;
-    border-radius: 20px;
-    box-sizing: border-box;
-    min-width: 97rem;
-}
-
 .activityContainer {
     display: flex;
     height: 11.9rem;
