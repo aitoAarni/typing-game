@@ -47,7 +47,6 @@ export const getLeitnerDefinition = async (
         let definition
         if (bucket_number === 0) {
             definition = await getNewWordDefinition(user_id)
-            console.log("new word id: ", definition.id)
         } else {
             definition = await getUserDefinitionProgress(user_id, bucket_number)
         }

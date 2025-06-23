@@ -36,8 +36,6 @@ export const raffleBucket = (wordsPerBucket: WordsPerBucket[]) => {
         cumulativeDistribution[i] += initialWeights[i] / maxProbability
     }
     const randomVariable = Math.random()
-    console.log("Random variable: ", randomVariable)
-    console.log("Cumulative distribution: ", cumulativeDistribution)
     for (let i = 0; i < 4; i++) {
         if (randomVariable < cumulativeDistribution[i]) {
             return i
