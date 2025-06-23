@@ -13,13 +13,17 @@ export const setTypingSession = async (
     next: NextFunction
 ) => {
     try {
-        console.log("Received typing session request:", req.body)
         const typingSessionReq = typingSessionRequestSchema.parse(req.body)
         const typingSessionLog = await addTypingSession(
             typingSessionReq,
             req.user?.id
         )
-        await addUserDefinitionProgress(req.user?.id, typingSessionReq.definition_id)
+        if (req.user?.id) {
+            await addUserDefinitionProgress(
+                req.user?.id,
+                typingSessionReq.definition_id
+            )
+        }
 
         res.status(201).json({
             typingSessionLog,
