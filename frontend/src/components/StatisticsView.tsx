@@ -32,7 +32,8 @@ const StatisticsView = () => {
                     const startDate = new Date()
                     startDate.setUTCDate(startDate.getUTCDate() - 365)
                     startDate.setUTCDate(
-                        startDate.getUTCDate() - dayMapping[startDate.getUTCDay()]
+                        startDate.getUTCDate() -
+                            dayMapping[startDate.getUTCDay()]
                     )
                     const typingActivityFilled = fillTypingSessionActivityList(
                         startDate,
@@ -76,11 +77,15 @@ const fillTypingSessionActivityList = (
     const activityList: TypingSessionActivity[] = []
     const id = data.length > 0 ? data[0].user_id : null
 
-    startDate.setHours(0, 0, 0, 0)
+    startDate.setUTCHours(0, 0, 0, 0)
     const today = new Date()
-    today.setHours(0, 0, 0, 0)
+    today.setUTCHours(0, 0, 0, 0)
     let index = 0
-    for (; startDate <= today; startDate.setDate(startDate.getDate() + 1)) {
+    for (
+        ;
+        startDate <= today;
+        startDate.setUTCDate(startDate.getUTCDate() + 1)
+    ) {
         if (data[index] && datesEqual(data[index].session_date, startDate)) {
             activityList.push(data[index])
             index++
