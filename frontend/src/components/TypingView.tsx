@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react"
 import styles from "./TypingView.module.scss"
 import TypingBox from "./TypingBox"
 import TypingFinished from "./TypingFinished"
-import WordDefinitionService from "../services/WordDefinitionService"
+import { WordDefinitionService } from "../types/types"
 import LoadingSpinner from "./LoadingSpinner"
 import { WordDefinition } from "../types/types"
 import { TypingStatistics } from "../types/types"
@@ -74,8 +74,7 @@ const TypingView = ({ definitionService }: TypingViewProps) => {
     }
 
     const skipNext = async () => {
-        definitionService.increaseDefinitionId()
-        definitionService.setNextDefinition()
+        definitionService.updateNextDefinition()
         const nextDefinition = await definitionService.getNextDefinition()
         setNextWord(nextDefinition.word)
     }

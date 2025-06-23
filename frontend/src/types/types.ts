@@ -61,3 +61,10 @@ export type TypingSessionActivity = Omit<
 }
 
 export type TypingSessionTotal = z.infer<typeof TypingSessionTotalSchema>
+
+export interface WordDefinitionService {
+    getCurrentDefinition: () => Promise<WordDefinition> | WordDefinition
+    getNewDefinition: () => Promise<WordDefinition> | WordDefinition
+    getNextDefinition: () => Promise<WordDefinition> | WordDefinition
+    updateNextDefinition: () => void
+}
