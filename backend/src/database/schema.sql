@@ -25,3 +25,14 @@ CREATE TABLE IF NOT EXISTS definitions (
     definition TEXT NOT NULL,
     sentence TEXT NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS user_definition_progress (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id),
+    definition_id INTEGER REFERENCES definitions(id),
+    bucket INTEGER NOT NULL DEFAULT 1 CHECK (bucket BETWEEN 1 AND 3),
+    liked BOOLEAN NOT NULL DEFAULT FALSE,
+    times_typed INTEGER NOT NULL DEFAULT 1,
+    last_typed_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    UNIQUE(user_id, definition_id)
+);
