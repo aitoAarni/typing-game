@@ -36,3 +36,7 @@ CREATE TABLE IF NOT EXISTS user_definition_progress (
     last_typed_at TIMESTAMP NOT NULL DEFAULT NOW(),
     UNIQUE(user_id, definition_id)
 );
+
+-- when db is big use this
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_user_definition_progress_user_def
+ON user_definition_progress(user_id, definition_id);
