@@ -16,7 +16,7 @@ export const databaseUserSchema = z.object({
 })
 
 export const typingSessionRequestSchema = z.object({
-    typed_text: z.string().optional().nullable(),
+    definition_id: z.number(),
     total_characters: z.number().nonnegative(),
     correct_characters: z.number().nonnegative(),
     error_count: z.number().nonnegative(),

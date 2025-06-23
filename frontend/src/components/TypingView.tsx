@@ -45,6 +45,7 @@ const TypingView = ({ definitionService }: TypingViewProps) => {
             100
         ).toFixed(2)
         const statistics = {
+            definition_id: wordDefinition.id,
             accuracy: accuracy,
             wpm: wpm,
             time: time,
@@ -89,6 +90,7 @@ const TypingView = ({ definitionService }: TypingViewProps) => {
         const sendStatistics = async () => {
             if (!typingStatistics || !token) return
             const statistics = {
+                definition_id: typingStatistics.definition_id,
                 total_characters: typingStatistics.totalChars,
                 correct_characters: typingStatistics.correctChars,
                 error_count: typingStatistics.errorCount,
