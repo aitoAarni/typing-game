@@ -5,6 +5,7 @@ import {
     queryTypingSessionActivity,
     queryTypingSessions,
 } from "../services/typingSessionServices"
+import { addUserDefinitionProgress } from "../services/userDefinitionProgressServices"
 
 export const setTypingSession = async (
     req: Request,
@@ -18,6 +19,7 @@ export const setTypingSession = async (
             typingSessionReq,
             req.user?.id
         )
+        await addUserDefinitionProgress(req.user?.id, typingSessionReq.definition_id)
 
         res.status(201).json({
             typingSessionLog,
