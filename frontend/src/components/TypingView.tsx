@@ -59,9 +59,9 @@ const TypingView = ({ definitionService }: TypingViewProps) => {
 
     const typeNext = async () => {
         setTypingTextLoading(true)
-        setIsTyping(true)
         const newDefinition = await definitionService.getNewDefinition()
         setWordDefinition(newDefinition)
+        setIsTyping(true)
         setTypingTextLoading(false)
     }
 
@@ -74,7 +74,7 @@ const TypingView = ({ definitionService }: TypingViewProps) => {
     }
 
     const skipNext = async () => {
-        definitionService.updateNextDefinition()
+        await definitionService.updateNextDefinition()
         const nextDefinition = await definitionService.getNextDefinition()
         setNextWord(nextDefinition.word)
     }
@@ -109,7 +109,7 @@ const TypingView = ({ definitionService }: TypingViewProps) => {
         if (!isTyping) {
             updateNextWord()
 
-            if (typingStatistics && typingStatistics.wpm > 28) {
+            if (typingStatistics && typingStatistics.wpm > 20) {
                 sendStatistics()
             }
         }

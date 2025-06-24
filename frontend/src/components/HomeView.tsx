@@ -1,33 +1,49 @@
 import TypingView from "./TypingView"
 import styles from "./HomeView.module.scss"
-import { LeitnerWordDefinitionService } from "../services/WordDefinitionService"
-import { getRemoteWordDefinitionLeitner } from "../services/GetRemoteText"
+import getDefinitionService from "../services/WordDefinitionService"
 import useAuth from "../hooks/useAuth"
 import LoadingSpinner from "./LoadingSpinner"
+import { useEffect, useState } from "react"
+import { WordDefinitionService } from "../types/types"
 
 const HomeView = () => {
+    const [mode, setMode] = useState<"sequential" | "leitner">("sequential")
+    const [definitionService, setDefinitionService] =
+        useState<WordDefinitionService | null>(null)
     const { token } = useAuth()
-    if (!token) {
-        return (
-            <div className={styles.container}>
-                <LoadingSpinner
-                    style={{
-                        left: "50%",
-                        top: "50%",
-                        transform: "translate(-50%, -50%)",
-                    }}
-                />
-            </div>
-        )
-    }
-    const fetchWordDefinition = getRemoteWordDefinitionLeitner(token)
-    const wordDefinitionService =
-        LeitnerWordDefinitionService.newInstance(fetchWordDefinition)
+    useEffect(() => {
+        const updateDefinitionService = async () => {
+            if (token) {
+                const definitionServiceResolved = await getDefinitionService(
+                    mode,
+                    token
+                )
+                setDefinitionService(definitionServiceResolved)
+            } else {
+                const definitionServiceResolved = await getDefinitionService(
+                    "sequential"
+                )
+
+                setDefinitionService(definitionServiceResolved)
+            }
+        }
+        updateDefinitionService()
+    }, [mode, token])
+
 
     return (
         <div className={styles.container} data-testid="home-view">
-            token
-            <TypingView definitionService={wordDefinitionService} />
+            {definitionService ? (
+                <TypingView definitionService={definitionService} />
+            ) : (
+                <LoadingSpinner
+                    style={{
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)",
+                    }}
+                />
+            )}
         </div>
     )
 }

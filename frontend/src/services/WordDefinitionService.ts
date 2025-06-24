@@ -1,67 +1,74 @@
 import { WordDefinition, WordDefinitionService } from "../types/types"
+import {
+    getRemoteWordDefinitionLeitner,
+    getRemoteWordDefinitionSequential,
+} from "./GetRemoteText"
 import LocalStorageService from "./LocalStorageService"
 
-export class SequentialWordDefinitionService implements WordDefinitionService {
+export class SequentialWordDefinitionService2 implements WordDefinitionService {
     id: number
-    currentDefinition: WordDefinition | Promise<WordDefinition>
-    nextDefinition: WordDefinition | Promise<WordDefinition>
+    currentDefinition!: WordDefinition | Promise<WordDefinition>
+    nextDefinition!: WordDefinition | Promise<WordDefinition>
     fetchWordDefinition: (id: number) => Promise<WordDefinition>
     localStorageService: typeof LocalStorageService
 
-    constructor(
-        id: number,
+    private constructor(
         fetchWordDefinition: (id: number) => Promise<WordDefinition>,
         localStorageService: typeof LocalStorageService
     ) {
-        this.id = id
-        this.currentDefinition = fetchWordDefinition(id)
-        this.nextDefinition = fetchWordDefinition(id + 1)
         this.fetchWordDefinition = fetchWordDefinition
         this.localStorageService = localStorageService
-        this.updateStorageId()
     }
 
-    static newInstance(
+    async initializeDefinitions(id: number) {
+        this.currentDefinition = await this.fetchWordDefinition(id)
+        this.updateStorageId()
+
+        this.nextDefinition = await this.fetchWordDefinition(
+            this.currentDefinition.id
+        )
+    }
+
+    static async newInstance(
         fetchWordDefinition: (id: number) => Promise<WordDefinition>,
         localStorageService: typeof LocalStorageService = LocalStorageService
     ) {
         const id = localStorageService.getDefinitionId()
-        return new SequentialWordDefinitionService(
-            id + 1,
+        const service = new SequentialWordDefinitionService2(
             fetchWordDefinition,
             localStorageService
         )
+        await service.initializeDefinitions(id)
+        return service
     }
+
     getCurrentDefinition() {
         return this.currentDefinition
     }
 
-    getNewDefinition() {
-        this.currentDefinition = this.getNextDefinition()
+    async getNewDefinition() {
+        this.currentDefinition = await this.getNextDefinition()
+        this.updateStorageId()
         this.updateNextDefinition()
         return this.currentDefinition
     }
 
-    updateNextDefinition() {
-        this.increaseDefinitionId()
-        this.setNextDefinition()
+    async updateNextDefinition() {
+        const resolvedNextDefinition = await this.getNextDefinition()
+        await this.setNextDefinition(resolvedNextDefinition.id)
     }
 
-    setNextDefinition() {
-        this.nextDefinition = this.fetchWordDefinition(this.id + 1)
+    private async setNextDefinition(id: number) {
+        this.nextDefinition = await this.fetchWordDefinition(id)
     }
 
     getNextDefinition() {
         return this.nextDefinition
     }
 
-    increaseDefinitionId() {
-        this.id++
-        this.updateStorageId()
-    }
-
-    updateStorageId() {
-        this.localStorageService.setDefinitionId(this.id)
+    private async updateStorageId() {
+        const id = (await this.currentDefinition).id
+        this.localStorageService.setDefinitionId(id)
     }
 }
 
@@ -96,3 +103,34 @@ export class LeitnerWordDefinitionService implements WordDefinitionService {
         this.nextDefinition = this.fetchWordDefinition()
     }
 }
+
+type DefinitionServiceType = "sequential" | "leitner"
+
+const getDefinitionService = async (
+    type: DefinitionServiceType,
+    token?: string
+) => {
+    switch (type) {
+        case "sequential":
+            return await SequentialWordDefinitionService2.newInstance(
+                getRemoteWordDefinitionSequential
+            )
+
+        case "leitner":
+            if (!token) {
+                throw new Error(
+                    "Token is required for Leitner word definition service"
+                )
+            }
+            return LeitnerWordDefinitionService.newInstance(
+                getRemoteWordDefinitionLeitner(token)
+            )
+
+        default:
+            return SequentialWordDefinitionService2.newInstance(
+                getRemoteWordDefinitionSequential
+            )
+    }
+}
+
+export default getDefinitionService
