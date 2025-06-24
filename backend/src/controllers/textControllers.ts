@@ -1,5 +1,6 @@
 import { Response, Request, NextFunction } from "express"
 import {
+    getMaxDefinitionId,
     getWordDefinitionCount,
     getWordDefinitionDb,
 } from "../services/textServices"
@@ -21,9 +22,10 @@ export const getWordDefinition = async (
             throw new HTTPError(400, "Invalid ID")
         }
         const wordCount = await getWordDefinitionCount()
-        let id = paramID % (wordCount + 1)
-        if (paramID > wordCount) {
-            id++
+        const maxId = await getMaxDefinitionId()
+        let id = paramID
+        if (maxId <= paramID) {
+            id = -1
         }
         const definition = await getWordDefinitionDb(id)
         res.status(200).json(definition)
