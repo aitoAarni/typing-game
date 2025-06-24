@@ -5,8 +5,7 @@ import {
 } from "./GetRemoteText"
 import LocalStorageService from "./LocalStorageService"
 
-export class SequentialWordDefinitionService2 implements WordDefinitionService {
-    id: number
+export class SequentialWordDefinitionService implements WordDefinitionService {
     currentDefinition!: WordDefinition | Promise<WordDefinition>
     nextDefinition!: WordDefinition | Promise<WordDefinition>
     fetchWordDefinition: (id: number) => Promise<WordDefinition>
@@ -34,7 +33,7 @@ export class SequentialWordDefinitionService2 implements WordDefinitionService {
         localStorageService: typeof LocalStorageService = LocalStorageService
     ) {
         const id = localStorageService.getDefinitionId()
-        const service = new SequentialWordDefinitionService2(
+        const service = new SequentialWordDefinitionService(
             fetchWordDefinition,
             localStorageService
         )
@@ -112,7 +111,7 @@ const getDefinitionService = async (
 ) => {
     switch (type) {
         case "sequential":
-            return await SequentialWordDefinitionService2.newInstance(
+            return await SequentialWordDefinitionService.newInstance(
                 getRemoteWordDefinitionSequential
             )
 
@@ -127,7 +126,7 @@ const getDefinitionService = async (
             )
 
         default:
-            return SequentialWordDefinitionService2.newInstance(
+            return SequentialWordDefinitionService.newInstance(
                 getRemoteWordDefinitionSequential
             )
     }
