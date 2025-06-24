@@ -78,11 +78,16 @@ const TypingView = ({ definitionService }: TypingViewProps) => {
         const nextDefinition = await definitionService.getNextDefinition()
         setNextWord(nextDefinition.word)
     }
+    useEffect(() => {
+        console.log("TypingView mounted")
+    }, [])
 
     useEffect(() => {
         const setInitialDefinition = async () => {
+            console.log("setInitialDefinitons called 123")
             setTypingTextLoading(true)
             const definition = await definitionService.getCurrentDefinition()
+            console.log("setInitialDefinition", definition)
             setWordDefinition(definition)
             setTypingTextLoading(false)
         }
@@ -103,6 +108,12 @@ const TypingView = ({ definitionService }: TypingViewProps) => {
             const nextDefinition = await definitionService.getNextDefinition()
             setNextWord(nextDefinition.word)
         }
+        console.log(
+            "isTyping changed",
+            isTyping,
+            "wordDefinition",
+            wordDefinition
+        )
         if (wordDefinition === null && isTyping) {
             setInitialDefinition()
         }

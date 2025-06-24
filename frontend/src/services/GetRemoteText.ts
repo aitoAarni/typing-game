@@ -15,10 +15,8 @@ const getRemoteWordDefinitionSequential = async (id: number) => {
 }
 
 const getRemoteWordDefinitionLeitner = (token: string) => {
-    console.log("token in 1", token)
     const callback = async () => {
         const url = `${API_URL}/text/word-definition/random`
-        console.log("token when calling: ", token)
         const result = await fetch(url, {
             headers: {
                 Authorization: `Bearer ${token}`,
