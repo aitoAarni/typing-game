@@ -30,9 +30,24 @@ const HomeView = () => {
         updateDefinitionService()
     }, [mode, token])
 
-
     return (
         <div className={styles.container} data-testid="home-view">
+            <div className={styles.dashboard}>
+                <div className={styles.modeContainer}>
+                    <button
+                        onClick={() => setMode("leitner")}
+                        className={mode === "leitner" ? styles.buttonSelected : styles.button}
+                    >
+                        smart
+                    </button>
+                    <button
+                        onClick={() => setMode("sequential")}
+                        className={mode === "sequential" ? styles.buttonSelected :styles.button}
+                    >
+                        sequential
+                    </button>
+                </div>
+            </div>
             {definitionService ? (
                 <TypingView definitionService={definitionService} />
             ) : (
