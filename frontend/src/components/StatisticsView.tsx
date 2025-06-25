@@ -10,6 +10,7 @@ import TotalTypingStatistics from "./TotalTypingStatistics"
 import styles from "./StatisticsView.module.scss"
 import ActivityMap from "./activityMap/ActivityMap"
 import { datesEqual } from "../utils"
+import WordsStatisticsList from "./WordStatisticsList"
 
 const StatisticsView = () => {
     const [isLoading, setIsLoading] = useState<boolean>(true)
@@ -62,6 +63,7 @@ const StatisticsView = () => {
                 <>
                     <TotalTypingStatistics typingStatistics={statistics} />
                     <ActivityMap typingActivity={typingActivity} />
+                    <WordsStatisticsList />
                 </>
             )}
         </div>

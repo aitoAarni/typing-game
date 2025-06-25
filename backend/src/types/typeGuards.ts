@@ -52,3 +52,12 @@ export const wordsPerBucketSchema = z.object({
     bucket: z.number(),
     word_count: z.string().transform(val => parseInt(val, 10)),
 })
+
+export const recentWordSchema = z.object({
+    definition_id: z.number(),
+    word: z.string(),
+    definition: z.string(),
+    times_typed: z.number(),
+    last_typed: z.date(),
+    row_number: z.string().transform(val => parseInt(val, 10)),
+})

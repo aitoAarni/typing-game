@@ -1,6 +1,7 @@
 import { z } from "zod"
 import {
     AuthResponseSchema,
+    recentWordSchema,
     typingSessionActivitySchema,
     TypingSessionTotalSchema,
     WordDefinitionSchema,
@@ -68,3 +69,5 @@ export interface WordDefinitionService {
     getNextDefinition: () => Promise<WordDefinition> | WordDefinition
     updateNextDefinition: () => void
 }
+
+export type RecentWord = z.infer<typeof recentWordSchema>

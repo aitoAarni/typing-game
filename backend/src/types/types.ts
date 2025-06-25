@@ -1,6 +1,7 @@
 import { z } from "zod"
 import {
     definitionSchema,
+    recentWordSchema,
     typingSessionActivitySchema,
     typingSessionDatabaseSchema,
     typingSessionRequestSchema,
@@ -37,3 +38,5 @@ export type TypingSessionsTotal = z.infer<typeof typingSessionsTotalSchema>
 export type TypingSessionActivity = z.infer<typeof typingSessionActivitySchema>
 
 export type WordsPerBucket = z.infer<typeof wordsPerBucketSchema>
+
+export type RecentWord = z.infer<typeof recentWordSchema>
