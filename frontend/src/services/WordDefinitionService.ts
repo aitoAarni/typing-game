@@ -17,7 +17,6 @@ export class SequentialWordDefinitionService implements WordDefinitionService {
     ) {
         this.fetchWordDefinition = fetchWordDefinition
         this.localStorageService = localStorageService
-        console.log("SequentialWordDefinitionService initialized")
     }
 
     async initializeDefinitions(id: number) {
@@ -33,19 +32,16 @@ export class SequentialWordDefinitionService implements WordDefinitionService {
         fetchWordDefinition: (id: number) => Promise<WordDefinition>,
         localStorageService: typeof LocalStorageService = LocalStorageService
     ) {
-        console.log("new instance started")
         const id = localStorageService.getDefinitionId()
         const service = new SequentialWordDefinitionService(
             fetchWordDefinition,
             localStorageService
         )
         await service.initializeDefinitions(id)
-        console.log("newInstance ready")
         return service
     }
 
     getCurrentDefinition() {
-        console.log("sequential getCurrentDefinition called")
         return this.currentDefinition
     }
 
@@ -84,14 +80,12 @@ export class LeitnerWordDefinitionService implements WordDefinitionService {
         this.fetchWordDefinition = fetchWordDefinition
         this.currentDefinition = this.fetchWordDefinition()
         this.nextDefinition = this.fetchWordDefinition()
-        console.log("LeitnerWordDefinitionService initialized")
     }
 
     static newInstance(fetchWordDefinition: () => Promise<WordDefinition>) {
         return new LeitnerWordDefinitionService(fetchWordDefinition)
     }
     getCurrentDefinition() {
-        console.log("leitner getCurrentDefinition called")
         return this.currentDefinition
     }
     getNewDefinition() {
