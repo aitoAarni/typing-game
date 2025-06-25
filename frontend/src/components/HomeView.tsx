@@ -6,20 +6,24 @@ import LoadingSpinner from "./LoadingSpinner"
 import { useEffect, useRef, useState } from "react"
 import { WordDefinitionService } from "../types/types"
 import LocalStorage from "../services/LocalStorageService"
+import useLoggedIn from "../hooks/useLoggedIn"
 
 const HomeView = () => {
     const [mode, setMode] = useState<"sequential" | "leitner">(
-        LocalStorage.getDefinitionMode
+        LocalStorage.getDefinitionMode()
     )
     const [loading, setLoading] = useState<boolean>(true)
 
     const definitionServiceRef = useRef<WordDefinitionService | null>(null)
 
     const { token } = useAuth()
+    const loggedIn = useLoggedIn()
     useEffect(() => {
         const updateDefinitionService = async () => {
-            LocalStorage.setDefinitionMode(mode)
-            if (token) {
+            if (loggedIn) {
+                LocalStorage.setDefinitionMode(mode)
+            }
+            if (token && loggedIn) {
                 const definitionServiceResolved = await getDefinitionService(
                     mode,
                     token
@@ -44,33 +48,14 @@ const HomeView = () => {
 
     return (
         <div className={styles.container} data-testid="home-view">
-            <div className={styles.dashboard}>
-                <div className={styles.modeContainer}>
-                    <button
-                        onClick={() => onClick("leitner")}
-                        className={
-                            mode === "leitner"
-                                ? styles.buttonSelected
-                                : styles.button
-                        }
-                    >
-                        smart
-                    </button>
-                    <button
-                        onClick={() => onClick("sequential")}
-                        className={
-                            mode === "sequential"
-                                ? styles.buttonSelected
-                                : styles.button
-                        }
-                    >
-                        sequential
-                    </button>
+            {loggedIn && (
+                <div className={styles.dashboard}>
+                    <ModeSwitch onClick={onClick} mode={mode} />
                 </div>
-            </div>
+            )}
             {definitionServiceRef.current && !loading ? (
                 <TypingView
-                    key={mode}
+                    key={mode + loggedIn}
                     definitionService={definitionServiceRef.current}
                 />
             ) : (
@@ -82,6 +67,39 @@ const HomeView = () => {
                     }}
                 />
             )}
+        </div>
+    )
+}
+
+type Mode = "sequential" | "leitner"
+
+const ModeSwitch = ({
+    onClick,
+    mode,
+}: {
+    onClick: (mode: Mode) => void
+    mode: Mode
+}) => {
+    return (
+        <div className={styles.modeContainer}>
+            <button
+                onClick={() => onClick("leitner")}
+                className={
+                    mode === "leitner" ? styles.buttonSelected : styles.button
+                }
+            >
+                smart
+            </button>
+            <button
+                onClick={() => onClick("sequential")}
+                className={
+                    mode === "sequential"
+                        ? styles.buttonSelected
+                        : styles.button
+                }
+            >
+                sequential
+            </button>
         </div>
     )
 }
