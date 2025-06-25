@@ -5,9 +5,12 @@ import useAuth from "../hooks/useAuth"
 import LoadingSpinner from "./LoadingSpinner"
 import { useEffect, useRef, useState } from "react"
 import { WordDefinitionService } from "../types/types"
+import LocalStorage from "../services/LocalStorageService"
 
 const HomeView = () => {
-    const [mode, setMode] = useState<"sequential" | "leitner">("sequential")
+    const [mode, setMode] = useState<"sequential" | "leitner">(
+        LocalStorage.getDefinitionMode
+    )
     const [loading, setLoading] = useState<boolean>(true)
 
     const definitionServiceRef = useRef<WordDefinitionService | null>(null)
@@ -15,7 +18,7 @@ const HomeView = () => {
     const { token } = useAuth()
     useEffect(() => {
         const updateDefinitionService = async () => {
-            
+            LocalStorage.setDefinitionMode(mode)
             if (token) {
                 const definitionServiceResolved = await getDefinitionService(
                     mode,
