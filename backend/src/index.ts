@@ -4,6 +4,7 @@ import textRouter from "./routes/textRoute"
 import authRouter from "./routes/authRoute"
 import { errorHandler } from "./middleware"
 import typingSessionRouter from "./routes/typingSessionRoute"
+import recentWordsRouter from "./routes/recentWordsRoute"
 const app = express()
 const PORT = process.env.PORT ? process.env.PORT : 3000
 
@@ -24,6 +25,8 @@ app.use("/text", textRouter)
 app.use("/auth", authRouter)
 
 app.use("/typing-session", typingSessionRouter)
+
+app.use("/recent-words", recentWordsRouter)
 
 app.use(errorHandler)
 
