@@ -43,6 +43,18 @@ export const injectionStorageService = (storage: StorageAdapter) => {
         localStorage.removeItem("user")
     }
 
+    const setDefinitionMode = (mode: "sequential" | "leitner") => {
+        localStorage.setItem("definitionMode", mode)
+    }
+
+    const getDefinitionMode = (): "sequential" | "leitner" => {
+        const mode = localStorage.getItem("definitionMode")
+        if (mode === "sequential" || mode === "leitner") {
+            return mode
+        }
+        return "sequential"
+    }
+
     return {
         setDefinitionId,
         getDefinitionId,
@@ -52,6 +64,8 @@ export const injectionStorageService = (storage: StorageAdapter) => {
         getUser,
         removeToken,
         removeUser,
+        setDefinitionMode,
+        getDefinitionMode,
     }
 }
 

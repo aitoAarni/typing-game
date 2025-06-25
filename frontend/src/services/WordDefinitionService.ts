@@ -1,64 +1,135 @@
-import { WordDefinition } from "../types/types"
+import { WordDefinition, WordDefinitionService } from "../types/types"
+import {
+    getRemoteWordDefinitionLeitner,
+    getRemoteWordDefinitionSequential,
+} from "./GetRemoteText"
 import LocalStorageService from "./LocalStorageService"
 
-class WordDefinitionService {
-    id: number
-    currentDefinition: WordDefinition | Promise<WordDefinition>
-    nextDefinition: WordDefinition | Promise<WordDefinition>
+export class SequentialWordDefinitionService implements WordDefinitionService {
+    currentDefinition!: WordDefinition | Promise<WordDefinition>
+    nextDefinition!: WordDefinition | Promise<WordDefinition>
     fetchWordDefinition: (id: number) => Promise<WordDefinition>
     localStorageService: typeof LocalStorageService
 
-    constructor(
-        id: number,
+    private constructor(
         fetchWordDefinition: (id: number) => Promise<WordDefinition>,
         localStorageService: typeof LocalStorageService
     ) {
-        this.id = id
-        this.currentDefinition = fetchWordDefinition(id)
-        this.nextDefinition = fetchWordDefinition(id + 1)
         this.fetchWordDefinition = fetchWordDefinition
         this.localStorageService = localStorageService
-        this.updateStorageId()
     }
 
-    static newInstance(
+    async initializeDefinitions(id: number) {
+        this.currentDefinition = await this.fetchWordDefinition(id)
+        this.updateStorageId()
+
+        this.nextDefinition = await this.fetchWordDefinition(
+            this.currentDefinition.id
+        )
+    }
+
+    static async newInstance(
         fetchWordDefinition: (id: number) => Promise<WordDefinition>,
         localStorageService: typeof LocalStorageService = LocalStorageService
     ) {
         const id = localStorageService.getDefinitionId()
-        return new WordDefinitionService(
-            id + 1,
+        const service = new SequentialWordDefinitionService(
             fetchWordDefinition,
             localStorageService
         )
+        await service.initializeDefinitions(id)
+        return service
     }
+
     getCurrentDefinition() {
         return this.currentDefinition
     }
 
-    getNewDefinition() {
-        this.increaseDefinitionId()
-        this.currentDefinition = this.getNextDefinition()
-        this.setNextDefinition()
+    async getNewDefinition() {
+        this.currentDefinition = await this.getNextDefinition()
+        this.updateStorageId()
+        this.updateNextDefinition()
         return this.currentDefinition
     }
 
-    setNextDefinition() {
-        this.nextDefinition = this.fetchWordDefinition(this.id + 1)
+    async updateNextDefinition() {
+        const resolvedNextDefinition = await this.getNextDefinition()
+        await this.setNextDefinition(resolvedNextDefinition.id)
+    }
+
+    private async setNextDefinition(id: number) {
+        this.nextDefinition = await this.fetchWordDefinition(id)
     }
 
     getNextDefinition() {
         return this.nextDefinition
     }
 
-    increaseDefinitionId() {
-        this.id++
-        this.updateStorageId()
-    }
-
-    updateStorageId() {
-        this.localStorageService.setDefinitionId(this.id)
+    private async updateStorageId() {
+        const id = (await this.currentDefinition).id
+        this.localStorageService.setDefinitionId(id)
     }
 }
 
-export default WordDefinitionService
+export class LeitnerWordDefinitionService implements WordDefinitionService {
+    fetchWordDefinition: () => Promise<WordDefinition>
+    currentDefinition: WordDefinition | Promise<WordDefinition>
+    nextDefinition: WordDefinition | Promise<WordDefinition>
+
+    constructor(fetchWordDefinition: () => Promise<WordDefinition>) {
+        this.fetchWordDefinition = fetchWordDefinition
+        this.currentDefinition = this.fetchWordDefinition()
+        this.nextDefinition = this.fetchWordDefinition()
+    }
+
+    static newInstance(fetchWordDefinition: () => Promise<WordDefinition>) {
+        return new LeitnerWordDefinitionService(fetchWordDefinition)
+    }
+    getCurrentDefinition() {
+        return this.currentDefinition
+    }
+    getNewDefinition() {
+        this.currentDefinition = this.getNextDefinition()
+        this.nextDefinition = this.fetchWordDefinition()
+        return this.currentDefinition
+    }
+
+    getNextDefinition() {
+        return this.nextDefinition
+    }
+
+    updateNextDefinition() {
+        this.nextDefinition = this.fetchWordDefinition()
+    }
+}
+
+type DefinitionServiceType = "sequential" | "leitner"
+
+const getDefinitionService = async (
+    type: DefinitionServiceType,
+    token?: string
+) => {
+    switch (type) {
+        case "sequential":
+            return await SequentialWordDefinitionService.newInstance(
+                getRemoteWordDefinitionSequential
+            )
+
+        case "leitner":
+            if (!token) {
+                throw new Error(
+                    "Token is required for Leitner word definition service"
+                )
+            }
+            return LeitnerWordDefinitionService.newInstance(
+                getRemoteWordDefinitionLeitner(token)
+            )
+
+        default:
+            return SequentialWordDefinitionService.newInstance(
+                getRemoteWordDefinitionSequential
+            )
+    }
+}
+
+export default getDefinitionService

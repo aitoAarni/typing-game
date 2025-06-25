@@ -47,3 +47,8 @@ export const typingSessionActivitySchema = z.object({
     session_date: z.date(),
     total_seconds: z.number(),
 })
+
+export const wordsPerBucketSchema = z.object({
+    bucket: z.number(),
+    word_count: z.string().transform(val => parseInt(val, 10)),
+})
