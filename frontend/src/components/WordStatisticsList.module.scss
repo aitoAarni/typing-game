@@ -1,0 +1,8 @@
+@use "../styles/variables.scss" as *;
+
+.listItem {
+    color: white;
+    font-size: 2rem;
+    font-family: $font-family-base;
+    list-style-type: none;
+}

@@ -30,3 +30,12 @@ export const typingSessionActivitySchema = z.object({
     session_date: z.string().transform(val => new Date(val)),
     total_seconds: z.number(),
 })
+
+export const recentWordSchema = z.object({
+    definition_id: z.number(),
+    word: z.string(),
+    definition: z.string(),
+    times_typed: z.number(),
+    last_typed: z.string().transform(val => new Date(val)),
+    row_number: z.number(),
+})
