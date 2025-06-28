@@ -53,4 +53,4 @@ const main = async (word, text) => {
 const testText =
     "Revere to very much respect and admire someone or something. The students revere their teacher."
 
-main("revere", testText)
+// main("revere", testText)

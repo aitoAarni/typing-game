@@ -19,12 +19,32 @@ CREATE TABLE IF NOT EXISTS users (
     password TEXT
 );
 
-CREATE TABLE IF NOT EXISTS definitions (
+
+CREATE TABLE definitions (
     id SERIAL PRIMARY KEY,
     word TEXT NOT NULL,
     definition TEXT NOT NULL,
-    sentence TEXT NOT NULL
+    sentence TEXT NOT NULL,
+    homonym_number INTEGER NOT NULL DEFAULT 1
 );
+
+CREATE OR REPLACE FUNCTION assign_homonym_number()
+RETURNS TRIGGER AS $$
+BEGIN
+    SELECT COUNT(*) + 1
+    INTO NEW.homonym_number
+    FROM definitions
+    WHERE word = NEW.word;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER set_homonym_number
+BEFORE INSERT ON definitions
+FOR EACH ROW
+EXECUTE FUNCTION assign_homonym_number();
+
 
 CREATE TABLE IF NOT EXISTS user_definition_progress (
     id SERIAL PRIMARY KEY,
