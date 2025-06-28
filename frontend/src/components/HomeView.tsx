@@ -1,6 +1,8 @@
 import TypingView from "./TypingView"
 import styles from "./HomeView.module.scss"
-import getDefinitionService from "../services/WordDefinitionService"
+import getDefinitionService, {
+    DefinitionServiceType,
+} from "../services/WordDefinitionService"
 import useAuth from "../hooks/useAuth"
 import LoadingSpinner from "./LoadingSpinner"
 import { useEffect, useRef, useState } from "react"
@@ -9,8 +11,9 @@ import LocalStorage from "../services/LocalStorageService"
 import useLoggedIn from "../hooks/useLoggedIn"
 
 const HomeView = () => {
-    const [mode, setMode] = useState<"sequential" | "leitner">(
-        LocalStorage.getDefinitionMode()
+    const [mode, setMode] = useState<DefinitionServiceType>(
+        // LocalStorage.getDefinitionMode()
+        "stub"
     )
     const [loading, setLoading] = useState<boolean>(true)
 
@@ -41,7 +44,7 @@ const HomeView = () => {
         updateDefinitionService()
     }, [mode, token])
 
-    const onClick = (mode: "leitner" | "sequential") => {
+    const onClick = (mode: DefinitionServiceType) => {
         setLoading(true)
         setMode(mode)
     }
@@ -71,14 +74,14 @@ const HomeView = () => {
     )
 }
 
-type Mode = "sequential" | "leitner"
+// type Mode = "sequential" | "leitner"
 
 const ModeSwitch = ({
     onClick,
     mode,
 }: {
-    onClick: (mode: Mode) => void
-    mode: Mode
+    onClick: (mode: DefinitionServiceType) => void
+    mode: DefinitionServiceType
 }) => {
     return (
         <div className={styles.modeContainer}>

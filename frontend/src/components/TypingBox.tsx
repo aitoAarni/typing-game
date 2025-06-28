@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef, CSSProperties } from "react"
 import styles from "./TypingBox.module.scss"
 import useTypingEnabled from "../hooks/useTypingEnabled"
+import WordAudioService from "../services/WordAudioService"
 
 interface TypingBoxProps {
     text?: string
@@ -24,6 +25,10 @@ const TypingBox = ({
     const [scrollOffset, setScrollOffset] = useState<number>(0)
     const [isAnimating, setIsAnimating] = useState<boolean>(false)
     const [isFocused, setIsFocused] = useState<boolean>(true)
+
+    const wordAudioServiceRef = useRef(new WordAudioService())
+    const wordIndexesRef = useRef<number[]>([])
+    const wordIndexAudioMappingRef = useRef<Record<number, number>>({})
 
     const correctCharsRef = useRef<number>(0)
     const totalErrorsRef = useRef<number>(0)
@@ -86,6 +91,12 @@ const TypingBox = ({
                 currentIndexRef.current = setNewIndex(
                     currentIndex,
                     charListRef.current
+                )
+                playAudio(
+                    currentIndexRef.current,
+                    wordIndexesRef.current,
+                    wordIndexAudioMappingRef.current,
+                    wordAudioServiceRef.current
                 )
             }
         } else if (char === "Backspace") {
@@ -156,6 +167,11 @@ const TypingBox = ({
             ) {
                 typedCorrectlyRef.current = typedCorrectlyInitial
                 charListRef.current = partitionedText
+                wordIndexesRef.current = getWordIndexes(text)
+                wordIndexAudioMappingRef.current = mapWordIndexesToAudio(
+                    wordIndexesRef.current
+                )
+                console.log("audio mapping: ", wordIndexAudioMappingRef.current)
             }
         }
         setTimeout(() => {
@@ -336,6 +352,29 @@ const partitionText = (text: string): [string[][], (boolean | null)[][]] => {
     return [partitionedText, typedCorrectly]
 }
 
+const getWordIndexes = (text: string) => {
+    const words = text.trim().split(/\s+/)
+    const wordIndexes: number[] = []
+    let index = 0
+    for (const word of words) {
+        if (word.length > 1) {
+            wordIndexes.push(index)
+        } else if (word !== "-") {
+            wordIndexes.push(index)
+        }
+        index += 2
+    }
+    return wordIndexes
+}
+
+const mapWordIndexesToAudio = (wordIndexes: number[]) => {
+    const mapping: Record<number, number> = {}
+    wordIndexes.forEach((index, i) => {
+        mapping[index] = i
+    })
+    return mapping
+}
+
 const setNewIndex = (currentIndex: number[], charList: string[][]) => {
     if (currentIndex[1] + 1 < charList[currentIndex[0]].length) {
         return [currentIndex[0], currentIndex[1] + 1]
@@ -343,6 +382,18 @@ const setNewIndex = (currentIndex: number[], charList: string[][]) => {
         return [currentIndex[0] + 1, 0]
     } else {
         return [currentIndex[0], charList[currentIndex[0]].length]
+    }
+}
+
+const playAudio = (
+    currentIndex: number[],
+    wordIndexes: number[],
+    wordIndexAudioMapping: Record<number, number>,
+    wordAudioService: WordAudioService
+) => {
+    if (currentIndex[1] !== 0) return
+    if (wordIndexes.includes(currentIndex[0] -1)) {
+        wordAudioService.addToQueue(wordIndexAudioMapping[currentIndex[0] - 1])
     }
 }
 

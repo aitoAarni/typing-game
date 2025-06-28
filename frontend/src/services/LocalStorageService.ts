@@ -1,5 +1,6 @@
 import { BrowserStorage, StorageAdapter } from "../storage/LocalStorage"
 import { User } from "../types/types"
+import { DefinitionServiceType } from "./WordDefinitionService"
 
 // for testability
 export const injectionStorageService = (storage: StorageAdapter) => {
@@ -43,11 +44,11 @@ export const injectionStorageService = (storage: StorageAdapter) => {
         localStorage.removeItem("user")
     }
 
-    const setDefinitionMode = (mode: "sequential" | "leitner") => {
+    const setDefinitionMode = (mode: DefinitionServiceType) => {
         localStorage.setItem("definitionMode", mode)
     }
 
-    const getDefinitionMode = (): "sequential" | "leitner" => {
+    const getDefinitionMode = (): DefinitionServiceType => {
         const mode = localStorage.getItem("definitionMode")
         if (mode === "sequential" || mode === "leitner") {
             return mode
