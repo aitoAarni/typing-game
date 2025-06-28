@@ -1,10 +1,12 @@
 export default class WordAudioService {
-    directory: string
+    private directory: string
     private queue: HTMLAudioElement[] = []
     private isPlaying: boolean = false
+    private playbackRate: number = 1.0
 
-    constructor(directory: string = "./audio/revere") {
+    constructor(plabackRate?: number, directory: string = "./audio/revere") {
         this.directory = directory
+        this.playbackRate = plabackRate || 1
     }
 
     private getAudio(index: number) {
@@ -13,6 +15,7 @@ export default class WordAudioService {
 
     addToQueue(index: number) {
         const audio = this.getAudio(index)
+
         audio.load()
         this.queue.push(audio)
         this.playAudio()
@@ -22,6 +25,7 @@ export default class WordAudioService {
         if (this.queue.length === 0 || this.isPlaying) return
         this.isPlaying = true
         const audio = this.queue[0]
+        audio.playbackRate = this.playbackRate
         audio.play()
         audio.onended = () => {
             this.queue.shift()

@@ -72,6 +72,13 @@ const TypingBox = ({
                 charListRef.current[currentIndex[0]][currentIndex[1]]
             if (!startedTypingRef.current) {
                 startTimer()
+
+                // playAudio(
+                //     currentIndexRef.current,
+                //     wordIndexesRef.current,
+                //     wordIndexAudioMappingRef.current,
+                //     wordAudioServiceRef.current
+                // )
                 startedTypingRef.current = true
             }
             const correctChar = char === charAtIndex
@@ -88,15 +95,15 @@ const TypingBox = ({
                     totalErrorsRef.current += 1
                 }
 
-                currentIndexRef.current = setNewIndex(
-                    currentIndex,
-                    charListRef.current
-                )
                 playAudio(
                     currentIndexRef.current,
                     wordIndexesRef.current,
                     wordIndexAudioMappingRef.current,
                     wordAudioServiceRef.current
+                )
+                currentIndexRef.current = setNewIndex(
+                    currentIndex,
+                    charListRef.current
                 )
             }
         } else if (char === "Backspace") {
@@ -392,8 +399,8 @@ const playAudio = (
     wordAudioService: WordAudioService
 ) => {
     if (currentIndex[1] !== 0) return
-    if (wordIndexes.includes(currentIndex[0] -1)) {
-        wordAudioService.addToQueue(wordIndexAudioMapping[currentIndex[0] - 1])
+    if (wordIndexes.includes(currentIndex[0])) {
+        wordAudioService.addToQueue(wordIndexAudioMapping[currentIndex[0]])
     }
 }
 
