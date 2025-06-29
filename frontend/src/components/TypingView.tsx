@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react"
 import styles from "./TypingView.module.scss"
 import TypingBox from "./TypingBox"
 import TypingFinished from "./TypingFinished"
-import { WordDefinitionService } from "../types/types"
+import { AudioUrlData, WordDefinitionService } from "../types/types"
 import LoadingSpinner from "./LoadingSpinner"
 import { WordDefinition } from "../types/types"
 import { TypingStatistics } from "../types/types"
@@ -38,7 +38,7 @@ const TypingView = ({ definitionService }: TypingViewProps) => {
         const text = createTextFromDefinition(wordDefinition)
         const time = (endTime - startTimeRef.current) / 1000
         const textLength = text.length
-        const words = text.split(/\s+/).length
+        const words = text.split(/\s+/g).length
         const wpm = Math.round(correctChars / 5 / (time / 60))
         const accuracy = (
             (correctChars / (correctChars + errors)) *
@@ -120,6 +120,9 @@ const TypingView = ({ definitionService }: TypingViewProps) => {
             {isTyping && !typingTextLoading && (
                 <TypingBox
                     text={createTextFromDefinition(wordDefinition)}
+                    getAudioUrlData={() => {
+                        return getAudioUrlData(wordDefinition)
+                    }}
                     textTyped={() => setIsTyping(false)}
                     calculateStatistics={calculateStatistics}
                     startTimer={turnTimerOn}
@@ -155,6 +158,21 @@ const createTextFromDefinition = (definitionObject: WordDefinition | null) => {
         " - " +
         definitionObject.sentence
     return string
+}
+
+const getAudioUrlData = (
+    definitionObject: WordDefinition | null
+): AudioUrlData | null => {
+    if (!definitionObject) return null
+    const wordArray = [definitionObject.word]
+    const definitionArray = definitionObject.definition.split(/\s+/g)
+    const sentenceArray = definitionObject.sentence.split(/\s+/g)
+    const words = [...wordArray, ...definitionArray, ...sentenceArray]
+    return {
+        definitionWord: definitionObject.word,
+        words,
+        definitionId: definitionObject.id,
+    }
 }
 
 export default TypingView

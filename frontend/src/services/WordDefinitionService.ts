@@ -5,28 +5,6 @@ import {
 } from "./GetRemoteText"
 import LocalStorageService from "./LocalStorageService"
 
-export class WordDefinitionStub implements WordDefinitionService {
-    definition = {
-        id: 1,
-        word: "revere",
-        definition: "to very much respect and admire someone or something",
-        sentence: "The students revere their teacher.",
-    }
-    getCurrentDefinition() {
-        return this.definition
-    }
-
-    getNextDefinition() {
-        return this.definition
-    }
-
-    getNewDefinition() {
-        return this.definition
-    }
-
-    updateNextDefinition() {}
-}
-
 export class SequentialWordDefinitionService implements WordDefinitionService {
     currentDefinition!: WordDefinition | Promise<WordDefinition>
     nextDefinition!: WordDefinition | Promise<WordDefinition>
@@ -125,7 +103,7 @@ export class LeitnerWordDefinitionService implements WordDefinitionService {
     }
 }
 
-export type DefinitionServiceType = "sequential" | "leitner" | "stub"
+export type DefinitionServiceType = "sequential" | "leitner"
 
 const getDefinitionService = async (
     type: DefinitionServiceType,
@@ -147,8 +125,6 @@ const getDefinitionService = async (
                 getRemoteWordDefinitionLeitner(token)
             )
 
-        case "stub":
-            return new WordDefinitionStub()
         default:
             return SequentialWordDefinitionService.newInstance(
                 getRemoteWordDefinitionSequential

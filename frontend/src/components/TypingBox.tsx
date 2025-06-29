@@ -2,9 +2,11 @@ import { useEffect, useState, useRef, CSSProperties } from "react"
 import styles from "./TypingBox.module.scss"
 import useTypingEnabled from "../hooks/useTypingEnabled"
 import WordAudioService from "../services/WordAudioService"
+import { AudioUrlData } from "../types/types"
 
 interface TypingBoxProps {
     text?: string
+    getAudioUrlData: () => AudioUrlData | null
     textTyped: () => void
     calculateStatistics: (totalChars: number, errors: number) => void
     startTimer: () => void
@@ -14,6 +16,7 @@ interface TypingBoxProps {
 
 const TypingBox = ({
     text,
+    getAudioUrlData,
     textTyped,
     calculateStatistics,
     startTimer,
@@ -73,12 +76,6 @@ const TypingBox = ({
             if (!startedTypingRef.current) {
                 startTimer()
 
-                // playAudio(
-                //     currentIndexRef.current,
-                //     wordIndexesRef.current,
-                //     wordIndexAudioMappingRef.current,
-                //     wordAudioServiceRef.current
-                // )
                 startedTypingRef.current = true
             }
             const correctChar = char === charAtIndex
@@ -178,7 +175,15 @@ const TypingBox = ({
                 wordIndexAudioMappingRef.current = mapWordIndexesToAudio(
                     wordIndexesRef.current
                 )
-                console.log("audio mapping: ", wordIndexAudioMappingRef.current)
+                const audioData = getAudioUrlData()
+                if (audioData) {
+                    const { definitionWord, words, definitionId } = audioData
+                    wordAudioServiceRef.current.loadAudio(
+                        definitionWord,
+                        definitionId,
+                        words
+                    )
+                }
             }
         }
         setTimeout(() => {

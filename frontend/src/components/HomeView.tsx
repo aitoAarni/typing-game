@@ -13,7 +13,7 @@ import useLoggedIn from "../hooks/useLoggedIn"
 const HomeView = () => {
     const [mode, setMode] = useState<DefinitionServiceType>(
         // LocalStorage.getDefinitionMode()
-        "stub"
+        "sequential"
     )
     const [loading, setLoading] = useState<boolean>(true)
 
