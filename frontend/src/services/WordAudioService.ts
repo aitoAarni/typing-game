@@ -31,6 +31,7 @@ export default class WordAudioService {
 
     loadAudio(definitionWord: string, definitionId: number, words: string[]) {
         words.forEach((word, index) => {
+
             const audio = this.getAudio(
                 definitionWord,
                 word,
@@ -42,8 +43,8 @@ export default class WordAudioService {
     }
 
     addToQueue(index: number) {
+        
         const audio = this.loadedAudio[index]
-        audio.load()
         this.queue.push(audio)
         this.playAudio()
     }
