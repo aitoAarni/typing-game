@@ -1,25 +1,29 @@
 import textToSpeech from "@google-cloud/text-to-speech"
-
 import fs from "node:fs"
 import { writeFile } from "fs/promises"
+import { AUDIO_DIR } from "../config.js"
 
-const client = new textToSpeech.TextToSpeechClient()
+// const voiceName = "en-GB-Chirp3-HD-Enceladus"
+const voiceName = "en-GB-News-K"
 
-const audioFolder = "./audio"
 
-const writeWord = async (word, index, path) => {
+const writeWord = async (word, fileName, directory) => {
+    const client = new textToSpeech.TextToSpeechClient()
     const request = {
         input: { text: word },
         voice: {
             languageCode: "en-GB",
-            name: "en-GB-Standard-O",
+            name: voiceName,
         },
         audioConfig: { audioEncoding: "MP3" },
     }
 
     const [response] = await client.synthesizeSpeech(request)
-    await writeFile(`${path}/${index}.mp3`, response.audioContent, "binary")
-    console.log(`Audio content written to file: ${path}/${index}.mp3`)
+    await writeFile(
+        `${directory}/${fileName}.mp3`,
+        response.audioContent,
+        "binary"
+    )
 }
 
 const createFolder = folderName => {
@@ -33,24 +37,30 @@ const createFolder = folderName => {
     }
 }
 
-const main = async (word, text) => {
-    console.log(process.cwd())
+export const generateTtsToDirectory =  (
+    textList,
+    dirName,
+) => {
+    if (!Array.isArray(textList)) {
+        throw new Error("textList must be an array")
+    }
     try {
-        const textList = text.split(" ")
-        console.log("textList: ", textList)
-        const path = `${audioFolder}/${word}`
+        const path = `${AUDIO_DIR}/${dirName}`
+
         createFolder(path)
-        console.log("folder created: ", path)
+
         for (const [index, w] of textList.entries()) {
-            await writeWord(w, index, path)
+            const fileName = `${index}-${w}`
+            writeWord(w, fileName, path)
         }
-        console.log(`Audio files for "${word}" created in ${path}`)
     } catch (error) {
+        fs.appendFile(
+            "./error.log",
+            `\nfolderName: ${dirName} ${new Date().toISOString()} - ${error}\n`,
+            err => {
+                console.error("Error writing to error.log:", err)
+            }
+        )
         console.error("Error creating audio files:", error)
     }
 }
-;("revere | to very much respect and admire someone or something | The students revere their teacher.")
-const testText =
-    "Revere to very much respect and admire someone or something. The students revere their teacher."
-
-// main("revere", testText)
