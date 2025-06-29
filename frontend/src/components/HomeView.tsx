@@ -15,6 +15,7 @@ const HomeView = () => {
         // LocalStorage.getDefinitionMode()
         "sequential"
     )
+    const [audioMode, setAudioMode] = useState<boolean>(false)
     const [loading, setLoading] = useState<boolean>(true)
 
     const definitionServiceRef = useRef<WordDefinitionService | null>(null)
@@ -44,18 +45,22 @@ const HomeView = () => {
         updateDefinitionService()
     }, [mode, token])
 
-    const onClick = (mode: DefinitionServiceType) => {
+    const modeSwitch = (mode: DefinitionServiceType) => {
         setLoading(true)
         setMode(mode)
     }
 
     return (
         <div className={styles.container} data-testid="home-view">
-            {loggedIn && (
-                <div className={styles.dashboard}>
-                    <ModeSwitch onClick={onClick} mode={mode} />
-                </div>
-            )}
+            <div className={styles.dashboard}>
+                {loggedIn && (
+                    <>
+                        <ModeSwitch onClick={modeSwitch} mode={mode} />
+                        <div className={styles.divider} />
+                    </>
+                )}
+                <AudioSwitch onClick={setAudioMode} audioMode={audioMode} />
+            </div>
             {definitionServiceRef.current && !loading ? (
                 <TypingView
                     key={mode + loggedIn}
@@ -73,8 +78,6 @@ const HomeView = () => {
         </div>
     )
 }
-
-// type Mode = "sequential" | "leitner"
 
 const ModeSwitch = ({
     onClick,
@@ -102,6 +105,28 @@ const ModeSwitch = ({
                 }
             >
                 sequential
+            </button>
+        </div>
+    )
+}
+
+interface AudioSwitchProps {
+    onClick: React.Dispatch<React.SetStateAction<boolean>>
+    audioMode: boolean
+}
+
+const AudioSwitch = ({ onClick, audioMode }: AudioSwitchProps) => {
+    return (
+        <div className={styles.modeContainer}>
+            <button
+                onClick={() => {
+                    onClick(!audioMode)
+                }}
+                className={
+                    audioMode === true ? styles.buttonSelected : styles.button
+                }
+            >
+                audio
             </button>
         </div>
     )

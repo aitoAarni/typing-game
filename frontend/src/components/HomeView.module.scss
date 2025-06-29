@@ -16,7 +16,7 @@
     font-style: $font-family-base;
     background-color: $background-color-secondary;
     padding: 0;
-    overflow: visible;
+    // overflow: visible;
 
     border: none;
     cursor: pointer;
@@ -40,15 +40,25 @@
 .dashboard {
     display: flex;
     position: absolute;
+    box-sizing: border-box;
+    align-items: center;
     top: 2rem;
     left: 50%;
+    height: 3.75rem;
     transform: translateX(-50%);
     background-color: $background-color-secondary;
     padding: 1rem 2rem;
     border-radius: 30px;
+    gap: 2rem;
 }
 
 .modeContainer {
     display: flex;
     gap: 2rem;
+}
+
+.divider {
+    width: 2px;
+    height: 100%;
+    background-color: black;
 }
