@@ -2,18 +2,29 @@ import { useEffect, useRef, useState } from "react"
 import styles from "./TypingView.module.scss"
 import TypingBox from "./TypingBox"
 import TypingFinished from "./TypingFinished"
-import { AudioUrlData, WordDefinitionService } from "../types/types"
+import {
+    AudioUrlData,
+    WordDefinitionService,
+    WordDefinition,
+    TypingStatistics,
+} from "../types/types"
 import LoadingSpinner from "./LoadingSpinner"
-import { WordDefinition } from "../types/types"
-import { TypingStatistics } from "../types/types"
 import useAuth from "../hooks/useAuth"
 import { sendTypingSession } from "../services/TypingSessionService"
 
 interface TypingViewProps {
     definitionService: WordDefinitionService
+    audioOn: boolean
+    audioVolume: number
+    audioSpeed: number
 }
 
-const TypingView = ({ definitionService }: TypingViewProps) => {
+const TypingView = ({
+    definitionService,
+    audioOn,
+    audioVolume,
+    audioSpeed,
+}: TypingViewProps) => {
     const [isTyping, setIsTyping] = useState<boolean>(true)
     const [wordDefinition, setWordDefinition] = useState<WordDefinition | null>(
         null
@@ -128,6 +139,9 @@ const TypingView = ({ definitionService }: TypingViewProps) => {
                     startTimer={turnTimerOn}
                     nextText={typeNext}
                     retryText={typeAgain}
+                    audioOn={audioOn}
+                    audioSpeed={audioSpeed}
+                    audioVolume={audioVolume}
                 />
             )}
 

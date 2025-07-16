@@ -39,3 +39,36 @@
     padding: 0 2rem;
     gap: 2rem;
 }
+
+.sliderContainer {
+    display: flex;
+    align-items: center;
+
+    label {
+        color: $primary-color;
+        font-family: $font-family-base;
+        margin-right: 0.5rem;
+    }
+
+    input[type="number"] {
+        font-family: $font-family-base;
+        background-color: rgba(255, 255, 255, 0);
+        margin-left: 0.5rem;
+        font-size: 1rem;
+        width: 2rem;
+        border: none;
+        color: $primary-color;
+        /* Hide arrows in Chrome, Safari, Edge, Opera */
+        &::-webkit-outer-spin-button,
+        &::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* Hide arrows in Firefox */
+        -moz-appearance: textfield;
+
+        /* Optional: style like a normal text input */
+        appearance: textfield;
+    }
+}

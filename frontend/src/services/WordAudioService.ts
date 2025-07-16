@@ -2,12 +2,18 @@ export default class WordAudioService {
     private loadedAudio: HTMLAudioElement[] = []
     private queue: HTMLAudioElement[] = []
     private isPlaying: boolean = false
-    private playbackRate: number = 1.0
     private baseUrl =
         "https://storage.googleapis.com/typing-app-word-audio/audio"
+    private volume: number = NaN
+    private speed: number = NaN
+    private audioLoaded: boolean = false
 
-    constructor(playbackRate?: number) {
-        this.playbackRate = playbackRate || 1
+    setVolume(volume: number) {
+        this.volume = volume
+    }
+
+    setSpeed(speed: number) {
+        this.speed = speed
     }
 
     private getAudio(
@@ -39,6 +45,7 @@ export default class WordAudioService {
             )
             this.loadedAudio.push(audio)
         })
+        this.audioLoaded = true
     }
 
     addToQueue(index: number) {
@@ -51,12 +58,24 @@ export default class WordAudioService {
         if (this.queue.length === 0 || this.isPlaying) return
         this.isPlaying = true
         const audio = this.queue[0]
-        audio.playbackRate = this.playbackRate
+
+        if (!isNaN(this.speed)) {
+            audio.playbackRate = this.speed
+        }
+
+        if (!isNaN(this.volume)) {
+            audio.volume = this.volume
+        }
+
         audio.play()
         audio.onended = () => {
             this.queue.shift()
             this.isPlaying = false
             this.playAudio()
         }
+    }
+
+    getAudioLoaded() {
+        return this.audioLoaded
     }
 }

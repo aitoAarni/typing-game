@@ -13,8 +13,18 @@ import AudioSwitch, { AudioSettings } from "./AudioSwitch"
 import NextWordModeSwitch from "./NextWordMode"
 
 const HomeView = () => {
-    const [mode, setMode] = useState<DefinitionServiceType>(LocalStorage.getDefinitionMode())
-    const [audioMode, setAudioMode] = useState<boolean>(false)
+    const [mode, setMode] = useState<DefinitionServiceType>(
+        LocalStorage.getDefinitionMode()
+    )
+    const [audioOn, setAudioOn] = useState<boolean>(
+        LocalStorage.getAudioActive()
+    )
+    const [audioVolume, setAudioVolume] = useState<number>(
+        LocalStorage.getAudioVolume()
+    )
+    const [audioSpeed, setAudioSpeed] = useState<number>(
+        LocalStorage.getAudioSpeed()
+    )
     const [loading, setLoading] = useState<boolean>(true)
 
     const definitionServiceRef = useRef<WordDefinitionService | null>(null)
@@ -58,15 +68,25 @@ const HomeView = () => {
                         <div className={styles.divider} />
                     </>
                 )}
-                <AudioSwitch onClick={setAudioMode} audioMode={audioMode} />
+                <AudioSwitch onClick={setAudioOn} audioOn={audioOn} />
             </div>
             <div className={styles.settingsBoardContainer}>
-                {audioMode && <AudioSettings />}
+                {audioOn && (
+                    <AudioSettings
+                        volume={audioVolume}
+                        speed={audioSpeed}
+                        setVolume={setAudioVolume}
+                        setSpeed={setAudioSpeed}
+                    />
+                )}
             </div>
             {definitionServiceRef.current && !loading ? (
                 <TypingView
                     key={mode + loggedIn}
                     definitionService={definitionServiceRef.current}
+                    audioOn={audioOn}
+                    audioSpeed={audioSpeed}
+                    audioVolume={audioVolume}
                 />
             ) : (
                 <LoadingSpinner
