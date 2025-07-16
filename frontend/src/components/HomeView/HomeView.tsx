@@ -1,20 +1,19 @@
-import TypingView from "./TypingView"
+import TypingView from "../TypingView"
 import styles from "./HomeView.module.scss"
 import getDefinitionService, {
     DefinitionServiceType,
-} from "../services/WordDefinitionService"
-import useAuth from "../hooks/useAuth"
-import LoadingSpinner from "./LoadingSpinner"
+} from "../../services/WordDefinitionService"
+import useAuth from "../../hooks/useAuth"
+import LoadingSpinner from "../LoadingSpinner"
 import { useEffect, useRef, useState } from "react"
-import { WordDefinitionService } from "../types/types"
-import LocalStorage from "../services/LocalStorageService"
-import useLoggedIn from "../hooks/useLoggedIn"
+import { WordDefinitionService } from "../../types/types"
+import LocalStorage from "../../services/LocalStorageService"
+import useLoggedIn from "../../hooks/useLoggedIn"
+import AudioSwitch, { AudioSettings } from "./AudioSwitch"
+import NextWordModeSwitch from "./NextWordMode"
 
 const HomeView = () => {
-    const [mode, setMode] = useState<DefinitionServiceType>(
-        // LocalStorage.getDefinitionMode()
-        "sequential"
-    )
+    const [mode, setMode] = useState<DefinitionServiceType>(LocalStorage.getDefinitionMode())
     const [audioMode, setAudioMode] = useState<boolean>(false)
     const [loading, setLoading] = useState<boolean>(true)
 
@@ -55,11 +54,14 @@ const HomeView = () => {
             <div className={styles.dashboard}>
                 {loggedIn && (
                     <>
-                        <ModeSwitch onClick={modeSwitch} mode={mode} />
+                        <NextWordModeSwitch onClick={modeSwitch} mode={mode} />
                         <div className={styles.divider} />
                     </>
                 )}
                 <AudioSwitch onClick={setAudioMode} audioMode={audioMode} />
+            </div>
+            <div className={styles.settingsBoardContainer}>
+                {audioMode && <AudioSettings />}
             </div>
             {definitionServiceRef.current && !loading ? (
                 <TypingView
@@ -75,59 +77,6 @@ const HomeView = () => {
                     }}
                 />
             )}
-        </div>
-    )
-}
-
-const ModeSwitch = ({
-    onClick,
-    mode,
-}: {
-    onClick: (mode: DefinitionServiceType) => void
-    mode: DefinitionServiceType
-}) => {
-    return (
-        <div className={styles.modeContainer}>
-            <button
-                onClick={() => onClick("leitner")}
-                className={
-                    mode === "leitner" ? styles.buttonSelected : styles.button
-                }
-            >
-                smart
-            </button>
-            <button
-                onClick={() => onClick("sequential")}
-                className={
-                    mode === "sequential"
-                        ? styles.buttonSelected
-                        : styles.button
-                }
-            >
-                sequential
-            </button>
-        </div>
-    )
-}
-
-interface AudioSwitchProps {
-    onClick: React.Dispatch<React.SetStateAction<boolean>>
-    audioMode: boolean
-}
-
-const AudioSwitch = ({ onClick, audioMode }: AudioSwitchProps) => {
-    return (
-        <div className={styles.modeContainer}>
-            <button
-                onClick={() => {
-                    onClick(!audioMode)
-                }}
-                className={
-                    audioMode === true ? styles.buttonSelected : styles.button
-                }
-            >
-                audio
-            </button>
         </div>
     )
 }
