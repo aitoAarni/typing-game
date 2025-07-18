@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom"
-import HomeView from "./components/HomeView"
+import HomeView from "./components/HomeView/HomeView"
 import NavBar from "./components/NavBar"
 import StatisticsView from "./components/StatisticsView"
 import SettingsView from "./components/SettingsView"

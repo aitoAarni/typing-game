@@ -103,7 +103,7 @@ export class LeitnerWordDefinitionService implements WordDefinitionService {
     }
 }
 
-type DefinitionServiceType = "sequential" | "leitner"
+export type DefinitionServiceType = "sequential" | "leitner"
 
 const getDefinitionService = async (
     type: DefinitionServiceType,

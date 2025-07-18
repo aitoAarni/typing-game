@@ -66,5 +66,10 @@ LEFT JOIN user_definition_progress udg
   ON udg.bucket = b.bucket AND udg.user_id = 1
 GROUP BY b.bucket
 ORDER BY b.bucket;`
-const result = await execSql(query5)
-console.log("results: ", result.rows)
+
+const queryWords = `SELECT word FROM definitions`
+const result = await execSql(queryWords)
+result.rows.forEach(row => {
+  console.log(row.word)
+})
+// console.log("results: ", result.rows)

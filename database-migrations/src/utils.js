@@ -1,15 +1,11 @@
 import { Client } from "pg"
-import dotenv from "dotenv"
-
-process.env.server === "true"
-    ? dotenv.config({ path: ".env.prod" })
-    : dotenv.config({ path: ".env" })
-
-const databaseUrl = process.env.DATABASE_URL
+import { DATABASE_URL } from "./config.js"
 
 const client = new Client({
-    connectionString: databaseUrl,
+    connectionString: DATABASE_URL,
 })
+
+export const sleep = ms => new Promise(resolve => setTimeout(() => {}, ms))
 
 export const execSql = async (Query, params) => {
     let res

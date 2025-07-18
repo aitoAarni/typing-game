@@ -1,29 +1,48 @@
 import { useEffect, useState, useRef, CSSProperties } from "react"
 import styles from "./TypingBox.module.scss"
 import useTypingEnabled from "../hooks/useTypingEnabled"
+import WordAudioService from "../services/WordAudioService"
+import { AudioUrlData } from "../types/types"
 
 interface TypingBoxProps {
     text?: string
+    getAudioUrlData: () => AudioUrlData | null
     textTyped: () => void
     calculateStatistics: (totalChars: number, errors: number) => void
     startTimer: () => void
     nextText: () => void
     retryText: () => void
+    audioOn: boolean
+    audioVolume: number
+    audioSpeed: number
 }
 
 const TypingBox = ({
     text,
+    getAudioUrlData,
     textTyped,
     calculateStatistics,
     startTimer,
     nextText,
     retryText,
+    audioOn,
+    audioVolume,
+    audioSpeed,
 }: TypingBoxProps) => {
     const lineHeight = 60
     const [frameNumber, setFrameNumber] = useState<number>(0)
     const [scrollOffset, setScrollOffset] = useState<number>(0)
     const [isAnimating, setIsAnimating] = useState<boolean>(false)
     const [isFocused, setIsFocused] = useState<boolean>(true)
+
+    const wordAudioServiceRef = useRef(new WordAudioService())
+
+    wordAudioServiceRef.current.setSpeed(audioSpeed)
+    wordAudioServiceRef.current.setVolume(audioVolume)
+    const audioOnRef = useRef(audioOn)
+
+    const wordIndexesRef = useRef<number[]>([])
+    const wordIndexAudioMappingRef = useRef<Record<number, number>>({})
 
     const correctCharsRef = useRef<number>(0)
     const totalErrorsRef = useRef<number>(0)
@@ -35,6 +54,7 @@ const TypingBox = ({
     const containerRef = useRef<HTMLDivElement | null>(null)
     const typingContainerRef = useRef<HTMLDivElement | null>(null)
     const { typingEnabled } = useTypingEnabled()
+
     const keyPressed = (event: KeyboardEvent) => {
         const char = event.key
         if (!typingEnabled) {
@@ -67,6 +87,7 @@ const TypingBox = ({
                 charListRef.current[currentIndex[0]][currentIndex[1]]
             if (!startedTypingRef.current) {
                 startTimer()
+
                 startedTypingRef.current = true
             }
             const correctChar = char === charAtIndex
@@ -82,7 +103,14 @@ const TypingBox = ({
                 } else {
                     totalErrorsRef.current += 1
                 }
-
+                if (audioOnRef.current) {
+                    playAudio(
+                        currentIndexRef.current,
+                        wordIndexesRef.current,
+                        wordIndexAudioMappingRef.current,
+                        wordAudioServiceRef.current
+                    )
+                }
                 currentIndexRef.current = setNewIndex(
                     currentIndex,
                     charListRef.current
@@ -156,6 +184,7 @@ const TypingBox = ({
             ) {
                 typedCorrectlyRef.current = typedCorrectlyInitial
                 charListRef.current = partitionedText
+                wordIndexesRef.current = getWordIndexes(text)
             }
         }
         setTimeout(() => {
@@ -165,6 +194,24 @@ const TypingBox = ({
             }
         }, 50)
     }, [text])
+
+    useEffect(() => {
+        audioOnRef.current = audioOn
+        if (audioOn && !wordAudioServiceRef.current.getAudioLoaded()) {
+            wordIndexAudioMappingRef.current = mapWordIndexesToAudio(
+                wordIndexesRef.current
+            )
+            const audioData = getAudioUrlData()
+            if (audioData) {
+                const { definitionWord, words, definitionId } = audioData
+                wordAudioServiceRef.current.loadAudio(
+                    definitionWord,
+                    definitionId,
+                    words
+                )
+            }
+        }
+    }, [audioOn])
 
     useEffect(() => {
         if (
@@ -326,6 +373,7 @@ const partitionText = (text: string): [string[][], (boolean | null)[][]] => {
     words.forEach((word, index) => {
         const chars = word.trim().split("")
         const nullInitializer = new Array(chars.length).fill(null)
+
         partitionedText.push(chars)
         typedCorrectly.push(nullInitializer)
         if (index !== words.length - 1) {
@@ -336,6 +384,29 @@ const partitionText = (text: string): [string[][], (boolean | null)[][]] => {
     return [partitionedText, typedCorrectly]
 }
 
+const getWordIndexes = (text: string) => {
+    const words = text.trim().split(/\s+/)
+    const wordIndexes: number[] = []
+    let index = 0
+    for (const word of words) {
+        if (word.length > 1) {
+            wordIndexes.push(index)
+        } else if (word !== "-") {
+            wordIndexes.push(index)
+        }
+        index += 2
+    }
+    return wordIndexes
+}
+
+const mapWordIndexesToAudio = (wordIndexes: number[]) => {
+    const mapping: Record<number, number> = {}
+    wordIndexes.forEach((index, i) => {
+        mapping[index] = i
+    })
+    return mapping
+}
+
 const setNewIndex = (currentIndex: number[], charList: string[][]) => {
     if (currentIndex[1] + 1 < charList[currentIndex[0]].length) {
         return [currentIndex[0], currentIndex[1] + 1]
@@ -343,6 +414,18 @@ const setNewIndex = (currentIndex: number[], charList: string[][]) => {
         return [currentIndex[0] + 1, 0]
     } else {
         return [currentIndex[0], charList[currentIndex[0]].length]
+    }
+}
+
+const playAudio = (
+    currentIndex: number[],
+    wordIndexes: number[],
+    wordIndexAudioMapping: Record<number, number>,
+    wordAudioService: WordAudioService
+) => {
+    if (currentIndex[1] !== 0) return
+    if (wordIndexes.includes(currentIndex[0])) {
+        wordAudioService.addToQueue(wordIndexAudioMapping[currentIndex[0]])
     }
 }
 

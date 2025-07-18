@@ -71,3 +71,9 @@ export interface WordDefinitionService {
 }
 
 export type RecentWord = z.infer<typeof recentWordSchema>
+
+export type AudioUrlData = {
+    definitionWord: string
+    words: string[]
+    definitionId: number
+}
