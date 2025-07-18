@@ -1,12 +1,12 @@
+import { AUDIO_DIR } from "../config.js"
 import { fetchDefinitions } from "../postgres/fetch.js"
 import { QueueTimeout } from "../queue.js"
 import { generateTtsToDirectory } from "../tts/main.js"
 import { uploadDir } from "./upload.js"
 
-const queue = new QueueTimeout(4000)
+const queue = new QueueTimeout(3000)
 
 const createTtsFromDefinitions = async () => {
-    return
     const whiteSpaceRegex = /\s+/g
     const definitions = await fetchDefinitions()
     const ttsDefinition = definitions.flatMap(row => {
@@ -26,9 +26,11 @@ const createTtsFromDefinitions = async () => {
 }
 
 const uploadAudioToCloud = async () => {
-    const path = `./audio`
-    await uploadDir(path)
+    const path = AUDIO_DIR
+    uploadDir(path)
     console.log("Upload complete")
 }
+
+// createTtsFromDefinitions()
 
 uploadAudioToCloud()

@@ -103,7 +103,6 @@ const TypingBox = ({
                 } else {
                     totalErrorsRef.current += 1
                 }
-                console.log("audioOn", audioOnRef.current)
                 if (audioOnRef.current) {
                     playAudio(
                         currentIndexRef.current,

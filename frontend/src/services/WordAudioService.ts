@@ -1,9 +1,11 @@
+import { AUDIO_API_URL } from "../config"
+
 export default class WordAudioService {
     private loadedAudio: HTMLAudioElement[] = []
     private queue: HTMLAudioElement[] = []
     private isPlaying: boolean = false
-    private baseUrl =
-        "https://storage.googleapis.com/typing-app-word-audio/audio"
+    private baseUrl = AUDIO_API_URL
+
     private volume: number = NaN
     private speed: number = NaN
     private audioLoaded: boolean = false
@@ -58,6 +60,7 @@ export default class WordAudioService {
         if (this.queue.length === 0 || this.isPlaying) return
         this.isPlaying = true
         const audio = this.queue[0]
+
 
         if (!isNaN(this.speed)) {
             audio.playbackRate = this.speed

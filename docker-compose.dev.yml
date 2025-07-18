@@ -29,6 +29,7 @@ services:
             - 5173:5173
         environment:
             - NODE_ENV=development
+            - VITE_AUDIO_API_URL=${AUDIO_API_URL}
         command: npm run dev -- --host
 
     db:

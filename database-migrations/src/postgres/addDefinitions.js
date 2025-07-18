@@ -1,5 +1,5 @@
 import fs from "fs/promises"
-import { execSql } from "./utils.js"
+import { execSql } from "../utils.js"
 
 const definitions = JSON.parse(
     await fs.readFile("./data/newProduction.json", "utf-8")
