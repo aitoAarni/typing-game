@@ -1,5 +1,5 @@
 # Improve vocabulary and typing speed at the same time
-
+[Deplyed app](https://typing-game-frontend-4p84.onrender.com/)
 ## How to run in development mode
 
 Containers have bind mounts to the src folders, so code is auto updated without rebuilding the container, except if new node_modules are installed. Run the following commands from project root.
