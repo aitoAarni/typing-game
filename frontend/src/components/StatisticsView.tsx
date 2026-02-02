@@ -17,9 +17,11 @@ const StatisticsView = () => {
     const [statistics, setStatistics] = useState<TypingSessionTotal | null>(
         null
     )
+
     const [typingActivity, setTypingActivity] = useState<
         TypingSessionActivity[]
     >([])
+
     const { token } = useAuth()
     useEffect(() => {
         const getStatistics = async () => {
